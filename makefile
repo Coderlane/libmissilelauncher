@@ -14,6 +14,11 @@ SOURCES=$(wildcard $(SRC_DIR)/*.c)
 OBJ_DIR=obj
 OBJECTS=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%_$(MODE).o,$(SOURCES))
 
+TEST_DIR=test
+TEST_BIN_DIR=bin/test
+TEST_SOURCES=$(wildcard $(TEST_DIR)/*.c)
+TEST_OBJECTS=$(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR)/%_$(MODE).o,$(TEST_SOURCES))
+
 BIN=$(PROJECT)
 BIN_DIR=bin
 TARGET=$(BIN_DIR)/$(BIN)
@@ -38,6 +43,7 @@ valgrind: dir valgrind_build
 # Check directories
 dir:
 	test -d $(BIN_DIR) || mkdir $(BIN_DIR)
+	test -d $(TEST_BIN_DIR) || mkdir $(TEST_BIN_DIR)
 	test -d $(OBJ_DIR) || mkdir $(OBJ_DIR)
 
 # Clean up directories
@@ -51,12 +57,11 @@ debug_build: $(OBJECTS)
 	$(CC) -o $(DEBUG_TARGET) $^
 	
 
-# DEBUG target
-valgrind_build: CFLAGS += -O0 -DVALGRIND
-valgrind_build: MODE=valgrind
-valgrind_build: $(OBJECTS)
-	$(CC) -o $(VALGRIND_TARGET) $^
-
+# Test targets
+test_build: CFLAGS += -O0
+test_build: MODE=test
+test_build: $(OBJECTS) $(TEST_OBJECTS)
+	$(CC) -o $(TEST_BIN_DIR)/movement $(OBJECTS) movement.o
 
 # RELEASE target
 release_build: CFLAGS += -O3 -DNDEBUG
