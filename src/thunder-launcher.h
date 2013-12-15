@@ -62,16 +62,16 @@ typedef enum tl_direction {
 
 typedef struct thunder_launcher {
   uint8_t   led_status;
-  uint8_t   missiles;
   uint32_t  horizontal_position;
   uint32_t  vertical_position;
 } thunder_launcher;
 
 
 int16_t move_time(thunder_launcher *launcher, tl_direction direction, uint32_t time);
-int16_t move_degrees(thunder_launcher *launcher, tl_direction direction, uint32_t deg);
+int16_t move_degrees(thunder_launcher *launcher, tl_direction direction, int32_t deg);
 
-int16_t set_position(thunder_launcher *launcher, tl_direction direction, uint32_t deg);
+int16_t set_vertical_position(thunder_launcher *launcher, int32_t deg);
+int16_t set_horizontal_position(thunder_launcher *launcher, int32_t deg);
 int16_t zero(thunder_launcher *launcher);
 
 int16_t led_on(thunder_launcher *launcher);
