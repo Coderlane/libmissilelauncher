@@ -16,3 +16,13 @@
 *.exe
 *.out
 *.app
+bin/*
+
+#Temp Files
+.*.sw*
+
+#Object Files
+obj/*
+
+#Personal
+.ycm_extra_conf.pyc
