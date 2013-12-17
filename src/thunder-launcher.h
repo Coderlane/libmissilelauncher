@@ -66,6 +66,14 @@ typedef struct thunder_launcher {
   uint32_t  vertical_position;
 } thunder_launcher;
 
+typedef struct launch_control {
+  uint32_t launcher_count;
+
+} launch_control;
+
+int16_t initialize_library();
+int16_t cleanup_library();
+int16_t poll_for_launcher();
 
 int16_t move_time(thunder_launcher *launcher, tl_direction direction, uint32_t time);
 int16_t move_degrees(thunder_launcher *launcher, tl_direction direction, int32_t deg);
