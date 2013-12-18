@@ -10,13 +10,11 @@
 #define TL_TEST_DETECTION_H
 
 #include <tl_detection.h>
-#include "../src/tlib_debug.h"
 
 
+int16_t test_init();
 
-
-
-
+int16_t test_cleanup();
 
 
 #endif
