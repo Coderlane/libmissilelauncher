@@ -6,12 +6,10 @@
  * @date 2013-12-14
  */
 
-#ifndef THUNDER_LAUNCHER_H
-#define THUNDER_LAUNCHER_H
+#ifndef TL_CONTROL_H
+#define TL_CONTROL_H
 
-#include <stdint.h>
-
-
+#include "tl_common.h"
 // Don't mess with these, they are constant for a reason.
 
 // The communications array length
@@ -60,21 +58,6 @@ typedef enum tl_direction {
   TL_RIGHT
 } tl_direction;
 
-typedef struct thunder_launcher {
-  uint8_t   led_status;
-  uint32_t  horizontal_position;
-  uint32_t  vertical_position;
-} thunder_launcher;
-
-typedef struct launch_control {
-  uint32_t launcher_count;
-
-} launch_control;
-
-int16_t initialize_library();
-int16_t cleanup_library();
-int16_t poll_for_launcher();
-
 int16_t move_time(thunder_launcher *launcher, tl_direction direction, uint32_t time);
 int16_t move_degrees(thunder_launcher *launcher, tl_direction direction, int32_t deg);
 
@@ -86,10 +69,5 @@ int16_t led_on(thunder_launcher *launcher);
 int16_t led_off(thunder_launcher *launcher);
 
 int16_t fire(thunder_launcher *launcher);
-
-typedef enum tl_launch_codes {
-  TL_OK,
-  TL_NOT_IMPLEMENTED
-} tl_launch_codes;
 
 #endif

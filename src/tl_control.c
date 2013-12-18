@@ -6,25 +6,7 @@
  * @date 2013-12-15
  */
 
-#include "thunder-launcher.h"
-
-
-
-int16_t initialize_library() {
-
-  return TL_NOT_IMPLEMENTED;
-}
-
-int16_t cleanup_library() {
-
-  return TL_NOT_IMPLEMENTED;
-}
-
-
-int16_t poll_for_launcher() {
-
-  return TL_NOT_IMPLEMENTED; 
-}
+#include "tl_control.h"
 
 
 /**
