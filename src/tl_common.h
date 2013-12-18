@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 #include "tl_errors.h"
 #include "tlib_debug.h"
 

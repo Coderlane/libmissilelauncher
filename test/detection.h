@@ -11,10 +11,4 @@
 
 #include <tl_detection.h>
 
-
-int16_t test_init();
-
-int16_t test_cleanup();
-
-
 #endif

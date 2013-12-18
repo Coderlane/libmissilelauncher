@@ -61,12 +61,8 @@ dir:
 clean:
 	rm -f $(BIN_DIR)/*_test $(OBJ_DIR)/*.o $(LIB_DIR)/*.so
 
-# DEBUG target
-debug_build: CFLAGS += -Wno-unused-variable -Wno-unused-parameter
-debug_build: $(DEBUG_TARGET)
-
 # Test targets
-test_build: CFLAGS += -Wno-unused-variable -Wno-unused-parameter
+test_build: CFLAGS += -Wno-unused-variable -Wno-unused-parameter -DNDEBUG
 test_build: $(DEBUG_TARGET) $(TEST_BINS)
 
 # RELEASE target

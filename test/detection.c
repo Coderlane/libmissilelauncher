@@ -10,16 +10,3 @@ int main() {
   return TL_OK;
 }
 
-
-int16_t test_init() {
-
-
-
-  return TL_NOT_IMPLEMENTED;
-}
-
-int16_t test_cleanup() {
-
-
-  return TL_NOT_IMPLEMENTED;
-}

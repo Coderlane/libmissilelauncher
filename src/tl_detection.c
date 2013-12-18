@@ -15,7 +15,7 @@
  */
 int16_t initialize_library() {
   int16_t failed = 0;
-  if(main_launch_control == NULL) {
+  if(main_launch_control != NULL) {
     TRACE("Main launch control was not null, possibly already initialized\n");
     return TL_LIBRARY_ALREADY_INIT;
   }
