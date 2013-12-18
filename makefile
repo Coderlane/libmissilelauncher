@@ -33,6 +33,7 @@ LIBRARY_NAME=l$(PROJECT)
 DEBUG_LIBRARY_NAME=l$(PROJECT)_debug
 
 LIBRARY_PATH=$(PWD)/$(LIB_DIR)
+INCLUDE_PATH=$(PWD)/$(SRC_DIR)
 
 DEBUG_LIB=lib$(PROJECT)_debug.so
 RELEASE_LIB=lib$(PROJECT).so
@@ -91,7 +92,7 @@ $(OBJ_DIR)/%_test.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 $(BIN_DIR)/%_test: $(DEBUG_LIBRARY) $(TEST_DIR)/%.c
-	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME)
+	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME)
 
 $(OBJ_DIR)/%_test.o: $(TEST_DIR)/%.c
 	$(CC) $(CFLAGS) -o $@ $<
