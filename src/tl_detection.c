@@ -11,8 +11,18 @@
 
 
 int16_t initialize_library() {
+  
+  if(main_launch_control.control_initialized) {
+    TRACE("Controller already initialized\n");
+    return TL_OK;
+  }
 
-  return TL_NOT_IMPLEMENTED;
+  main_launch_control.control_initialized = 1;
+
+  main_launch_control.launcher_array = calloc(sizeof(thunder_launcher) * INITIAL_ARRAY_SIZE);
+
+
+  return TL_OK;
 }
 
 int16_t cleanup_library() {
