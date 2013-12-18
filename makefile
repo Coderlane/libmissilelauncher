@@ -85,10 +85,10 @@ $(OBJ_DIR)/%_debug.o: $(SRC_DIR)/%.c
 
 # Make object files 
 $(OBJ_DIR)/%_test.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $< 
 
 $(BIN_DIR)/%_test: $(DEBUG_LIBRARY) $(TEST_DIR)/%.c
-	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME)
+	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME) -lusb
 
 $(OBJ_DIR)/%_test.o: $(TEST_DIR)/%.c
 	$(CC) $(CFLAGS) -o $@ $<

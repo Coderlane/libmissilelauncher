@@ -14,6 +14,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+
+#include <usb.h>
+
+
 #include "tl_errors.h"
 #include "tlib_debug.h"
 
