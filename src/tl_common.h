@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include <usb.h>
+#include <libusb.h>
 
 
 #include "tl_errors.h"

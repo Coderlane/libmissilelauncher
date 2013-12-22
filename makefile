@@ -51,7 +51,7 @@ debug: dir debug_build
 test: dir debug_build test_build
 
 
-# Check directories
+#Check directories
 dir:
 	test -d $(BIN_DIR) || mkdir $(BIN_DIR)
 	test -d $(OBJ_DIR) || mkdir $(OBJ_DIR)
@@ -88,7 +88,7 @@ $(OBJ_DIR)/%_test.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -o $@ $< 
 
 $(BIN_DIR)/%_test: $(DEBUG_LIBRARY) $(TEST_DIR)/%.c
-	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME) -lusb
+	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME) -lusb-1.0
 
 $(OBJ_DIR)/%_test.o: $(TEST_DIR)/%.c
 	$(CC) $(CFLAGS) -o $@ $<
