@@ -5,8 +5,11 @@
 
 PROJECT=thunderlauncher
 
+LIBUSB_INCLUDE_PATH=/usr/include/libusb-1.0
+
+
 CC=clang
-CFLAGS=-c -Wall -fPIC -std=gnu99 -Wextra
+CFLAGS=-c -Wall -fPIC -std=gnu99 -Wextra -I$(LIBUSB_INCLUDE_PATH)
 PWD=$(shell pwd)
 
 SRC_DIR=src
@@ -40,6 +43,9 @@ RELEASE_LIB=lib$(PROJECT).so
 
 DEBUG_TARGET=$(LIB_DIR)/$(DEBUG_LIB)
 RELEASE_TARGET=$(LIB_DIR)/$(RELEASE_LIB)
+
+
+
 # All defaults to debug, to make release run make release
 .PHONY: all dir debug release clean test debug_build release_build 
 all: test 
@@ -69,8 +75,6 @@ test_build: $(DEBUG_TARGET) $(TEST_BINS)
 release_build: CFLAGS += -DNDEBUG
 release_build: $(RELEASE_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(RELEASE_LIB) -o $(RELEASE_TARGET) $^
- 
-
 
 $(DEBUG_TARGET): $(DEBUG_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(DEBUG_LIB) -o $(DEBUG_TARGET) $^

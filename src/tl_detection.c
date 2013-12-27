@@ -57,6 +57,7 @@ int16_t _initialize_control(launch_control *init_control) {
   init_control->launcher_count = 0;
 
   init_control->control_initialized = 1;
+  pthread_mutex_init(&(init_control->poll_control_mutex), NULL);
   return TL_OK;
 }
 
@@ -102,9 +103,119 @@ int16_t _cleanup_control(launch_control *cleanup_control) {
   return TL_OK;
 }
 
+/**
+ * @brief 
+ *
+ * @param target_control
+ *
+ * @return 
+ */
+void *_poll_control_for_launcher(void *target_arg) {
+  launch_control *target_control = target_arg;
 
-int16_t poll_for_launcher() {
+  if(target_control == NULL) {
+    TRACE("Target control was null.\n");
+    return NULL;
+  }
+  pthread_cleanup_push(_poll_control_for_launcher_cleanup, NULL);
+  //pthread_cleanup_push(_poll_control_for_launcher_cleanup, NULL);
 
+  for(;;) {
+    // The cancellation point 
+    pthread_testcancel();
+
+    // Search for new launchers
+    
+    sleep(TL_CONTROL_POLL_RATE);
+  }
+
+  pthread_cleanup_pop(NULL);
+  return NULL;
+}
+
+
+void _poll_control_for_launcher_cleanup(void *target_arg) {
+
+
+
+}
+
+/**
+ * @brief 
+ *
+ * @return 
+ */
+int16_t start_continuous_poll() {
+  int16_t failed = 0;
+  if(main_launch_control == NULL) {
+    TRACE("Could not start continuous poll, control was null.\n");
+    return TL_CONTROL_WAS_NULL;
+  }
+  failed = _start_continuous_control_poll(main_launch_control);
+  return failed;
+}
+
+/**
+ * @brief 
+ *
+ * @return 
+ */
+int16_t stop_continuous_poll() {
+  int16_t failed = 0;
+  if(main_launch_control == NULL) {
+    TRACE("Could not stop continuous poll, control was null.\n");
+    return TL_CONTROL_WAS_NULL;
+  }
+  failed = _stop_continuous_control_poll(main_launch_control);
+  return failed;
+}
+
+/**
+ * @brief 
+ *
+ * @param target_control
+ *
+ * @return 
+ */
+int16_t _start_continuous_control_poll(launch_control *target_control) {
+  int thread_code = 0;
+  if(target_control == NULL) {
+    TRACE("Could not start continuous poll, control was null.\n");
+    return TL_CONTROL_WAS_NULL;
+  }
+
+  pthread_mutex_lock(&(target_control->poll_control_mutex));
+  target_control->poll_usb = 1;
+  thread_code = pthread_create(&(target_control->poll_thread), NULL, _poll_control_for_launcher, (void *) target_control);
+
+  pthread_mutex_unlock(&(target_control->poll_control_mutex));
+  return TL_NOT_IMPLEMENTED; 
+}
+
+/**
+ * @brief 
+ *
+ * @param target_control
+ *
+ * @return 
+ */
+int16_t _stop_continuous_control_poll(launch_control *target_control) {
+  
+  if(target_control == NULL) {
+    TRACE("Could not stop continuous poll, control was null.\n");
+    return TL_CONTROL_WAS_NULL;
+  }
+  
+  pthread_mutex_lock(&(target_control->poll_control_mutex));
+  target_control->poll_usb = 0;
+  
+  pthread_cancel(target_control->poll_thread);
+
+  #ifndef NDEBUG
+  pthread_join(target_control->poll_thread, NULL)
+  #endif
+
+  pthread_mutex_unlock(&(target_control->poll_control_mutex));
   return TL_NOT_IMPLEMENTED; 
 }
 

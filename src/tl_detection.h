@@ -17,6 +17,13 @@ int16_t cleanup_library();
 int16_t _initialize_control(launch_control *init_control);
 int16_t _cleanup_control(launch_control *clean_control);
 
-int16_t poll_for_launcher();
 
+int16_t start_continuous_poll();
+int16_t stop_continuous_poll();
+
+int16_t _start_continuous_control_poll(launch_control *target_control);
+int16_t _stop_continuous_control_poll(launch_control *target_control);
+
+void *_poll_control_for_launcher(void *target_control);
+void _poll_control_for_launcher_cleanup(void *target_control);
 #endif

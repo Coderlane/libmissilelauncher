@@ -14,14 +14,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-
-#include <libusb.h>
-
+#include <libusb-1.0/libusb.h>
+#include <pthread.h>
+#include <unistd.h>
 
 #include "tl_errors.h"
 #include "tlib_debug.h"
 
 #define INITIAL_ARRAY_SIZE 10
+
+#define TL_CONTROL_POLL_RATE 2
 
 typedef enum launcher_status {
   TLS_FREE,
@@ -38,11 +40,15 @@ typedef struct thunder_launcher {
 typedef struct launch_control {
   uint32_t launcher_count;
   uint32_t launcher_arr_size;
-  thunder_launcher *launcher_array;
+
   uint8_t  control_initialized;
+  uint8_t  poll_usb;
+
+  thunder_launcher *launcher_array;
+
+  pthread_mutex_t poll_control_mutex;
+  pthread_t poll_thread;
 } launch_control;
-
-
 
 static launch_control __attribute__ ((unused)) *main_launch_control = NULL;
 #endif
