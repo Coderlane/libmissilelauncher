@@ -33,4 +33,9 @@ uint8_t _get_control_poll_rate(launch_control *target_control);
 
 void *_poll_control_for_launcher(void *target_control);
 void _poll_control_for_launcher_cleanup(void *target_control);
+
+uint8_t is_device_launcher(struct libusb_device_descriptor *desc);
+int16_t _control_mount_launcher(launch_control *control, struct libusb_device *device);
+
+
 #endif

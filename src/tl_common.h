@@ -31,8 +31,8 @@
 #include "tl_errors.h"
 #include "tlib_debug.h"
 
-#define INITIAL_ARRAY_SIZE 10
-
+#define TL_INITIAL_LAUNCHER_ARRAY_SIZE 10
+#define TL_MAX_ATTACHED_DEVICES 256
 #define TL_DEFAULT_CONTROL_POLL_RATE 2
 
 typedef enum launcher_status {

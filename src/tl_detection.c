@@ -57,14 +57,14 @@ int16_t _initialize_control(launch_control *init_control) {
     return TL_CONTROL_ALREADY_INIT;
   }
   // Setup the array
-  init_control->launcher_array = calloc(sizeof(thunder_launcher), INITIAL_ARRAY_SIZE);
+  init_control->launcher_array = calloc(sizeof(thunder_launcher), TL_INITIAL_LAUNCHER_ARRAY_SIZE);
   if(init_control->launcher_array == NULL) {
     TRACE("Failed to initialize library. Launcher array was null.\n");
     return TL_CONTROL_ARR_ALLOC_FAIL;
   }
   // Set default variables
   init_control->_poll_rate_seconds = TL_DEFAULT_CONTROL_POLL_RATE;
-  init_control->launcher_arr_size = INITIAL_ARRAY_SIZE;
+  init_control->launcher_arr_size = TL_INITIAL_LAUNCHER_ARRAY_SIZE;
   init_control->launcher_count = 0;
   // Initialize mutexes
   pthread_mutex_init(&(init_control->poll_rate_mutex), NULL);
@@ -154,10 +154,12 @@ uint8_t _get_control_poll_rate(launch_control *target_control) {
  * @return 
  */
 void *_poll_control_for_launcher(void *target_arg) {
-  int device_count = 0;
+  int device_count = 0, desc_result = 0;
   uint8_t poll_rate = 0;
+  int16_t failed = 0;
 
   libusb_device **devices = NULL;
+  libusb_device *cur_device = NULL;
   launch_control *target_control = target_arg;
 
   if(target_control == NULL) {
@@ -177,7 +179,14 @@ void *_poll_control_for_launcher(void *target_arg) {
     device_count = libusb_get_device_list(NULL, &devices);
     if(device_count > 0){
       // Check for a new device...
-
+      for(int i = 0; (cur_device = devices[i]) != NULL && 
+                      i < TL_MAX_ATTACHED_DEVICES; i++){
+        struct libusb_device_descriptor descriptor;
+        desc_result = libusb_get_device_descriptor(cur_device, &descriptor);
+        if(is_device_launcher(&descriptor)){
+          failed = _control_mount_launcher(target_control, cur_device);
+        }
+      }
     }
     // Free
     libusb_free_device_list(devices, 1);
@@ -190,12 +199,13 @@ void *_poll_control_for_launcher(void *target_arg) {
   return NULL;
 }
 
-
 void _poll_control_for_launcher_cleanup(void *target_arg) {
 
 
 
 }
+
+
 
 /**
  * @brief 
@@ -274,5 +284,16 @@ int16_t _stop_continuous_control_poll(launch_control *target_control) {
 
     pthread_mutex_unlock(&(target_control->poll_control_mutex));
   return TL_NOT_IMPLEMENTED; 
+}
+
+
+uint8_t is_device_launcher(struct libusb_device_descriptor *desc){
+  
+  return 0; // Not implmented, return false.
+}
+
+int16_t _control_mount_launcher(launch_control *target_control, struct libusb_device *device){
+
+  return TL_NOT_IMPLEMENTED;
 }
 
