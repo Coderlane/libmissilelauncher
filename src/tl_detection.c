@@ -53,11 +53,14 @@ int16_t _initialize_control(launch_control *init_control) {
     return TL_CONTROL_ARR_ALLOC_FAIL;
   }
 
+  init_control->_poll_rate_seconds = TL_DEFAULT_CONTROL_POLL_RATE;
   init_control->launcher_arr_size = INITIAL_ARRAY_SIZE;
   init_control->launcher_count = 0;
 
-  init_control->control_initialized = 1;
+  pthread_mutex_init(&(init_control->poll_rate_mutex), NULL);
   pthread_mutex_init(&(init_control->poll_control_mutex), NULL);
+
+  init_control->control_initialized = 1;
   return TL_OK;
 }
 
@@ -103,6 +106,35 @@ int16_t _cleanup_control(launch_control *cleanup_control) {
   return TL_OK;
 }
 
+int16_t set_poll_rate(uint8_t new_rate) {
+  return _set_control_poll_rate(main_launch_control, new_rate);
+}
+
+uint8_t get_poll_rate() {
+  return _get_control_poll_rate(main_launch_control);
+}
+
+int16_t _set_control_poll_rate(launch_control *target_control, uint8_t new_rate) {
+  if(target_control == NULL) {
+    return TL_CONTROL_WAS_NULL;
+  }
+  pthread_mutex_lock(&(target_control->poll_rate_mutex));
+  target_control->_poll_rate_seconds = new_rate;
+  pthread_mutex_unlock(&(target_control->poll_rate_mutex));
+  return TL_OK;
+}
+
+uint8_t _get_control_poll_rate(launch_control *target_control) {
+  uint8_t poll_rate = 0;
+  if(target_control == NULL) {
+    return 0;
+  }
+  pthread_mutex_lock(&(target_control->poll_rate_mutex));
+  poll_rate = target_control->_poll_rate_seconds;
+  pthread_mutex_unlock(&(target_control->poll_rate_mutex));
+  return poll_rate;
+}
+
 /**
  * @brief 
  *
@@ -112,7 +144,8 @@ int16_t _cleanup_control(launch_control *cleanup_control) {
  */
 void *_poll_control_for_launcher(void *target_arg) {
   launch_control *target_control = target_arg;
-
+  uint8_t poll_rate = 0;
+ 
   if(target_control == NULL) {
     TRACE("Target control was null.\n");
     return NULL;
@@ -120,13 +153,16 @@ void *_poll_control_for_launcher(void *target_arg) {
   pthread_cleanup_push(_poll_control_for_launcher_cleanup, NULL);
   //pthread_cleanup_push(_poll_control_for_launcher_cleanup, NULL);
 
+  poll_rate = _get_control_poll_rate(target_control);
+
   for(;;) {
     // The cancellation point 
     pthread_testcancel();
 
     // Search for new launchers
-    
-    sleep(TL_CONTROL_POLL_RATE);
+
+    second_sleep(poll_rate);
+    poll_rate = _get_control_poll_rate(target_control);
   }
 
   pthread_cleanup_pop(NULL);
