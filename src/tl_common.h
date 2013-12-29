@@ -50,15 +50,13 @@ typedef struct thunder_launcher {
 typedef struct launch_control {
   uint32_t launcher_count;
   uint32_t launcher_arr_size;
-  
   uint8_t  _poll_rate_seconds;
-
   uint8_t  control_initialized;
   uint8_t  poll_usb;
 
   thunder_launcher *launcher_array;
 
-  pthread_mutex_t poll_rate_mutex;
+  pthread_rwlock_t poll_rate_lock;
   pthread_mutex_t poll_control_mutex;
   pthread_t poll_thread;
 } launch_control;

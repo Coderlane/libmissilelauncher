@@ -20,6 +20,7 @@ int16_t initialize_library() {
     TRACE("Main launch control was not null, possibly already initialized\n");
     return TL_LIBRARY_ALREADY_INIT;
   }
+  // Allocate space for the main controller, calloc so everything is null.
   main_launch_control = calloc(sizeof(launch_control), 1);
   if(main_launch_control == NULL) {
     TRACE("Could not allocate memory for a new launch control\n");
@@ -33,6 +34,7 @@ int16_t initialize_library() {
     main_launch_control = NULL;
     return TL_LIBUSB_INIT_FAILED;
   }
+  // Initialize the main controller
   failed = _initialize_control(main_launch_control);
   if(failed) {
     if(main_launch_control->launcher_array != NULL) {
@@ -66,8 +68,8 @@ int16_t _initialize_control(launch_control *init_control) {
   init_control->_poll_rate_seconds = TL_DEFAULT_CONTROL_POLL_RATE;
   init_control->launcher_arr_size = TL_INITIAL_LAUNCHER_ARRAY_SIZE;
   init_control->launcher_count = 0;
-  // Initialize mutexes
-  pthread_mutex_init(&(init_control->poll_rate_mutex), NULL);
+  // Initialize mutexes and locks
+  pthread_rwlock_init(&(init_control->poll_rate_lock), NULL);
   pthread_mutex_init(&(init_control->poll_control_mutex), NULL);
   // Good to go!
   init_control->control_initialized = 1;
@@ -114,6 +116,11 @@ int16_t _cleanup_control(launch_control *cleanup_control) {
   cleanup_control->launcher_arr_size = 0;
   cleanup_control->launcher_count = 0;
   cleanup_control->control_initialized = 0;
+
+
+  pthread_mutex_destroy(&(cleanup_control->poll_control_mutex));
+  pthread_rwlock_destroy(&(cleanup_control->poll_rate_lock));
+
   return TL_OK;
 }
 
@@ -129,9 +136,9 @@ int16_t _set_control_poll_rate(launch_control *target_control, uint8_t new_rate)
   if(target_control == NULL) {
     return TL_CONTROL_WAS_NULL;
   }
-  pthread_mutex_lock(&(target_control->poll_rate_mutex));
+  pthread_rwlock_wrlock(&(target_control->poll_rate_lock));
   target_control->_poll_rate_seconds = new_rate;
-  pthread_mutex_unlock(&(target_control->poll_rate_mutex));
+  pthread_rwlock_unlock(&(target_control->poll_rate_lock));
   return TL_OK;
 }
 
@@ -140,9 +147,9 @@ uint8_t _get_control_poll_rate(launch_control *target_control) {
   if(target_control == NULL) {
     return 0;
   }
-  pthread_mutex_lock(&(target_control->poll_rate_mutex));
+  pthread_rwlock_rdlock(&(target_control->poll_rate_lock));
   poll_rate = target_control->_poll_rate_seconds;
-  pthread_mutex_unlock(&(target_control->poll_rate_mutex));
+  pthread_rwlock_unlock(&(target_control->poll_rate_lock));
   return poll_rate;
 }
 
@@ -254,7 +261,6 @@ int16_t _start_continuous_control_poll(launch_control *target_control) {
   pthread_mutex_lock(&(target_control->poll_control_mutex));
   target_control->poll_usb = 1;
   thread_code = pthread_create(&(target_control->poll_thread), NULL, _poll_control_for_launcher, (void *) target_control);
-
   pthread_mutex_unlock(&(target_control->poll_control_mutex));
   return TL_NOT_IMPLEMENTED; 
 }
