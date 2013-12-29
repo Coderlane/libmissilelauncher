@@ -14,6 +14,7 @@
  * @return 
  */
 int16_t initialize_library() {
+  int init_result;
   int16_t failed = 0;
   if(main_launch_control != NULL) {
     TRACE("Main launch control was not null, possibly already initialized\n");
@@ -23,6 +24,14 @@ int16_t initialize_library() {
   if(main_launch_control == NULL) {
     TRACE("Could not allocate memory for a new launch control\n");
     return TL_CONTROL_ALLOC_FAIL;
+  }
+  // Initialize libusb 
+  init_result = libusb_init(NULL);
+  if(init_result < 0) {
+    TRACE("libusb failed with code: %d\n", init_result);
+    free(main_launch_control);
+    main_launch_control = NULL;
+    return TL_LIBUSB_INIT_FAILED;
   }
   failed = _initialize_control(main_launch_control);
   if(failed) {
@@ -47,19 +56,20 @@ int16_t _initialize_control(launch_control *init_control) {
     TRACE("Controller already initialized\n");
     return TL_CONTROL_ALREADY_INIT;
   }
+  // Setup the array
   init_control->launcher_array = calloc(sizeof(thunder_launcher), INITIAL_ARRAY_SIZE);
   if(init_control->launcher_array == NULL) {
     TRACE("Failed to initialize library. Launcher array was null.\n");
     return TL_CONTROL_ARR_ALLOC_FAIL;
   }
-
+  // Set default variables
   init_control->_poll_rate_seconds = TL_DEFAULT_CONTROL_POLL_RATE;
   init_control->launcher_arr_size = INITIAL_ARRAY_SIZE;
   init_control->launcher_count = 0;
-
+  // Initialize mutexes
   pthread_mutex_init(&(init_control->poll_rate_mutex), NULL);
   pthread_mutex_init(&(init_control->poll_control_mutex), NULL);
-
+  // Good to go!
   init_control->control_initialized = 1;
   return TL_OK;
 }
@@ -80,8 +90,9 @@ int16_t cleanup_library() {
     free(main_launch_control);
     main_launch_control = NULL;
   }
+  libusb_exit(NULL);
   return failed;
- }
+}
 
 /**
  * @brief Do not use. Frees all memory related to a launch controller.
@@ -143,9 +154,12 @@ uint8_t _get_control_poll_rate(launch_control *target_control) {
  * @return 
  */
 void *_poll_control_for_launcher(void *target_arg) {
-  launch_control *target_control = target_arg;
+  int device_count = 0;
   uint8_t poll_rate = 0;
- 
+
+  libusb_device **devices = NULL;
+  launch_control *target_control = target_arg;
+
   if(target_control == NULL) {
     TRACE("Target control was null.\n");
     return NULL;
@@ -155,12 +169,19 @@ void *_poll_control_for_launcher(void *target_arg) {
 
   poll_rate = _get_control_poll_rate(target_control);
 
+
   for(;;) {
     // The cancellation point 
     pthread_testcancel();
+    // Get devices  
+    device_count = libusb_get_device_list(NULL, &devices);
+    if(device_count > 0){
+      // Check for a new device...
 
-    // Search for new launchers
-
+    }
+    // Free
+    libusb_free_device_list(devices, 1);
+    // Sleep and update poll rate
     second_sleep(poll_rate);
     poll_rate = _get_control_poll_rate(target_control);
   }
@@ -236,22 +257,22 @@ int16_t _start_continuous_control_poll(launch_control *target_control) {
  * @return 
  */
 int16_t _stop_continuous_control_poll(launch_control *target_control) {
-  
+
   if(target_control == NULL) {
     TRACE("Could not stop continuous poll, control was null.\n");
     return TL_CONTROL_WAS_NULL;
   }
-  
+
   pthread_mutex_lock(&(target_control->poll_control_mutex));
   target_control->poll_usb = 0;
-  
+
   pthread_cancel(target_control->poll_thread);
 
-  #ifndef NDEBUG
+#ifndef NDEBUG
   pthread_join(target_control->poll_thread, NULL)
-  #endif
+#endif
 
-  pthread_mutex_unlock(&(target_control->poll_control_mutex));
+    pthread_mutex_unlock(&(target_control->poll_control_mutex));
   return TL_NOT_IMPLEMENTED; 
 }
 

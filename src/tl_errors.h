@@ -22,6 +22,7 @@ typedef enum tl_launch_codes {
   TL_CONTROL_ARR_ALLOC_FAIL,
   TL_CONTROL_FREE_NULL,
   TL_CONTROL_ARR_NULL,
+  TL_LIBUSB_INIT_FAILED
 } tl_launch_codes;
 
 #endif
