@@ -11,4 +11,14 @@
 
 #include <tl_detection.h>
 
+
+int16_t test_constant_poll();
+
+#define MAX_TEST_INDEX 1 
+
+static int16_t (*test_array[MAX_TEST_INDEX])(void) = {test_constant_poll};
+
+
+
+
 #endif

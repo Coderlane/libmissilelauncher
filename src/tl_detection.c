@@ -113,14 +113,14 @@ int16_t _cleanup_control(launch_control *cleanup_control) {
     return TL_CONTROL_ARR_NULL;
   }
   free(cleanup_control->launcher_array);
+  cleanup_control->launcher_array = NULL;
   cleanup_control->launcher_arr_size = 0;
   cleanup_control->launcher_count = 0;
   cleanup_control->control_initialized = 0;
-
-
+  
+  // Cleanup mutexes
   pthread_mutex_destroy(&(cleanup_control->poll_control_mutex));
   pthread_rwlock_destroy(&(cleanup_control->poll_rate_lock));
-
   return TL_OK;
 }
 
@@ -190,11 +190,12 @@ void *_poll_control_for_launcher(void *target_arg) {
                       i < TL_MAX_ATTACHED_DEVICES; i++){
         struct libusb_device_descriptor descriptor;
         desc_result = libusb_get_device_descriptor(cur_device, &descriptor);
+
         if(is_device_launcher(&descriptor)){
           failed = _control_mount_launcher(target_control, cur_device);
         }
       }
-    }
+    } 
     // Free
     libusb_free_device_list(devices, 1);
     // Sleep and update poll rate
@@ -260,6 +261,7 @@ int16_t _start_continuous_control_poll(launch_control *target_control) {
 
   pthread_mutex_lock(&(target_control->poll_control_mutex));
   target_control->poll_usb = 1;
+  TRACE("starting poll\n");
   thread_code = pthread_create(&(target_control->poll_thread), NULL, _poll_control_for_launcher, (void *) target_control);
   pthread_mutex_unlock(&(target_control->poll_control_mutex));
   return TL_NOT_IMPLEMENTED; 
@@ -285,7 +287,7 @@ int16_t _stop_continuous_control_poll(launch_control *target_control) {
   pthread_cancel(target_control->poll_thread);
 
 #ifndef NDEBUG
-  pthread_join(target_control->poll_thread, NULL)
+  pthread_join(target_control->poll_thread, NULL);
 #endif
 
     pthread_mutex_unlock(&(target_control->poll_control_mutex));
@@ -294,8 +296,11 @@ int16_t _stop_continuous_control_poll(launch_control *target_control) {
 
 
 uint8_t is_device_launcher(struct libusb_device_descriptor *desc){
-  
-  return 0; // Not implmented, return false.
+  if(desc->idVendor == TL_STD_VENDOR_ID && desc->idProduct == TL_STD_PRODUCT_ID){
+    TRACE("found std launcher\n");
+    return TL_STANDARD_LAUNCHER;
+  } 
+  return TL_NOT_LAUNCHER; // Not implmented, return false.
 }
 
 int16_t _control_mount_launcher(launch_control *target_control, struct libusb_device *device){
