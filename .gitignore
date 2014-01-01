@@ -26,3 +26,4 @@ obj/*
 
 #Personal
 .ycm_extra_conf.pyc
+old/*
