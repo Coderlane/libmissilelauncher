@@ -115,15 +115,40 @@ uint8_t ml_is_library_init() {
 }
 
 int16_t ml_start_continuous_poll() {
+  int thread_code = 0;
   if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
 
-  return ML_NOT_IMPLEMENTED;
+  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
+  if(ml_main_controller->currently_polling) {
+    pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
+    return ML_OK;
+  }
+
+  thread_code = pthread_create(&(ml_main_controller->poll_thread), NULL, _ml_poll_for_launchers, (void *) ml_main_controller);
+  ml_main_controller->currently_polling = 1;
+  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
+  if(thread_code != 0) {
+    return ML_FAILED_POLL_START;
+  }
+  return ML_OK;
 }
 
 int16_t ml_stop_continuous_poll() {
   if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
 
-  return ML_NOT_IMPLEMENTED;
+  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
+  if(!(ml_main_controller->currently_polling)) {
+    pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
+    return ML_OK;
+  }
+  pthread_cancel(ml_main_controller->poll_thread);
+
+#ifndef NDEBUG
+  pthread_join(ml_main_controller->poll_thread, NULL);
+#endif
+  ml_main_controller->currently_polling = 0;
+  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
+  return ML_OK;
 }
 
 
@@ -136,7 +161,6 @@ void *_ml_poll_for_launchers(void *target_arg) {
   libusb_device *cur_device = NULL;
 
   if(!ml_is_library_init()) return NULL;
-  // pthread_cleanup_push(_poll_control_for_launcher_cleanup, NULL);
 
   poll_rate = ml_get_poll_rate();
 
@@ -145,27 +169,25 @@ void *_ml_poll_for_launchers(void *target_arg) {
     pthread_testcancel();
     // Get devices  
     device_count = libusb_get_device_list(NULL, &devices);
+    
 
-    //_ml_update_device_list(devices);
-    /*
-       if(device_count > 0){
-    // Check for a new device...
-    for(int i = 0; (cur_device = devices[i]) != NULL && 
-    i < TL_MAX_ATTACHED_DEVICES; i++){
-    struct libusb_device_descriptor descriptor;
-    desc_result = libusb_get_device_descriptor(cur_device, &descriptor);
+    // Free
+    libusb_free_device_list(devices, 1);
+    // Sleep and update poll rate
+    ml_second_sleep(poll_rate);
+    poll_rate = ml_get_poll_rate();
+  }
+}
 
-    if(is_device_launcher(&descriptor)){
+uint8_t ml_is_polling() {
+  uint8_t polling = 0;
 
-    }
-    }
-    */
-  } 
-  // Free
-  libusb_free_device_list(devices, 1);
-  // Sleep and update poll rate
-  ml_second_sleep(poll_rate);
-  poll_rate = ml_get_poll_rate();
+  if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
+
+  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
+  polling = ml_main_controller->currently_polling;
+  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
+  return polling;
 }
 
 /**
@@ -205,13 +227,4 @@ int16_t ml_set_poll_rate(uint8_t poll_rate_seconds) {
   return ML_OK;
 }
 
-uint8_t ml_is_polling() {
-  uint8_t polling = 0;
 
-  if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
-
-  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
-  polling = ml_main_controller->currently_polling;
-  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
-  return polling;
-}
