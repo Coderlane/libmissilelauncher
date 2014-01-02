@@ -6,5 +6,4 @@
  * @date 2014-01-02
  */
 
-#include "libmissilelauncher.h"
-#include "ml_launcher_def.h"
+#include "libmissilelauncher_internal.h"

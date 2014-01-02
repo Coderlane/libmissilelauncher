@@ -6,9 +6,7 @@
  * @date 2013-12-31
  */
 
-#include "libmissilelauncher.h"
-#include "ml_controller_def.h"
-#include "ml_launcher_def.h"
+#include "libmissilelauncher_internal.h"
 
 int16_t ml_init_library(){
   int init_result;

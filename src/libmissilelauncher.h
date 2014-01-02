@@ -52,10 +52,6 @@ typedef struct ml_launcher_t ml_launcher_t;
 
 typedef struct ml_arr_launcher_t ml_arr_launcher_t;
 
-// ***** Global Statics *****
-static ml_controller_t __attribute__ ((unused)) *ml_main_controller = NULL;
-static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHREAD_MUTEX_INITIALIZER;
-
 // ***** Functions *****
 int16_t ml_init_library();
 int16_t ml_cleanup_library();
