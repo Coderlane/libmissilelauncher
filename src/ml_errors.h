@@ -23,7 +23,8 @@ typedef enum ml_error_codes {
   ML_CONTROL_ARR_ALLOC_FAIL,
   ML_CONTROL_FREE_NULL,
   ML_CONTROL_ARR_NULL,
-  ML_LIBUSB_INIT_FAILED
+  ML_LIBUSB_INIT_FAILED,
+  ML_INVALID_POLL_RATE
 } ml_error_codes;
 
 #endif

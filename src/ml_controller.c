@@ -106,13 +106,22 @@ int16_t _ml_cleanup_controller(ml_controller_t *controller) {
   return ML_OK;
 }
 
+uint8_t ml_is_library_init() {
+  if(ml_main_controller == NULL) {
+    TRACE("Library not initialized.\n");
+    return 0;
+  } 
+  return 1;
+}
 
 int16_t ml_start_continuous_poll() {
+  if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
 
   return ML_NOT_IMPLEMENTED;
 }
 
 int16_t ml_stop_continuous_poll() {
+  if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
 
   return ML_NOT_IMPLEMENTED;
 }
@@ -126,10 +135,7 @@ void *_ml_poll_for_launchers(void *target_arg) {
   libusb_device **devices = NULL;
   libusb_device *cur_device = NULL;
 
-  if(ml_main_controller == NULL) {
-    TRACE("Library not initialized.\n");
-    return NULL;
-  }
+  if(!ml_is_library_init()) return NULL;
   // pthread_cleanup_push(_poll_control_for_launcher_cleanup, NULL);
 
   poll_rate = ml_get_poll_rate();
@@ -162,25 +168,50 @@ void *_ml_poll_for_launchers(void *target_arg) {
   poll_rate = ml_get_poll_rate();
 }
 
+/**
+ * @brief 
+ *
+ * @return 
+ */
 uint8_t ml_get_poll_rate() {
   uint8_t poll_rate;
-  if(ml_main_controller == NULL) {
-    TRACE("Library not initialized.\n");
-    return ML_LIBRARY_NOT_INIT;
-  }
+
+  if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
+
   pthread_rwlock_rdlock(&(ml_main_controller->poll_rate_lock));
   poll_rate = ml_main_controller->poll_rate_seconds;
   pthread_rwlock_unlock(&(ml_main_controller->poll_rate_lock));
   return poll_rate;
 }
 
+/**
+ * @brief 
+ *
+ * @param poll_rate_seconds The new pollrate in seconds equal to 
+ * or between ML_MAX_POLL_RATE and ML_MIN_POLL_RATE
+ *
+ * @return A result code, 0 (OK),  ML_LIBRARY_NOT_INIT, or ML_INVALID_POLL_RATE
+ */
 int16_t ml_set_poll_rate(uint8_t poll_rate_seconds) {
-  if(ml_main_controller == NULL) {
-    TRACE("Library not initialized.\n");
-    return ML_LIBRARY_NOT_INIT;
+
+  if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
+
+  if(poll_rate_seconds > ML_MAX_POLL_RATE || poll_rate_seconds < ML_MIN_POLL_RATE) {
+    return ML_INVALID_POLL_RATE;
   }
   pthread_rwlock_wrlock(&(ml_main_controller->poll_rate_lock));
   ml_main_controller->poll_rate_seconds = poll_rate_seconds;
   pthread_rwlock_unlock(&(ml_main_controller->poll_rate_lock));
   return ML_OK;
+}
+
+uint8_t ml_is_polling() {
+  uint8_t polling = 0;
+
+  if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
+
+  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
+  polling = ml_main_controller->currently_polling;
+  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
+  return polling;
 }

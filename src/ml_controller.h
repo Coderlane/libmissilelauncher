@@ -15,6 +15,9 @@
 #define ML_MAX_ATTACHED_DEVICES 256
 #define ML_DEFAULT_CONTROL_POLL_RATE 2
 
+#define ML_MAX_POLL_RATE 120
+#define ML_MIN_POLL_RATE 1
+
 typedef void(*ml_void_event_handler)();
 
 typedef struct ml_controller_t {
@@ -22,7 +25,7 @@ typedef struct ml_controller_t {
   uint32_t  launcher_array_size;
   uint8_t   poll_rate_seconds;
   uint8_t   control_initialized;
-  uint8_t   poll_usb;
+  uint8_t   currently_polling;
   ml_arr_launcher_t **launchers;
   // Event Handlers
   ml_void_event_handler on_launchers_updated;
@@ -39,9 +42,11 @@ static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHRE
 
 int16_t ml_init_library();
 int16_t ml_cleanup_library();
+uint8_t ml_is_library_init();
 
 int16_t ml_start_continuous_poll();
 int16_t ml_stop_continuous_poll();
+uint8_t ml_is_polling();
 
 uint8_t ml_get_poll_rate();
 int16_t ml_set_poll_rate(uint8_t poll_rate_seconds);
