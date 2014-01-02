@@ -6,7 +6,9 @@
  * @date 2013-12-31
  */
 
-#include "ml_controller.h"
+#include "libmissilelauncher.h"
+#include "ml_controller_def.h"
+#include "ml_launcher_def.h"
 
 int16_t ml_init_library(){
   int init_result;
@@ -170,6 +172,7 @@ void *_ml_poll_for_launchers(void *target_arg) {
     // Get devices  
     device_count = libusb_get_device_list(NULL, &devices);
     
+    //TODO: Scan and add to array if new. Else continue
 
     // Free
     libusb_free_device_list(devices, 1);
