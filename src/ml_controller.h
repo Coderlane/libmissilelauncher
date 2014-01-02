@@ -40,7 +40,16 @@ static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHRE
 int16_t ml_init_library();
 int16_t ml_cleanup_library();
 
+int16_t ml_start_continuous_poll();
+int16_t ml_stop_continuous_poll();
+
+uint8_t ml_get_poll_rate();
+int16_t ml_set_poll_rate(uint8_t poll_rate_seconds);
+
+
 int16_t _ml_init_controller(ml_controller_t *controller);
 int16_t _ml_cleanup_controller(ml_controller_t *controller);
+
+void *_ml_poll_for_launchers(void *target_arg);
 
 #endif

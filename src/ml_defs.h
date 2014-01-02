@@ -12,10 +12,10 @@
 
 // Cross platform compatibility
 #if defined(WIN32)
-#define tl_second_sleep(seconds) Sleep(1000 * seconds) // Seconds to milliseconds
+#define ml_second_sleep(seconds) Sleep(1000 * seconds) // Seconds to milliseconds
 #else
 #include <unistd.h>
-#define tl_second_sleep(seconds) sleep(seconds)  // No conversion necessary
+#define ml_second_sleep(seconds) sleep(seconds)  // No conversion necessary
 #endif
 
 #include <stdint.h>
