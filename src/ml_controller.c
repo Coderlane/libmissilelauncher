@@ -59,7 +59,7 @@ int16_t _ml_init_controller(ml_controller_t *controller) {
     return ML_CONTROL_ARR_ALLOC_FAIL;
   }
   // Set default variables
-  controller->poll_rate_seconds   = ML_DEFAULT_CONTROL_POLL_RATE;
+  controller->poll_rate_seconds   = ML_DEFAULT_POLL_RATE;
   controller->launcher_array_size = ML_INITIAL_LAUNCHER_ARRAY_SIZE;
   controller->launcher_count = 0;
   // Initialize mutexes and locks
@@ -207,16 +207,24 @@ uint8_t ml_get_poll_rate() {
 }
 
 /**
- * @brief 
+ * @brief Sets a new poll rate for the library to use.
  *
  * @param poll_rate_seconds The new pollrate in seconds equal to 
- * or between ML_MAX_POLL_RATE and ML_MIN_POLL_RATE
+ * or between ML_MAX_POLL_RATE and ML_MIN_POLL_RATE or
+ * 0 to reset to the default poll rate
  *
  * @return A result code, 0 (OK),  ML_LIBRARY_NOT_INIT, or ML_INVALID_POLL_RATE
  */
 int16_t ml_set_poll_rate(uint8_t poll_rate_seconds) {
 
   if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
+
+  if(poll_rate_seconds == 0) {
+    pthread_rwlock_wrlock(&(ml_main_controller->poll_rate_lock));
+    ml_main_controller->poll_rate_seconds = ML_DEFAULT_POLL_RATE;
+    pthread_rwlock_unlock(&(ml_main_controller->poll_rate_lock));
+    return ML_OK;
+  }
 
   if(poll_rate_seconds > ML_MAX_POLL_RATE || poll_rate_seconds < ML_MIN_POLL_RATE) {
     return ML_INVALID_POLL_RATE;

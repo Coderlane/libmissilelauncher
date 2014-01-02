@@ -9,12 +9,14 @@
 #ifndef ML_CONTROLLER_H
 #define ML_CONTROLLER_H
 
-#include "ml_launcher.h"
 #include "ml_defs.h"
+#include "ml_launcher.h"
+
+// ***** Controller Definitions *****
 
 #define ML_MAX_ATTACHED_DEVICES 256
-#define ML_DEFAULT_CONTROL_POLL_RATE 2
 
+#define ML_DEFAULT_POLL_RATE 2
 #define ML_MAX_POLL_RATE 120
 #define ML_MIN_POLL_RATE 1
 
@@ -37,8 +39,12 @@ typedef struct ml_controller_t {
   pthread_t poll_thread;
 } ml_controller_t;
 
+// ***** Global Statics *****
+
 static ml_controller_t __attribute__ ((unused)) *ml_main_controller = NULL;
 static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+// ***** Functions *****
 
 int16_t ml_init_library();
 int16_t ml_cleanup_library();
@@ -47,7 +53,6 @@ uint8_t ml_is_library_init();
 int16_t ml_start_continuous_poll();
 int16_t ml_stop_continuous_poll();
 uint8_t ml_is_polling();
-
 uint8_t ml_get_poll_rate();
 int16_t ml_set_poll_rate(uint8_t poll_rate_seconds);
 
