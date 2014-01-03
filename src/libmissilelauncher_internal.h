@@ -10,32 +10,40 @@
 #define LIBMISSILELAUNCHER_INTERNAL_H
 
 #include "libmissilelauncher.h"
+#include "tlib_debug.h"
 
-struct ml_launcher_t {
+// Cross platform compatibility
+#if defined(WIN32)
+#define ml_second_sleep(seconds) Sleep(1000 * seconds) // Seconds to milliseconds
+#else
+#include <unistd.h>
+#define ml_second_sleep(seconds) sleep(seconds)  // No conversion necessary
+#endif
+
+#define ML_INITIAL_LAUNCHER_ARRAY_SIZE 10
+
+typedef struct ml_launcher_t {
   ml_launcher_type type;
   uint8_t usb_bus;
   uint8_t usb_device_number;
-};
+  uint32_t ref_count;
 
-struct ml_arr_launcher_t {
-  // Public Variables
-  ml_launcher_type type;
-  uint8_t usb_bus;
-  uint8_t usb_device_number;
 
-  // Private Variables  
   uint32_t horizontal_position;
   uint32_t vertical_position;
   uint32_t led_status;
-};
+
+  pthread_mutex_t main_lock;
+} ml_arr_launcher_t;
 
 struct ml_controller_t {
-  uint32_t  launcher_count;
-  uint32_t  launcher_array_size;
+  int16_t  launcher_count;
+  int16_t  launcher_array_size;
   uint8_t   poll_rate_seconds;
   uint8_t   control_initialized;
   uint8_t   currently_polling;
-  struct ml_arr_launcher_t **launchers;
+
+  struct ml_launcher_t **launchers;
   // Event Handlers
   ml_void_event_handler on_launchers_updated;
   //  Mutexes and Locks
@@ -50,5 +58,14 @@ struct ml_controller_t {
 static ml_controller_t __attribute__ ((unused)) *ml_main_controller = NULL;
 static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+
+// ********** Library Functions **********
+int16_t _ml_init_controller(ml_controller_t *);
+int16_t _ml_cleanup_controller(ml_controller_t *);
+
+void *_ml_poll_for_launchers(void *);
+
+uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
+int16_t _ml_update_launchers(struct libusb_device **, int);
 #endif
 

@@ -161,15 +161,16 @@ void *_ml_poll_for_launchers(void *target_arg) {
   libusb_device *cur_device = NULL;
 
   if(!ml_is_library_init()) return NULL;
-
+  TRACE("Polling\n");
   poll_rate = ml_get_poll_rate();
 
   for(;;) {
     // The cancellation point 
     pthread_testcancel();
+    TRACE("loop\n");
     // Get devices  
     device_count = libusb_get_device_list(NULL, &devices);
-    
+    _ml_update_launchers(devices, device_count); 
     //TODO: Scan and add to array if new. Else continue
 
     // Free
@@ -236,4 +237,37 @@ int16_t ml_set_poll_rate(uint8_t poll_rate_seconds) {
   return ML_OK;
 }
 
+uint8_t _ml_catagorize_device(struct libusb_device_descriptor *desc) {
+  if(desc->idProduct == ML_STD_PRODUCT_ID && desc->idVendor == ML_STD_VENDOR_ID) {
+    TRACE("found std launcher\n");
+    return ML_STANDARD_LAUNCHER;
+  }
+  return ML_NOT_LAUNCHER;
+}
 
+int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
+  libusb_device *device = NULL;
+
+  for(int i = 0; i < device_count && (device = devices[i]) != NULL; i++) {
+    struct libusb_device_descriptor device_descriptor;
+    libusb_get_device_descriptor(device, &device_descriptor);
+
+    // Check if the device is a launcher
+    if(_ml_catagorize_device(&device_descriptor) != ML_NOT_LAUNCHER) {
+      // Device is launcher
+    } 
+  
+  }
+  return ML_NOT_IMPLEMENTED;
+}
+
+
+int16_t ml_get_launcher_array(ml_launcher_t ***new_arr) {
+  
+  return 0;
+}
+
+int16_t ml_free_launcher_array(ml_launcher_t **free_arr) {
+
+  return 0;
+}
