@@ -8,29 +8,73 @@
 
 #include "libmissilelauncher_internal.h"
 
-int16_t _ml_init_launcher(ml_launcher_t *launcher) {
 
+/**
+ * @brief 
+ *
+ * @param launcher
+ *
+ * @return 
+ */
+int16_t _ml_init_launcher(ml_launcher_t *launcher) {
+  if(launcher == NULL) {
+    TRACE("Launcher was null. _ml_init_launcher\n");
+    return ML_NULL_LAUNCHER;
+  }
   pthread_mutex_init(&(launcher->main_lock), NULL);
   return ML_OK;
 }
 
-int16_t _ml_cleanup_launcher(ml_launcher_t *launcher) {
-
-  pthread_mutex_destroy(&(launcher->main_lock));
+/**
+ * @brief 
+ *
+ * @param launcher
+ *
+ * @return 
+ */
+int16_t _ml_cleanup_launcher(ml_launcher_t **launcher) {
+  if((*launcher) == NULL) {
+    TRACE("Launcher was null. _ml_cleanup_launcher\n");
+    return ML_NULL_LAUNCHER;
+  }
+  pthread_mutex_destroy(&((*launcher)->main_lock));
+  free((*launcher));
+  launcher = NULL;
   return ML_OK;
 }
 
+/**
+ * @brief 
+ *
+ * @param launcher
+ *
+ * @return 
+ */
 int16_t ml_refrence_launcher(ml_launcher_t *launcher) {
+  if(launcher == NULL) {
+    TRACE("Launcher was null. ml_refrence_launcher\n");
+    return ML_NULL_LAUNCHER;
+  }
   pthread_mutex_lock(&(launcher->main_lock));
-  
+  launcher->ref_count += 1; 
   pthread_mutex_unlock(&(launcher->main_lock));
   return ML_NOT_IMPLEMENTED;
 }
 
-
+/**
+ * @brief 
+ *
+ * @param launcher
+ *
+ * @return 
+ */
 int16_t ml_derefrence_launcher(ml_launcher_t *launcher) {
+  if(launcher == NULL) {
+    TRACE("Launcher was null. ml_derefrence_launcher\n");
+    return ML_NULL_LAUNCHER;
+  }
   pthread_mutex_lock(&(launcher->main_lock));
-  
+  launcher->ref_count -= 1;
   pthread_mutex_unlock(&(launcher->main_lock));
   return ML_NOT_IMPLEMENTED;
 }

@@ -20,18 +20,22 @@
 #define ml_second_sleep(seconds) sleep(seconds)  // No conversion necessary
 #endif
 
-#define ML_INITIAL_LAUNCHER_ARRAY_SIZE 10
+#define ML_MAX_LAUNCHER_ARRAY_SIZE 256
+#define ML_INITIAL_LAUNCHER_ARRAY_SIZE 8
 
 typedef struct ml_launcher_t {
   ml_launcher_type type;
   uint8_t usb_bus;
   uint8_t usb_device_number;
+  uint8_t device_connected;
   uint32_t ref_count;
 
 
   uint32_t horizontal_position;
   uint32_t vertical_position;
   uint32_t led_status;
+
+  libusb_device *usb_device;
 
   pthread_mutex_t main_lock;
 } ml_arr_launcher_t;
@@ -63,9 +67,15 @@ static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHRE
 int16_t _ml_init_controller(ml_controller_t *);
 int16_t _ml_cleanup_controller(ml_controller_t *);
 
+int16_t _ml_init_launcher(ml_launcher_t *);
+int16_t _ml_cleanup_launcher(ml_launcher_t **);
+
+int16_t _ml_remove_launcher(int16_t);
+int16_t _ml_add_launcher(ml_launcher_t *);
+
+
 void *_ml_poll_for_launchers(void *);
 
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
 int16_t _ml_update_launchers(struct libusb_device **, int);
 #endif
-

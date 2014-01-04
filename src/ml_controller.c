@@ -53,7 +53,8 @@ int16_t _ml_init_controller(ml_controller_t *controller) {
     return ML_CONTROL_ALREADY_INIT;
   }
   // Setup the array
-  controller->launchers = calloc(sizeof(ml_arr_launcher_t), ML_INITIAL_LAUNCHER_ARRAY_SIZE);
+  controller->launchers = calloc(sizeof(ml_arr_launcher_t),
+                                 ML_INITIAL_LAUNCHER_ARRAY_SIZE);
   if(controller->launchers == NULL) {
     TRACE("Failed to initialize library. Launcher array was null.\n");
     return ML_CONTROL_ARR_ALLOC_FAIL;
@@ -124,7 +125,8 @@ int16_t ml_start_continuous_poll() {
     return ML_OK;
   }
 
-  thread_code = pthread_create(&(ml_main_controller->poll_thread), NULL, _ml_poll_for_launchers, (void *) ml_main_controller);
+  thread_code = pthread_create(&(ml_main_controller->poll_thread), NULL,
+                   _ml_poll_for_launchers, (void *) ml_main_controller);
   ml_main_controller->currently_polling = 1;
   pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
   if(thread_code != 0) {
@@ -228,7 +230,8 @@ int16_t ml_set_poll_rate(uint8_t poll_rate_seconds) {
     return ML_OK;
   }
 
-  if(poll_rate_seconds > ML_MAX_POLL_RATE || poll_rate_seconds < ML_MIN_POLL_RATE) {
+  if(poll_rate_seconds > ML_MAX_POLL_RATE ||
+      poll_rate_seconds < ML_MIN_POLL_RATE) {
     return ML_INVALID_POLL_RATE;
   }
   pthread_rwlock_wrlock(&(ml_main_controller->poll_rate_lock));
@@ -238,7 +241,8 @@ int16_t ml_set_poll_rate(uint8_t poll_rate_seconds) {
 }
 
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *desc) {
-  if(desc->idProduct == ML_STD_PRODUCT_ID && desc->idVendor == ML_STD_VENDOR_ID) {
+  if(desc->idProduct == ML_STD_PRODUCT_ID && 
+     desc->idVendor == ML_STD_VENDOR_ID) {
     TRACE("found std launcher\n");
     return ML_STANDARD_LAUNCHER;
   }
@@ -246,28 +250,87 @@ uint8_t _ml_catagorize_device(struct libusb_device_descriptor *desc) {
 }
 
 int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
-  libusb_device *device = NULL;
-
-  for(int i = 0; i < device_count && (device = devices[i]) != NULL; i++) {
+  libusb_device *found_device = NULL;
+  libusb_device **found_launchers = NULL;
+  ml_launcher_t *known_device = NULL;
+  uint8_t *
+  int16_t launchers_found = 0;
+  
+  // Make a new array of devices
+  for(int i = 0; i < device_count && (found_device = devices[i]) != NULL; i++) {
     struct libusb_device_descriptor device_descriptor;
-    libusb_get_device_descriptor(device, &device_descriptor);
+    libusb_get_device_descriptor(found_device, &device_descriptor);
 
     // Check if the device is a launcher
     if(_ml_catagorize_device(&device_descriptor) != ML_NOT_LAUNCHER) {
       // Device is launcher
+      launchers_found += 1;
+      found_launchers = realloc(found_launchers, 
+                          (launchers_found + 1) * sizeof(libusb_device *));
+      if(found_launchers == NULL) {
+        TRACE("realloc failed. _ml_update_launchers\n");
+        return ML_FAILED_DEV_ARR_REALLOC;
+      }
+      found_launchers[launchers_found - 1] = found_device;
+      found_launchers[launchers_found] = NULL;
     } 
-  
   }
+
+  // Update the main array
+  pthread_rwlock_wrlock(&(ml_main_controller->launcher_array_lock));
+  
+  // Check to see if we need to remove any devices 
+  for(uint16_t known_it = 0; known_it < ml_main_controller->launcher_array_size &&
+      (known_device = ml_main_controller->launchers[known_it]) != NULL; known_it++){
+
+    uint8_t found = 0;
+    pthread_mutex_lock(&(known_device->main_lock));
+    for(uint16_t found_it = 0; found_it < launchers_found && 
+        (found_device = found_launchers[found_it]) != NULL && found == 0; found_it++) {
+      if(known_device->usb_device == found_device){
+        found = 1;
+      }
+    }
+    known_device->device_connected = found;
+    pthread_mutex_unlock(&(known_device->main_lock));
+    if(known_device->device_connected == 0 &&
+       known_device->ref_count == 0) {
+      // No one is refrencing the device, so we can free it.
+      _ml_remove_launcher(known_it);
+      _ml_cleanup_launcher(&known_device);
+    }
+  }
+
+  for(uint16_t found_it = 0; found_it < launchers_found &&
+        (found_device = found_launchers[found_it]) != NULL; found_it++){
+    for(uint16_t known_it = 0; known_it < ml_main_controller->launcher_array_size &&
+        (known_device = ml_main_controller->launchers[known_it]) != NULL; known_it++) {
+
+
+    }
+  }
+
+  pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
   return ML_NOT_IMPLEMENTED;
 }
 
 
 int16_t ml_get_launcher_array(ml_launcher_t ***new_arr) {
   
-  return 0;
+  return ML_NOT_IMPLEMENTED;
 }
 
 int16_t ml_free_launcher_array(ml_launcher_t **free_arr) {
 
-  return 0;
+  return ML_NOT_IMPLEMENTED;
 }
+
+int16_t _ml_remove_launcher(int16_t launcher) {
+
+  return ML_NOT_IMPLEMENTED;
+}
+int16_t _ml_add_launcher(ml_launcher_t *) {
+
+  return ML_NOT_IMPLEMENTED;
+}
+
