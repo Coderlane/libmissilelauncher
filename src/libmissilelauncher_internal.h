@@ -1,6 +1,6 @@
 /**
  * @file libmissilelauncher_internal.h
- * @brief 
+ * @brief Library internal header, I strongly recommend against using these functions. 
  * @author Travis Lane
  * @version 0.0.3
  * @date 2014-01-02
@@ -79,4 +79,9 @@ void *_ml_poll_for_launchers(void *);
 
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
 int16_t _ml_update_launchers(struct libusb_device **, int);
+
+
+int16_t _ml_start_launcher_tread(ml_launcher_t *);
+int16_t _ml_stop_launcher_tread(ml_launcher_t *);
+void *_ml_launcher_thread_task(void *);
 #endif

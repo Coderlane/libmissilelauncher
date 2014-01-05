@@ -63,7 +63,7 @@ int16_t ml_reference_launcher(ml_launcher_t *launcher) {
   pthread_mutex_lock(&(launcher->main_lock));
   launcher->ref_count += 1; 
   pthread_mutex_unlock(&(launcher->main_lock));
-  return ML_NOT_IMPLEMENTED;
+  return ML_OK;
 }
 
 /**
@@ -86,5 +86,39 @@ int16_t ml_dereference_launcher(ml_launcher_t *launcher) {
     _ml_cleanup_launcher(&launcher);
   }
   pthread_mutex_unlock(&(launcher->main_lock));
+  return ML_OK;
+}
+
+
+
+int16_t _ml_start_launcher_tread(ml_launcher_t *launcher) {
+
   return ML_NOT_IMPLEMENTED;
 }
+
+int16_t _ml_stop_launcher_tread(ml_launcher_t *launcher) {
+
+  return ML_NOT_IMPLEMENTED;
+}
+
+void *_ml_launcher_thread_task(void *launcher_arg) {
+
+  return NULL;
+}
+
+int16_t ml_file_launcher(ml_launcher_t *launcher) {
+
+  return ML_NOT_IMPLEMENTED;
+}
+
+int16_t ml_move_launcher(ml_launcher_t *launcher, ml_launcher_direction direction, uint16_t degrees) {
+
+  return ML_NOT_IMPLEMENTED;
+}
+
+int16_t ml_zero_launcher(ml_launcher_t *launcher) {
+
+  return ML_NOT_IMPLEMENTED;
+}
+
+

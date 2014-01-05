@@ -36,6 +36,13 @@ typedef enum ml_launcher_type {
   ML_STANDARD_LAUNCHER
 } ml_launcher_type;
 
+typedef enum ml_launcher_direction {
+  ML_UP,
+  ML_DOWN,
+  ML_LEFT,
+  ML_RIGHT
+} ml_launcher_direction;
+
 typedef struct ml_launcher_t ml_launcher_t; 
 
 // ********** API Functions **********
@@ -55,9 +62,9 @@ int16_t ml_free_launcher_array(ml_launcher_t **);
 
 int16_t ml_reference_launcher(ml_launcher_t *);
 int16_t ml_dereference_launcher(ml_launcher_t *);
-/*
-int16_t ml_file_launcher(ml_launcher_t);
-int16_t ml_move_launcher(ml_launcher_t, ml_launcher_direcion, uint16_t);
-int16_t ml_zero_launcher(ml_launcher_t);
-*/
+
+int16_t ml_file_launcher(ml_launcher_t *);
+int16_t ml_move_launcher(ml_launcher_t *, ml_launcher_direction, uint16_t);
+int16_t ml_zero_launcher(ml_launcher_t *);
+
 #endif

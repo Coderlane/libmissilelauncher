@@ -369,7 +369,6 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
       found_launchers[launchers_found] = NULL;
     } 
   }
-  TRACE("Found launchers: %d\n", launchers_found);
   // Update the main array
 
   pthread_rwlock_wrlock(&(ml_main_controller->launcher_array_lock));
@@ -380,6 +379,9 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
     uint8_t found = 0;
 
     known_device = ml_main_controller->launchers[known_it];
+    if(known_device == NULL) {
+      continue;
+    }
     pthread_mutex_lock(&(known_device->main_lock));
    
     // Check the devices we found
