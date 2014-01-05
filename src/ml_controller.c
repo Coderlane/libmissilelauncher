@@ -270,30 +270,39 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
         TRACE("realloc failed. _ml_update_launchers\n");
         return ML_FAILED_DEV_ARR_REALLOC;
       }
+      TRACE("Device found, temp index: %d\n", launchers_found - 1);
+      
       found_launchers[launchers_found - 1] = found_device;
       found_launchers[launchers_found] = NULL;
     } 
   }
-
+  TRACE("Found launchers: %d\n", launchers_found);
   // Update the main array
+
   pthread_rwlock_wrlock(&(ml_main_controller->launcher_array_lock));
   
   // Check to see if we need to remove any devices 
   for(uint16_t known_it = 0; known_it < ml_main_controller->launcher_array_size &&
       (known_device = ml_main_controller->launchers[known_it]) != NULL; known_it++){
-
     uint8_t found = 0;
     pthread_mutex_lock(&(known_device->main_lock));
     for(uint16_t found_it = 0; found_it < launchers_found && 
         (found_device = found_launchers[found_it]) != NULL && found == 0; found_it++) {
       if(known_device->usb_device == found_device){
+        TRACE("Found existing device.\n");
         found = 1;
       }
     }
     known_device->device_connected = found;
+    if(found == 0) {
+      TRACE("Device removed.\n");
+    } else {
+      TRACE("Device still mounted.\n");
+    }
     pthread_mutex_unlock(&(known_device->main_lock));
     if(known_device->device_connected == 0 &&
        known_device->ref_count == 0) {
+      TRACE("Removing old device.\n");
       // No one is refrencing the device, so we can free it.
       _ml_remove_launcher_index(known_it);
       _ml_cleanup_launcher(&known_device);
@@ -302,13 +311,26 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
 
   for(uint16_t found_it = 0; found_it < launchers_found &&
         (found_device = found_launchers[found_it]) != NULL; found_it++){
+    uint8_t found = 0;
     for(uint16_t known_it = 0; known_it < ml_main_controller->launcher_array_size &&
-        (known_device = ml_main_controller->launchers[known_it]) != NULL; known_it++) {
-
-
+        (known_device = ml_main_controller->launchers[known_it]) != NULL && found == 0; known_it++) {
+      TRACE("k: %p f: %p\n", known_device->usb_device, found_device);
+      if(known_device->usb_device == found_device){ 
+        found = 1;
+      }
+    }
+    if(found == 0) {
+      ml_launcher_t *new_launcher = calloc(sizeof(ml_launcher_t), 1);
+      TRACE("adding device.\n");
+      if(new_launcher == NULL) {
+        TRACE("Calloc failed...\n");
+      } else {
+        _ml_init_launcher(new_launcher, found_device);
+        _ml_add_launcher(new_launcher);
+      }
     }
   }
-
+  free(found_launchers);
   pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
   return ML_NOT_IMPLEMENTED;
 }
@@ -377,8 +399,9 @@ int16_t _ml_remove_launcher_index(int16_t index) {
  */
 int16_t _ml_add_launcher(ml_launcher_t *launcher) {
   /* This function is not thread safe, please lock the array first */
-  for(int16_t i = 0; i < ml_main_controller->launcher_count; i++) {
+  for(int16_t i = 0; i < ml_main_controller->launcher_array_size; i++) {
     if(ml_main_controller->launchers[i] == NULL) {
+      TRACE("adding launcher to index: %d\n", i);
       return _ml_add_launcher_index(launcher, i);
     }
   }

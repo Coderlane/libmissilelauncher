@@ -67,7 +67,7 @@ static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHRE
 int16_t _ml_init_controller(ml_controller_t *);
 int16_t _ml_cleanup_controller(ml_controller_t *);
 
-int16_t _ml_init_launcher(ml_launcher_t *);
+int16_t _ml_init_launcher(ml_launcher_t *, libusb_device *);
 int16_t _ml_cleanup_launcher(ml_launcher_t **);
 
 int16_t _ml_remove_launcher(ml_launcher_t *);
