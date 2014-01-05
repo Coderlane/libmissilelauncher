@@ -1,6 +1,7 @@
 /**
  * @file libmissilelauncher.h
- * @brief 
+ * @brief Header file for libmissilelauncher.h
+ * Use these functions to control your missile launcher
  * @author Travis Lane
  * @version 0.0.3
  * @date 2014-01-02

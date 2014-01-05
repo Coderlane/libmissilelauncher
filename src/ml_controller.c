@@ -1,6 +1,6 @@
 /**
  * @file ml_controller.c
- * @brief 
+ * @brief Functions releated to the launcher controller 
  * @author Travis Lane
  * @version 0.0.2
  * @date 2013-12-31
@@ -421,6 +421,7 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
       }
     }
     if(found == 0) {
+      // Device wasn't found in the array of known devices. Add it.
       ml_launcher_t *new_launcher = calloc(sizeof(ml_launcher_t), 1);
       if(new_launcher == NULL) {
         TRACE("Failed to allocate a new launcher. (_ml_update_launchers)\n");
@@ -438,6 +439,10 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
 
 /**
  * @brief Allocates space for and returns a new array of launchers.
+ * To clean up use ml_free_launcher_array. Modifying values in the array
+ * will produce undexpected results. Treat this array as a constant.
+ * NOTE: if you don't want to lose access to a launcher use 
+ * ml_reference_launcher and ml_dereference_launcher when you are done.
  *
  * @param new_arr Pointer to where you want the array
  *
@@ -486,9 +491,33 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr) {
   return ML_OK;
 }
 
+/**
+ * @brief Frees the array of launchers ml_get_launcher_array provides.
+ * Dereferences every launcher in the array so they can be cleaned up later.
+ * NOTE: if you don't want to lose access to a launcher use 
+ * ml_reference_launcher and ml_dereference_launcher when you are done.
+ *
+ * @param free_arr The array to free
+ *
+ * @return A status code
+ */
 int16_t ml_free_launcher_array(ml_launcher_t **free_arr) {
+  ml_launcher_t *cur_launcher = NULL;
+  int16_t index = 0;
+  
+  if(free_arr == NULL) {
+    TRACE("Could not free array, array was null. (ml_free_launcher_array)\n");
+    return ML_ARRAY_WAS_NULL;
+  }
 
-  return ML_NOT_IMPLEMENTED;
+  while((cur_launcher = free_arr[index]) != NULL) {
+    // Dereference each launcher.
+    ml_dereference_launcher(cur_launcher);
+    index++;
+  }
+  // Free the leftover array
+  free(free_arr);
+  return ML_OK;
 }
 
 

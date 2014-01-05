@@ -31,6 +31,7 @@ typedef enum ml_error_codes {
   ML_COUNT_ZERO,
   ML_NOT_FOUND,
   ML_ARRAY_NOT_NULL,
+  ML_ARRAY_WAS_NULL,
   ML_ALLOC_FAILED,
   ML_LAUNCHER_ARRAY_INCONSISTENT
 } ml_error_codes;
