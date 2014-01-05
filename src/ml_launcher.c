@@ -55,7 +55,7 @@ int16_t _ml_cleanup_launcher(ml_launcher_t **launcher) {
  *
  * @return 
  */
-int16_t ml_refrence_launcher(ml_launcher_t *launcher) {
+int16_t ml_reference_launcher(ml_launcher_t *launcher) {
   if(launcher == NULL) {
     TRACE("Launcher was null. ml_refrence_launcher\n");
     return ML_NULL_LAUNCHER;
@@ -73,7 +73,7 @@ int16_t ml_refrence_launcher(ml_launcher_t *launcher) {
  *
  * @return 
  */
-int16_t ml_derefrence_launcher(ml_launcher_t *launcher) {
+int16_t ml_dereference_launcher(ml_launcher_t *launcher) {
   if(launcher == NULL) {
     TRACE("Launcher was null. ml_derefrence_launcher\n");
     return ML_NULL_LAUNCHER;

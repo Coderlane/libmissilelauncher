@@ -52,8 +52,8 @@ int16_t ml_get_launcher_array(ml_launcher_t ***);
 int16_t ml_free_launcher_array(ml_launcher_t **);
 
 
-int16_t ml_refrence_launcher(ml_launcher_t *);
-int16_t ml_derefrence_launcher(ml_launcher_t *);
+int16_t ml_reference_launcher(ml_launcher_t *);
+int16_t ml_dereference_launcher(ml_launcher_t *);
 /*
 int16_t ml_file_launcher(ml_launcher_t);
 int16_t ml_move_launcher(ml_launcher_t, ml_launcher_direcion, uint16_t);
