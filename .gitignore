@@ -30,3 +30,6 @@ old/*
 
 #ignore test for a bit
 test/*
+
+#Ignore Documentation until finished.
+doc/*
