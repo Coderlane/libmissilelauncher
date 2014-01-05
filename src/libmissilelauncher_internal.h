@@ -70,9 +70,10 @@ int16_t _ml_cleanup_controller(ml_controller_t *);
 int16_t _ml_init_launcher(ml_launcher_t *);
 int16_t _ml_cleanup_launcher(ml_launcher_t **);
 
-int16_t _ml_remove_launcher(int16_t);
+int16_t _ml_remove_launcher(ml_launcher_t *);
+int16_t _ml_remove_launcher_index(int16_t);
 int16_t _ml_add_launcher(ml_launcher_t *);
-
+int16_t _ml_add_launcher_index(ml_launcher_t *, int16_t);
 
 void *_ml_poll_for_launchers(void *);
 

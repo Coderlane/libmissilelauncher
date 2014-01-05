@@ -253,7 +253,6 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
   libusb_device *found_device = NULL;
   libusb_device **found_launchers = NULL;
   ml_launcher_t *known_device = NULL;
-  uint8_t *
   int16_t launchers_found = 0;
   
   // Make a new array of devices
@@ -296,7 +295,7 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
     if(known_device->device_connected == 0 &&
        known_device->ref_count == 0) {
       // No one is refrencing the device, so we can free it.
-      _ml_remove_launcher(known_it);
+      _ml_remove_launcher_index(known_it);
       _ml_cleanup_launcher(&known_device);
     }
   }
@@ -325,12 +324,85 @@ int16_t ml_free_launcher_array(ml_launcher_t **free_arr) {
   return ML_NOT_IMPLEMENTED;
 }
 
-int16_t _ml_remove_launcher(int16_t launcher) {
 
+/**
+ * @brief Removes a launcher from the array. Be sure to lock the array for writing first
+ *
+ * @param launcher The launcher to remove
+ *
+ * @return A status value, ML_OK if it is okay.
+ */
+int16_t _ml_remove_launcher(ml_launcher_t * launcher) {
+  /* This function is not thread safe, please lock the array first */
+  for(int16_t i = 0; i < ml_main_controller->launcher_count; i++) {
+    if(ml_main_controller->launchers[i] == launcher) {
+      return _ml_remove_launcher_index(i);
+    }
+  }
+  return ML_NOT_FOUND;
+}
+
+/**
+ * @brief Removes a launcher from the array. Be sure to lock the array for writing first
+ *
+ * @param index The index of the item to remove
+ *
+ * @return A status value, ML_OK if it is okay.
+ */
+int16_t _ml_remove_launcher_index(int16_t index) {
+  /* This function is not thread safe, please lock the array first */
+  if(ml_main_controller->launchers[index] == NULL) {
+    TRACE("Addition position was null.\n");
+    return ML_POSITION_WAS_NULL;
+  }
+  if(index >= ml_main_controller->launcher_array_size || index < 0) {
+    TRACE("Index out of bounds.\n");
+    return ML_INDEX_OUT_OF_BOUNDS;
+  }
+  if(ml_main_controller->launcher_count <= 0) {
+    TRACE("Nothing to remove.\n");
+    return ML_COUNT_ZERO;
+  }
+  ml_main_controller->launcher_count -= 1;
+  ml_main_controller->launchers[index] = NULL;
+  return ML_OK;
+}
+
+/**
+ * @brief adds a launcher to the array. Be sure to lock the array for writing first
+ *
+ * @param launcher The item to add
+ *
+ * @return A status value, ML_OK if it is okay
+ */
+int16_t _ml_add_launcher(ml_launcher_t *launcher) {
+  /* This function is not thread safe, please lock the array first */
+  for(int16_t i = 0; i < ml_main_controller->launcher_count; i++) {
+    if(ml_main_controller->launchers[i] == NULL) {
+      return _ml_add_launcher_index(launcher, i);
+    }
+  }
+  // No freespace found, needs a resize.
+  // Not yet implemented...
   return ML_NOT_IMPLEMENTED;
 }
-int16_t _ml_add_launcher(ml_launcher_t *) {
 
+/**
+ * @brief adds a launcher to the array. Be sure to lock the array for writing first
+ *
+ * @param launcher The launcher to add
+ * @param index The index to insert it in
+ *
+ * @return A status code, ML_OK if it is okay
+ */
+int16_t _ml_add_launcher_index(ml_launcher_t *launcher, int16_t index) {
+  /* This function is not thread safe, please lock the array first */
+  if(ml_main_controller->launchers[index] != NULL) {
+    TRACE("Addition position was not null.\n");
+    return ML_POSITION_WAS_NOT_NULL;
+  }
+  ml_main_controller->launcher_count += 1;
+  ml_main_controller->launchers[index] = launcher;
   return ML_NOT_IMPLEMENTED;
 }
 
