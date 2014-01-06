@@ -40,7 +40,6 @@ typedef struct ml_launcher_t {
   uint8_t device_connected;
   uint32_t ref_count;
 
-
   uint32_t horizontal_position;
   uint32_t vertical_position;
   uint8_t led_status;
@@ -99,7 +98,7 @@ typedef enum ml_launcher_cmd {
   ML_COMMAND_COUNT
 } ml_launcher_cmd;
 
-static unsigned char *ml_cmd_arr[ML_COMMAND_COUNT] = {
+static unsigned char __attribute__ ((unused)) *ml_cmd_arr[ML_COMMAND_COUNT] = {
   ml_down_cmd, ml_up_cmd, ml_left_cmd, ml_right_cmd, ml_fire_cmd,
   ml_stop_cmd, ml_led_on_cmd, ml_led_off_cmd};
 
@@ -124,9 +123,13 @@ int16_t _ml_move_launcher_unsafe(ml_launcher_t *, ml_launcher_direction, ml_time
 int16_t _ml_send_command_unsafe(ml_launcher_t *, ml_launcher_cmd);
 
 int16_t _ml_mseconds_to_time(uint32_t, ml_time_t *);
-int16_t _ml_degrees_to_time(uint16_t, ml_time_t *);
 
+
+// TODO Implement these functions
+int16_t _ml_degrees_to_time(uint16_t, ml_time_t *);
+/*
 int16_t _ml_start_launcher_tread(ml_launcher_t *);
 int16_t _ml_stop_launcher_tread(ml_launcher_t *);
 void *_ml_launcher_thread_task(void *);
+*/
 #endif

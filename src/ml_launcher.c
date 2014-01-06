@@ -100,20 +100,6 @@ int16_t ml_dereference_launcher(ml_launcher_t *launcher) {
   return ML_OK;
 }
 
-int16_t _ml_start_launcher_tread(ml_launcher_t *launcher) {
-
-  return ML_NOT_IMPLEMENTED;
-}
-
-int16_t _ml_stop_launcher_tread(ml_launcher_t *launcher) {
-
-  return ML_NOT_IMPLEMENTED;
-}
-
-void *_ml_launcher_thread_task(void *launcher_arg) {
-
-  return NULL;
-}
 
 /**
  * @brief Fires a missile from the launcher
@@ -348,3 +334,19 @@ int16_t _ml_degrees_to_time(uint16_t degrees, ml_time_t *time) {
   return ML_NOT_IMPLEMENTED;
 }
 
+/*
+int16_t _ml_start_launcher_tread(ml_launcher_t *launcher) {
+
+  return ML_NOT_IMPLEMENTED;
+}
+
+int16_t _ml_stop_launcher_tread(ml_launcher_t *launcher) {
+
+  return ML_NOT_IMPLEMENTED;
+}
+
+void *_ml_launcher_thread_task(void *launcher_arg) {
+
+  return NULL;
+}
+*/
