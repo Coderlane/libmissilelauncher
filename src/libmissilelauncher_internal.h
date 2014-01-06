@@ -22,6 +22,7 @@
 
 #define ML_MAX_LAUNCHER_ARRAY_SIZE 256
 #define ML_INITIAL_LAUNCHER_ARRAY_SIZE 8
+#define ML_CMD_ARR_SIZE 2
 
 typedef struct ml_launcher_t {
   ml_launcher_type type;
@@ -36,6 +37,7 @@ typedef struct ml_launcher_t {
   uint32_t led_status;
 
   libusb_device *usb_device;
+  libusb_device_handle *usb_handle;
 
   pthread_mutex_t main_lock;
 } ml_arr_launcher_t;
@@ -62,6 +64,14 @@ struct ml_controller_t {
 static ml_controller_t __attribute__ ((unused)) *ml_main_controller = NULL;
 static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+static unsigned char ml_fire_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x10};
+static unsigned char ml_stop_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x20};
+static unsigned char ml_up_cmd[ML_CMD_ARR_SIZE] =      {0x02, 0x01};
+static unsigned char ml_down_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x02};
+static unsigned char ml_left_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x04};
+static unsigned char ml_right_cmd[ML_CMD_ARR_SIZE] =   {0x02, 0x08};
+static unsigned char ml_led_on_cmd[ML_CMD_ARR_SIZE] =  {0x03, 0x01};
+static unsigned char ml_led_off_cmd[ML_CMD_ARR_SIZE] = {0x03, 0x00};
 
 // ********** Library Functions **********
 int16_t _ml_init_controller(ml_controller_t *);

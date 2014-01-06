@@ -24,7 +24,9 @@ int16_t _ml_init_launcher(ml_launcher_t *launcher, libusb_device *device) {
   launcher->usb_device = device;
   launcher->ref_count = 0;
   launcher->device_connected = 1;
-  libusb_ref_device(device);
+  libusb_open(device, &(launcher->usb_handle));
+  TRACE("detach result %d\n", libusb_detach_kernel_driver(launcher->usb_handle, 0));
+  TRACE("claim result %d\n", libusb_claim_interface(launcher->usb_handle, 0));
   pthread_mutex_init(&(launcher->main_lock), NULL);
   return ML_OK;
 }
@@ -41,7 +43,8 @@ int16_t _ml_cleanup_launcher(ml_launcher_t **launcher) {
     TRACE("Launcher was null. _ml_cleanup_launcher\n");
     return ML_NULL_LAUNCHER;
   }
-  libusb_unref_device((*launcher)->usb_device);
+  libusb_release_interface((*launcher)->usb_handle, 0);
+  libusb_close((*launcher)->usb_handle);
   pthread_mutex_destroy(&((*launcher)->main_lock));
   free((*launcher));
   launcher = NULL;
