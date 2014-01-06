@@ -1,0 +1,11 @@
+#Ignore some files
+
+bin/*
+obj/*
+lib/*
+old/*
+src/*
+test/*
+doc/*
+
+.ycm*
