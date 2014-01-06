@@ -28,10 +28,10 @@ int16_t _ml_init_launcher(ml_launcher_t *launcher, libusb_device *device) {
   launcher->ref_count = 0;
   launcher->device_connected = 1;
   libusb_open(device, &(launcher->usb_handle));
-  //TODO This is only used on linux systems, not darwin or windows.
+#ifdef LINUX
   libusb_detach_kernel_driver(launcher->usb_handle, 0);
   libusb_claim_interface(launcher->usb_handle, 0);
-  //
+#endif
   pthread_mutex_init(&(launcher->main_lock), NULL);
   return ML_OK;
 }
@@ -49,9 +49,9 @@ int16_t _ml_cleanup_launcher(ml_launcher_t **launcher) {
     return ML_NULL_LAUNCHER;
   }
 
-  //TODO This is only used on linux systems, not darwin or windows.
+#ifdef LINUX
   libusb_release_interface((*launcher)->usb_handle, 0);
-  // 
+#endif
   libusb_close((*launcher)->usb_handle);
   pthread_mutex_destroy(&((*launcher)->main_lock));
   free((*launcher));

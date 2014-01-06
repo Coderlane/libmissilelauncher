@@ -9,7 +9,7 @@ LIBUSB_INCLUDE_PATH=/usr/include/libusb-1.0
 
 
 CC=clang
-CFLAGS=-c -Wall -fPIC -std=gnu99 -Wextra -I$(LIBUSB_INCLUDE_PATH)
+CFLAGS=-c -Wall -fPIC -std=gnu99 -Wextra -D$(SYSTEM) -I$(LIBUSB_INCLUDE_PATH) 
 
 PWD=$(shell pwd)
 UNAME=$(shell uname)
@@ -20,12 +20,12 @@ ifeq ($(UNAME), Windows)
 	DEBUG_LIB=lib$(PROJECT)_debug.dll
 	RELEASE_LIB=lib$(PROJECT).dll
 else 
-ifeq ($(UNAME), Darwin))
+ifeq ($(UNAME), Darwin)
 	SYSTEM=DARWIN
 	DEBUG_LIB=lib$(PROJECT)_debug.so
 	RELEASE_LIB=lib$(PROJECT).so
 else
-ifeq ($(UNAME), Linux))
+ifeq ($(UNAME), Linux)
 	SYSTEM=LINUX
 	DEBUG_LIB=lib$(PROJECT)_debug.so
 	RELEASE_LIB=lib$(PROJECT).so
@@ -95,15 +95,13 @@ clean:
 	rm -f $(OBJ_DIR)/*.o $(LIB_DIR)/*.so $(LIB_DIR)/*.dll $(TEST_BIN_DIR)/*_test $(EXAMPLE_BIN_DIR)/*_example
 
 # Release target
-$(RELEASE_TARGET): CFLAGS += -DNDEBUG
+$(RELEASE_TARGET): CFLAGS += -DNDEBUG 
 $(RELEASE_TARGET): $(RELEASE_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(RELEASE_LIB) -o $(RELEASE_TARGET) $^
 
 #d Debug Target
 $(DEBUG_TARGET): $(DEBUG_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(DEBUG_LIB) -o $(DEBUG_TARGET) $^
-	echo $(UNAME)
-	echo $(SYSTEM)
 
 # Test targets
 test_build: $(DEBUG_TARGET) $(TEST_BINS)
@@ -111,9 +109,8 @@ test_build: $(DEBUG_TARGET) $(TEST_BINS)
 # Example targets
 example_build: $(RELEASE_TARGET) $(EXAMPLE_BINS)
 
-
 install:
-
+	echo "Not yet implemented. The libraries you want are in lib for now"
 
 # Make release object files 
 $(OBJ_DIR)/%_release.o: $(SRC_DIR)/%.c
