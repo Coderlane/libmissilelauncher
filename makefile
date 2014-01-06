@@ -17,20 +17,23 @@ OBJ_DIR=obj
 LIB_DIR=lib
 TEST_DIR=test
 BIN_DIR=bin
+EXAMPLE_DIR=examples
+
+TEST_BIN_DIR=$(TEST_DIR)/$(BIN_DIR)
+EXAMPLE_BIN_DIR=$(EXAMPLE_DIR)/$(BIN_DIR)
 
 LIB_VERSION=1
 
-
 SOURCES=$(wildcard $(SRC_DIR)/*.c)
 TEST_SOURCES=$(wildcard $(TEST_DIR)/*.c)
-
-TESTS=$(patsubst $(TEST_DIR)/%.c, %, $(TEST_SOURCES))
+EXAMPLE_SOURCES=$(wildcard $(EXAMPLE_DIR)/*.c)
 
 RELEASE_OBJECTS=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%_release.o,$(SOURCES))
 DEBUG_OBJECTS=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%_debug.o,$(SOURCES))
 TEST_OBJECTS=$(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR)/%_test.o,$(TEST_SOURCES))
 
-TEST_BINS=$(patsubst $(TEST_DIR)/%.c, $(BIN_DIR)/%_test, $(TEST_SOURCES))
+TEST_BINS=$(patsubst $(TEST_DIR)/%.c, $(TEST_BIN_DIR)/%_test, $(TEST_SOURCES))
+EXAMPLE_BINS=$(patsubst $(EXAMPLE_DIR)/%.c, $(EXAMPLE_BIN_DIR)/%_example, $(EXAMPLE_SOURCES))
 
 LIBRARY_NAME=l$(PROJECT)
 DEBUG_LIBRARY_NAME=l$(PROJECT)_debug
@@ -45,54 +48,68 @@ DEBUG_TARGET=$(LIB_DIR)/$(DEBUG_LIB)
 RELEASE_TARGET=$(LIB_DIR)/$(RELEASE_LIB)
 
 
+.PHONY: all clean dir debug example example_dir install release test test_dir  
+all: release 
 
-# All defaults to debug, to make release run make release
-.PHONY: all dir debug release clean test debug_build release_build 
-all: test 
+release: dir $(RELEASE_TARGET) 
 
-release: dir release_build
+debug: dir $(DEBUG_TARGET) 
 
-debug: dir debug_build
+test: test_dir test_build
 
-test: dir debug_build test_build
-
+example: example_dir example_build
 
 #Check directories
 dir:
-	test -d $(BIN_DIR) || mkdir $(BIN_DIR)
 	test -d $(OBJ_DIR) || mkdir $(OBJ_DIR)
 	test -d $(LIB_DIR) || mkdir $(LIB_DIR)
 
+test_dir: dir
+	test -d $(TEST_BIN_DIR) || mkdir $(TEST_BIN_DIR)
+
+example_dir: dir
+	test -d $(EXAMPLE_BIN_DIR) || mkdir $(EXAMPLE_BIN_DIR)
+
+
 # Clean up directories
 clean:
-	rm -f $(BIN_DIR)/*_test $(OBJ_DIR)/*.o $(LIB_DIR)/*.so
+	rm -f $(OBJ_DIR)/*.o $(LIB_DIR)/*.so $(LIB_DIR)/*.dll $(TEST_BIN_DIR)/*_test $(EXAMPLE_BIN_DIR)/*_example
 
-# Test targets
-test_build: CFLAGS += -Wno-unused-variable -Wno-unused-parameter
-test_build: $(DEBUG_TARGET) $(TEST_BINS)
-
-# RELEASE target
-release_build: CFLAGS += -DNDEBUG
-release_build: $(RELEASE_OBJECTS)
+# Release target
+$(RELEASE_TARGET): CFLAGS += -DNDEBUG
+$(RELEASE_TARGET): $(RELEASE_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(RELEASE_LIB) -o $(RELEASE_TARGET) $^
 
+#debug 
 $(DEBUG_TARGET): $(DEBUG_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(DEBUG_LIB) -o $(DEBUG_TARGET) $^
 
-# Make object files 
+# Test targets
+test_build: $(DEBUG_TARGET) $(TEST_BINS)
+
+# Example targets
+example_build: $(RELEASE_TARGET) $(EXAMPLE_BINS)
+
+
+install:
+
+
+# Make release object files 
 $(OBJ_DIR)/%_release.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -o $@ $<
 
-# Make object files 
+# Make debug object files 
 $(OBJ_DIR)/%_debug.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -o $@ $<
 
-# Make object files 
-$(OBJ_DIR)/%_test.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -o $@ $< 
-
-$(BIN_DIR)/%_test: $(DEBUG_LIBRARY) $(TEST_DIR)/%.c
-	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME) -lusb-1.0
-
+# Make test object files
 $(OBJ_DIR)/%_test.o: $(TEST_DIR)/%.c
 	$(CC) $(CFLAGS) -o $@ $<
+
+# Create test binaries
+$(TEST_BIN_DIR)/%_test: $(DEBUG_LIBRARY) $(TEST_DIR)/%.c
+	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME) -lusb-1.0
+
+# Create example binaries
+$(EXAMPLE_BIN_DIR)/%_example: $(DEBUG_LIBRARY) $(EXAMPLE_DIR)/%.c
+	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME) -lusb-1.0
