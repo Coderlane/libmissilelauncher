@@ -10,7 +10,31 @@ LIBUSB_INCLUDE_PATH=/usr/include/libusb-1.0
 
 CC=clang
 CFLAGS=-c -Wall -fPIC -std=gnu99 -Wextra -I$(LIBUSB_INCLUDE_PATH)
+
 PWD=$(shell pwd)
+UNAME=$(shell uname)
+
+# Detect system
+ifeq ($(UNAME), Windows)
+	SYSTEM=WINDOWS
+	DEBUG_LIB=lib$(PROJECT)_debug.dll
+	RELEASE_LIB=lib$(PROJECT).dll
+else 
+ifeq ($(UNAME), Darwin))
+	SYSTEM=DARWIN
+	DEBUG_LIB=lib$(PROJECT)_debug.so
+	RELEASE_LIB=lib$(PROJECT).so
+else
+ifeq ($(UNAME), Linux))
+	SYSTEM=LINUX
+	DEBUG_LIB=lib$(PROJECT)_debug.so
+	RELEASE_LIB=lib$(PROJECT).so
+else
+	# Add other systems here
+	SYSTEM=UNKNOWN
+endif
+endif
+endif
 
 SRC_DIR=src
 OBJ_DIR=obj
@@ -41,12 +65,8 @@ DEBUG_LIBRARY_NAME=l$(PROJECT)_debug
 LIBRARY_PATH=$(PWD)/$(LIB_DIR)
 INCLUDE_PATH=$(PWD)/$(SRC_DIR)
 
-DEBUG_LIB=lib$(PROJECT)_debug.so
-RELEASE_LIB=lib$(PROJECT).so
-
 DEBUG_TARGET=$(LIB_DIR)/$(DEBUG_LIB)
 RELEASE_TARGET=$(LIB_DIR)/$(RELEASE_LIB)
-
 
 .PHONY: all clean dir debug example example_dir install release test test_dir  
 all: release 
@@ -70,7 +90,6 @@ test_dir: dir
 example_dir: dir
 	test -d $(EXAMPLE_BIN_DIR) || mkdir $(EXAMPLE_BIN_DIR)
 
-
 # Clean up directories
 clean:
 	rm -f $(OBJ_DIR)/*.o $(LIB_DIR)/*.so $(LIB_DIR)/*.dll $(TEST_BIN_DIR)/*_test $(EXAMPLE_BIN_DIR)/*_example
@@ -80,9 +99,11 @@ $(RELEASE_TARGET): CFLAGS += -DNDEBUG
 $(RELEASE_TARGET): $(RELEASE_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(RELEASE_LIB) -o $(RELEASE_TARGET) $^
 
-#debug 
+#d Debug Target
 $(DEBUG_TARGET): $(DEBUG_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(DEBUG_LIB) -o $(DEBUG_TARGET) $^
+	echo $(UNAME)
+	echo $(SYSTEM)
 
 # Test targets
 test_build: $(DEBUG_TARGET) $(TEST_BINS)
