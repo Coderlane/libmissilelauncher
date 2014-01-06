@@ -8,4 +8,10 @@ src/*
 test/*
 doc/*
 
+# YCM
 .ycm*
+
+# Swap
+.*.sw*
+
+
