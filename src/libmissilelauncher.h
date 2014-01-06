@@ -37,8 +37,8 @@ typedef enum ml_launcher_type {
 } ml_launcher_type;
 
 typedef enum ml_launcher_direction {
-  ML_UP,
   ML_DOWN,
+  ML_UP,
   ML_LEFT,
   ML_RIGHT
 } ml_launcher_direction;
@@ -63,8 +63,9 @@ int16_t ml_free_launcher_array(ml_launcher_t **);
 int16_t ml_reference_launcher(ml_launcher_t *);
 int16_t ml_dereference_launcher(ml_launcher_t *);
 
-int16_t ml_file_launcher(ml_launcher_t *);
-int16_t ml_move_launcher(ml_launcher_t *, ml_launcher_direction, uint16_t);
+int16_t ml_fire_launcher(ml_launcher_t *);
+int16_t ml_move_launcher_degrees(ml_launcher_t *, ml_launcher_direction, uint16_t);
+int16_t ml_move_launcher_mseconds(ml_launcher_t *, ml_launcher_direction, uint32_t);
 int16_t ml_zero_launcher(ml_launcher_t *);
 
 int16_t ml_led_on(ml_launcher_t *);

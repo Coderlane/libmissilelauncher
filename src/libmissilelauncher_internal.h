@@ -17,13 +17,13 @@
 /* Use for only second values */
 #define ml_second_sleep(seconds) Sleep(1000 * seconds) // Seconds to milliseconds
 /* Use for less than one second */
-#define ml_msecond_sleep(mseconds) Sleep(1000 * mseconds) // milliseconds
+#define ml_msecond_sleep(mseconds) Sleep(mseconds) // milliseconds
 #else
 #include <unistd.h>
 /* Use only for second values */
 #define ml_second_sleep(seconds) sleep(seconds)  // No conversion necessary
 /* Use for less than one second */
-#define ml_millisecond_sleep(mseconds) usleep(mseconds * 1000)
+#define ml_msecond_sleep(mseconds) usleep(mseconds * 1000)
 #endif
 
 #define ML_MAX_LAUNCHER_ARRAY_SIZE 256
@@ -69,18 +69,39 @@ struct ml_controller_t {
   pthread_t poll_thread;
 };
 
+typedef struct ml_time_t {
+  uint32_t seconds;
+  uint32_t mseconds;
+} ml_time_t;
+
 // ***** Global Statics *****
 static ml_controller_t __attribute__ ((unused)) *ml_main_controller = NULL;
 static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static unsigned char ml_fire_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x10};
-static unsigned char ml_stop_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x20};
-static unsigned char ml_up_cmd[ML_CMD_ARR_SIZE] =      {0x02, 0x02};
 static unsigned char ml_down_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x01};
+static unsigned char ml_up_cmd[ML_CMD_ARR_SIZE] =      {0x02, 0x02};
 static unsigned char ml_left_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x04};
 static unsigned char ml_right_cmd[ML_CMD_ARR_SIZE] =   {0x02, 0x08};
 static unsigned char ml_led_on_cmd[ML_CMD_ARR_SIZE] =  {0x03, 0x01};
 static unsigned char ml_led_off_cmd[ML_CMD_ARR_SIZE] = {0x03, 0x00};
+static unsigned char ml_fire_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x10};
+static unsigned char ml_stop_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x20};
+
+typedef enum ml_launcher_cmd {
+  ML_DOWN_CMD,
+  ML_UP_CMD,
+  ML_LEFT_CMD,
+  ML_RIGHT_CMD,
+  ML_FIRE_CMD,
+  ML_STOP_CMD,
+  ML_LED_ON_CMD,
+  ML_LED_OFF_CMD,
+  ML_COMMAND_COUNT
+} ml_launcher_cmd;
+
+static unsigned char *ml_cmd_arr[ML_COMMAND_COUNT] = {
+  ml_down_cmd, ml_up_cmd, ml_left_cmd, ml_right_cmd, ml_fire_cmd,
+  ml_stop_cmd, ml_led_on_cmd, ml_led_off_cmd};
 
 // ********** Library Functions **********
 int16_t _ml_init_controller(ml_controller_t *);
@@ -99,6 +120,11 @@ void *_ml_poll_for_launchers(void *);
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
 int16_t _ml_update_launchers(struct libusb_device **, int);
 
+int16_t _ml_move_launcher_unsafe(ml_launcher_t *, ml_launcher_direction, ml_time_t *);
+int16_t _ml_send_command_unsafe(ml_launcher_t *, ml_launcher_cmd);
+
+int16_t _ml_mseconds_to_time(uint32_t, ml_time_t *);
+int16_t _ml_degrees_to_time(uint16_t, ml_time_t *);
 
 int16_t _ml_start_launcher_tread(ml_launcher_t *);
 int16_t _ml_stop_launcher_tread(ml_launcher_t *);
