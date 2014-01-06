@@ -67,4 +67,7 @@ int16_t ml_file_launcher(ml_launcher_t *);
 int16_t ml_move_launcher(ml_launcher_t *, ml_launcher_direction, uint16_t);
 int16_t ml_zero_launcher(ml_launcher_t *);
 
+int16_t ml_led_on(ml_launcher_t *);
+int16_t ml_led_off(ml_launcher_t *);
+uint8_t ml_get_led_stat(ml_launcher_t *);
 #endif

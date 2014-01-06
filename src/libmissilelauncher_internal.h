@@ -14,15 +14,24 @@
 
 // Cross platform compatibility
 #if defined(WIN32)
+/* Use for only second values */
 #define ml_second_sleep(seconds) Sleep(1000 * seconds) // Seconds to milliseconds
+/* Use for less than one second */
+#define ml_msecond_sleep(mseconds) Sleep(1000 * mseconds) // milliseconds
 #else
 #include <unistd.h>
+/* Use only for second values */
 #define ml_second_sleep(seconds) sleep(seconds)  // No conversion necessary
+/* Use for less than one second */
+#define ml_millisecond_sleep(mseconds) usleep(mseconds * 1000)
 #endif
 
 #define ML_MAX_LAUNCHER_ARRAY_SIZE 256
 #define ML_INITIAL_LAUNCHER_ARRAY_SIZE 8
+
 #define ML_CMD_ARR_SIZE 2
+#define ML_REQUEST_TYPE_SEND 0x21
+#define ML_REQUEST_FIELD_SEND 0x09
 
 typedef struct ml_launcher_t {
   ml_launcher_type type;
@@ -34,7 +43,7 @@ typedef struct ml_launcher_t {
 
   uint32_t horizontal_position;
   uint32_t vertical_position;
-  uint32_t led_status;
+  uint8_t led_status;
 
   libusb_device *usb_device;
   libusb_device_handle *usb_handle;
@@ -66,8 +75,8 @@ static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHRE
 
 static unsigned char ml_fire_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x10};
 static unsigned char ml_stop_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x20};
-static unsigned char ml_up_cmd[ML_CMD_ARR_SIZE] =      {0x02, 0x01};
-static unsigned char ml_down_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x02};
+static unsigned char ml_up_cmd[ML_CMD_ARR_SIZE] =      {0x02, 0x02};
+static unsigned char ml_down_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x01};
 static unsigned char ml_left_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x04};
 static unsigned char ml_right_cmd[ML_CMD_ARR_SIZE] =   {0x02, 0x08};
 static unsigned char ml_led_on_cmd[ML_CMD_ARR_SIZE] =  {0x03, 0x01};
