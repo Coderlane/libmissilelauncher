@@ -13,7 +13,7 @@
 #include "tlib_debug.h"
 
 // Cross platform compatibility
-#if defined(WIN32)
+#if defined(WINDOWS)
 /* Use for only second values */
 #define ml_second_sleep(seconds) Sleep(1000 * seconds) // Seconds to milliseconds
 /* Use for less than one second */

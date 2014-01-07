@@ -133,4 +133,4 @@ $(TEST_BIN_DIR)/%_test: $(DEBUG_LIBRARY) $(TEST_DIR)/%.c
 
 # Create example binaries
 $(EXAMPLE_BIN_DIR)/%_example: $(DEBUG_LIBRARY) $(EXAMPLE_DIR)/%.c
-	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(DEBUG_LIBRARY_NAME) -lusb-1.0
+	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(LIBRARY_NAME) -lusb-1.0
