@@ -92,7 +92,9 @@ example_dir: dir
 
 # Clean up directories
 clean:
-	rm -f $(OBJ_DIR)/*.o $(LIB_DIR)/*.so $(LIB_DIR)/*.dll $(TEST_BIN_DIR)/*_test $(EXAMPLE_BIN_DIR)/*_example
+	rm -f $(OBJ_DIR)/*.o 
+	rm -f $(LIB_DIR)/*.so $(LIB_DIR)/*.dll
+	rm -f	$(TEST_BIN_DIR)/*_test $(EXAMPLE_BIN_DIR)/*_example
 
 # Release target
 $(RELEASE_TARGET): CFLAGS += -DNDEBUG
@@ -109,6 +111,7 @@ test_build: $(DEBUG_TARGET) $(TEST_BINS)
 # Example targets
 example_build: $(RELEASE_TARGET) $(EXAMPLE_BINS)
 
+#TODO implement installing
 install:
 	echo "Not yet implemented. The libraries you want are in lib for now"
 
