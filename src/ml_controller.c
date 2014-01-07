@@ -46,7 +46,10 @@ int16_t ml_init_library(){
 
   // Initialize the main controller
   failed = _ml_init_controller(ml_main_controller);
-  if(failed) {
+  if(failed == ML_OK) {
+    ml_start_continuous_poll();
+  } else {
+    // Setup failed
     if(ml_main_controller->launchers != NULL) {
       free(ml_main_controller->launchers);
     }
@@ -101,6 +104,7 @@ int16_t ml_cleanup_library() {
     TRACE("Could not clean up library. Library not initialized.\n");
     return ML_LIBRARY_NOT_INIT;
   }
+  ml_stop_continuous_poll();
   failed = _ml_cleanup_controller(ml_main_controller);
   free(ml_main_controller);
   ml_main_controller = NULL;

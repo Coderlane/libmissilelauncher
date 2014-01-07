@@ -46,28 +46,27 @@ typedef enum ml_launcher_direction {
 typedef struct ml_launcher_t ml_launcher_t; 
 
 // ********** API Functions **********
+// Library init
 int16_t ml_init_library();
 int16_t ml_cleanup_library();
 uint8_t ml_is_library_init();
-
+// Polling
 int16_t ml_start_continuous_poll();
 int16_t ml_stop_continuous_poll();
 uint8_t ml_is_polling();
 uint8_t ml_get_poll_rate();
 int16_t ml_set_poll_rate(uint8_t);
-
+// Launcher arrays
 int16_t ml_get_launcher_array(ml_launcher_t ***, uint32_t *);
 int16_t ml_free_launcher_array(ml_launcher_t **);
-
-
+// Launcher refrence
 int16_t ml_reference_launcher(ml_launcher_t *);
 int16_t ml_dereference_launcher(ml_launcher_t *);
-
+// Launcher control
 int16_t ml_fire_launcher(ml_launcher_t *);
 int16_t ml_move_launcher_degrees(ml_launcher_t *, ml_launcher_direction, uint16_t);
 int16_t ml_move_launcher_mseconds(ml_launcher_t *, ml_launcher_direction, uint32_t);
 int16_t ml_zero_launcher(ml_launcher_t *);
-
 int16_t ml_led_on(ml_launcher_t *);
 int16_t ml_led_off(ml_launcher_t *);
 uint8_t ml_get_led_stat(ml_launcher_t *);
