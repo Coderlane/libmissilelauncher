@@ -211,10 +211,8 @@ int16_t ml_stop_continuous_poll() {
   // Cancel the thread and exit
   pthread_cancel(ml_main_controller->poll_thread);
 
-#ifndef NDEBUG
-  // Wait to exit when debugging
+  // Wait for thread to exit
   pthread_join(ml_main_controller->poll_thread, NULL);
-#endif
   ml_main_controller->currently_polling = 0;
 
   pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
