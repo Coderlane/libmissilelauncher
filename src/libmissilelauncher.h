@@ -31,16 +31,18 @@ typedef struct ml_controller_t ml_controller_t;
 #define ML_STD_VENDOR_ID 8483
 #define ML_STD_PRODUCT_ID 4112
 
+/// Use this enumeration to determine the type of launcher. 
 typedef enum ml_launcher_type {
-  ML_NOT_LAUNCHER,
-  ML_STANDARD_LAUNCHER
+  ML_NOT_LAUNCHER, ///< The object isn't a launcher
+  ML_STANDARD_LAUNCHER ///< The object is a standard thunder launcher
 } ml_launcher_type;
 
+/// Use this enumerationt to specify which direction to move the launcher in
 typedef enum ml_launcher_direction {
-  ML_DOWN,
-  ML_UP,
-  ML_LEFT,
-  ML_RIGHT
+  ML_DOWN, ///< Aim the launcher downwards
+  ML_UP,   ///< Aim the launcher upwards
+  ML_LEFT, ///< Move the launcher to the left
+  ML_RIGHT ///< Move the launcher to the righ
 } ml_launcher_direction;
 
 typedef struct ml_launcher_t ml_launcher_t; 
@@ -63,6 +65,7 @@ int16_t ml_free_launcher_array(ml_launcher_t **);
 int16_t ml_reference_launcher(ml_launcher_t *);
 int16_t ml_dereference_launcher(ml_launcher_t *);
 // Launcher control
+ml_launcher_type ml_get_launcher_type(ml_launcher_t *);
 int16_t ml_fire_launcher(ml_launcher_t *);
 int16_t ml_move_launcher_degrees(ml_launcher_t *, ml_launcher_direction, uint16_t);
 int16_t ml_move_launcher_mseconds(ml_launcher_t *, ml_launcher_direction, uint32_t);

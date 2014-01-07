@@ -358,6 +358,26 @@ int16_t _ml_degrees_to_time(uint16_t degrees, ml_time_t *time) {
   return ML_NOT_IMPLEMENTED;
 }
 
+/**
+ * @brief Gets the type of launcher from the launcher
+ *
+ * @param launcher The launcher to check
+ *
+ * @return The launcher type
+ */
+ml_launcher_type ml_get_launcher_type(ml_launcher_t *launcher) {
+  ml_launcher_type type;
+
+  pthread_mutex_lock(&(launcher->main_lock));
+  
+  // Grab the type
+  type = launcher->type;
+
+  pthread_mutex_unlock(&(launcher->main_lock));
+  return type;
+}
+
+
 /*
 int16_t _ml_start_launcher_tread(ml_launcher_t *launcher) {
 
