@@ -1,6 +1,6 @@
 /**
  * @file ml_errors.h
- * @brief 
+ * @brief All errors used in the library. 
  * @author Travis Lane
  * @version 0.0.1
  * @date 2013-12-14
@@ -8,7 +8,6 @@
 
 #ifndef ML_ERRORS_H
 #define ML_ERRORS_H
-
 
 typedef enum ml_error_codes {
   ML_OK,
@@ -33,7 +32,8 @@ typedef enum ml_error_codes {
   ML_ARRAY_NOT_NULL,
   ML_ARRAY_WAS_NULL,
   ML_ALLOC_FAILED,
-  ML_LAUNCHER_ARRAY_INCONSISTENT
+  ML_LAUNCHER_ARRAY_INCONSISTENT,
+  ML_NULL_POINTER
 } ml_error_codes;
 
 #endif

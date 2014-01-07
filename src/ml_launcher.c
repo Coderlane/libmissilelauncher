@@ -9,11 +9,13 @@
 #include "libmissilelauncher_internal.h"
 
 /**
- * @brief 
+ * @brief Initializes a newly connected launcher.
+ * Don't use this function, It is for internal operations.
  *
- * @param launcher
+ * @param launcher The launcher to initialize
+ * @param device The device that was connected
  *
- * @return 
+ * @return A status code
  */
 int16_t _ml_init_launcher(ml_launcher_t *launcher, libusb_device *device) {
   struct libusb_device_descriptor desc;
@@ -37,11 +39,11 @@ int16_t _ml_init_launcher(ml_launcher_t *launcher, libusb_device *device) {
 }
 
 /**
- * @brief 
+ * @brief Cleans up a launcher, This must be done so libusb devices are released.
  *
- * @param launcher
+ * @param launcher The launcher to destroy
  *
- * @return 
+ * @return A status code 
  */
 int16_t _ml_cleanup_launcher(ml_launcher_t **launcher) {
   if((*launcher) == NULL) {
@@ -60,11 +62,14 @@ int16_t _ml_cleanup_launcher(ml_launcher_t **launcher) {
 }
 
 /**
- * @brief 
+ * @brief Refrences a launcher so that it isn't destroyed. 
+ * If a launcher isn't refrenced, when you call ml_free_launcher_array the refrence may 
+ * or may not be freed. Thus you can't guarantee that the memory is still there for
+ * you to use. Using ml_refrence_launcher with ml_dereference_launcher avoids this issue.
  *
- * @param launcher
+ * @param launcher The launcher to reference.
  *
- * @return 
+ * @return A status code
  */
 int16_t ml_reference_launcher(ml_launcher_t *launcher) {
   if(launcher == NULL) {
@@ -78,11 +83,13 @@ int16_t ml_reference_launcher(ml_launcher_t *launcher) {
 }
 
 /**
- * @brief 
+ * @brief Dereferences a launcher so that it can be eventually destroyed.
+ * Just as with malloc and free, when using ml_reference_launcher you must use
+ * ml_dereference_launcher or suffer memory leaks.
  *
- * @param launcher
+ * @param launcher The launcher to dereference
  *
- * @return 
+ * @return A status code
  */
 int16_t ml_dereference_launcher(ml_launcher_t *launcher) {
   if(launcher == NULL) {
@@ -102,9 +109,9 @@ int16_t ml_dereference_launcher(ml_launcher_t *launcher) {
 
 
 /**
- * @brief Fires a missile from the launcher
+ * @brief Fires a missile from the launcher. 
  *
- * @param launcher The launcher to fire from
+ * @param launcher The launcher to fire from.
  *
  * @return A status code
  */
@@ -181,39 +188,41 @@ int16_t ml_zero_launcher(ml_launcher_t *launcher) {
 }
 
 /**
- * @brief 
+ * @brief Turns on the led of the selected launcher
  *
- * @param launcher
+ * @param launcher The launcher to get it's led turned on
  *
- * @return 
+ * @return A status code
  */
 int16_t ml_led_on(ml_launcher_t *launcher) {
+  int16_t result = 0;
   pthread_mutex_lock(&(launcher->main_lock));
   
   //TODO implement error checking
-  _ml_send_command_unsafe(launcher, ML_LED_ON_CMD);
+  result = _ml_send_command_unsafe(launcher, ML_LED_ON_CMD);
   launcher->led_status = 1;
 
   pthread_mutex_unlock(&(launcher->main_lock));
-  return ML_OK;
+  return result;
 }
 
 /**
- * @brief 
+ * @brief Turns off the led of the selected launcher
  *
- * @param launcher
+ * @param launcher The launcher to get it's led turned off
  *
- * @return 
+ * @return A status code
  */
 int16_t ml_led_off(ml_launcher_t *launcher) {
+  int16_t result = 0;
   pthread_mutex_lock(&(launcher->main_lock));
   
   //TODO implement error checking
-  _ml_send_command_unsafe(launcher, ML_LED_OFF_CMD);
+  result = _ml_send_command_unsafe(launcher, ML_LED_OFF_CMD);
   launcher->led_status = 0;
 
   pthread_mutex_unlock(&(launcher->main_lock));
-  return ML_OK;
+  return result;
 }
 
 /**
@@ -234,56 +243,67 @@ uint8_t ml_get_led_stat(ml_launcher_t *launcher) {
 }
 
 /**
- * @brief 
+ * @brief Moves the specified launcher, in the specified direction
+ * for the specified number of milliseconds. Don't use this in combination
+ * with ml_move_launcher_degrees without zeroing the launcher afterwards.
  *
- * @param launcher
- * @param direction
- * @param meseconds
+ * @param launcher The launcher the move.
+ * @param direction The direction to move in.
+ * @param meseconds The number of milliseconds to move for.
  *
- * @return 
+ * @return A status code
  */
 int16_t ml_move_launcher_mseconds(ml_launcher_t *launcher,
     ml_launcher_direction direction, uint32_t mseconds) {
-  
+
+  int16_t result = 0;
   ml_time_t time;
+
   pthread_mutex_lock(&(launcher->main_lock));
   
   _ml_mseconds_to_time(mseconds, &time);
-  _ml_move_launcher_unsafe(launcher, direction, &time);
+  result = _ml_move_launcher_unsafe(launcher, direction, &time);
   
   pthread_mutex_unlock(&(launcher->main_lock));
-  return ML_NOT_IMPLEMENTED;
+  return result;
 }
 
 /**
- * @brief 
+ * @brief Moves the launcher
+ * Don't use this function as it isn't thread safe 
  *
- * @param launcher
- * @param time
+ * @param launcher Th launcher to move.
+ * @param direction The direction to move in.
+ * @param time The time to move for.
  *
- * @return 
+ * @return A status code
  */
 int16_t _ml_move_launcher_unsafe(ml_launcher_t *launcher,
          ml_launcher_direction direction, ml_time_t *time) {
+
+  int16_t result = 0;
  
   // Start movement 
-  _ml_send_command_unsafe(launcher, (ml_launcher_cmd) direction);
+  result = _ml_send_command_unsafe(launcher, (ml_launcher_cmd) direction);
+  if(result != ML_OK) return result;
   // Sleep the set amount of time
   ml_second_sleep(time->seconds);
   ml_msecond_sleep(time->mseconds);
   // Stop movement
-  _ml_send_command_unsafe(launcher, ML_STOP_CMD);
+  result = _ml_send_command_unsafe(launcher, ML_STOP_CMD);
 
-  return ML_OK;
+  return result;
 }
 
 /**
- * @brief 
+ * @brief Sends a command to the launcher.
+ * Don't use this it isn't threadsafe.
+ * Add to this switch statement if you have a different type of launcher. 
  *
- * @param launcher
- * @param cmd
+ * @param launcher The launcher to send the command to
+ * @param cmd The command to send to the launcher.
  *
- * @return 
+ * @return A status code
  */
 int16_t _ml_send_command_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd) {
   uint8_t request_type = 0, request_field = 0;
@@ -307,26 +327,30 @@ int16_t _ml_send_command_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd) {
 }
 
 /**
- * @brief 
+ * @brief Changes milliseconds to a time object 
  *
- * @param mseconds
- * @param time
+ * @param mseconds The milliseonds to convert
+ * @param time The time object to put it into.
  *
- * @return 
+ * @return A status code.
  */
 int16_t _ml_mseconds_to_time(uint32_t mseconds, ml_time_t *time) {
+  if(time == NULL)
+    return ML_NULL_POINTER; 
+  // Time conversion
   time->seconds = (mseconds / 1000); // Get the seconds
   time->mseconds = mseconds - (time->seconds * 1000); // Get leftovers
   return ML_OK;
 }
 
 /**
- * @brief 
+ * @brief Changes degrees to a time object
+ * Not yet implemented
  *
- * @param degrees
- * @param time
+ * @param degrees The degrees to convert
+ * @param time The time object to put the result into
  *
- * @return 
+ * @return A status code
  */
 int16_t _ml_degrees_to_time(uint16_t degrees, ml_time_t *time) {
   time->mseconds = 0;
