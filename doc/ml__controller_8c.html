@@ -124,9 +124,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ab7c8a3c153eb4476ff0b73cd45c59414"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__controller_8c.html#ab7c8a3c153eb4476ff0b73cd45c59414">ml_set_poll_rate</a> (uint8_t poll_rate_seconds)</td></tr>
 <tr class="memdesc:ab7c8a3c153eb4476ff0b73cd45c59414"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new poll rate for the library to use.  <a href="#ab7c8a3c153eb4476ff0b73cd45c59414">More...</a><br/></td></tr>
 <tr class="separator:ab7c8a3c153eb4476ff0b73cd45c59414"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a767708763fb6fbf05411ca974c13492c"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__controller_8c.html#a767708763fb6fbf05411ca974c13492c">ml_get_launcher_array</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> ***new_arr)</td></tr>
-<tr class="memdesc:a767708763fb6fbf05411ca974c13492c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates space for and returns a new array of launchers. To clean up use ml_free_launcher_array. Modifying values in the array will produce undexpected results. Treat this array as a constant. NOTE: if you don't want to lose access to a launcher use ml_reference_launcher and ml_dereference_launcher when you are done.  <a href="#a767708763fb6fbf05411ca974c13492c">More...</a><br/></td></tr>
-<tr class="separator:a767708763fb6fbf05411ca974c13492c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a892662f59af52456fce3cde51bc97179"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__controller_8c.html#a892662f59af52456fce3cde51bc97179">ml_get_launcher_array</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> ***new_arr, uint32_t *count)</td></tr>
+<tr class="memdesc:a892662f59af52456fce3cde51bc97179"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates space for and returns a new array of launchers. To clean up use ml_free_launcher_array. Modifying values in the array will produce undexpected results. Treat this array as a constant. NOTE: if you don't want to lose access to a launcher use ml_reference_launcher and ml_dereference_launcher when you are done.  <a href="#a892662f59af52456fce3cde51bc97179">More...</a><br/></td></tr>
+<tr class="separator:a892662f59af52456fce3cde51bc97179"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bddbaf124badc54bf6e5abf7e729543"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__controller_8c.html#a2bddbaf124badc54bf6e5abf7e729543">ml_free_launcher_array</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> **free_arr)</td></tr>
 <tr class="memdesc:a2bddbaf124badc54bf6e5abf7e729543"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees the array of launchers ml_get_launcher_array provides. Dereferences every launcher in the array so they can be cleaned up later. NOTE: if you don't want to lose access to a launcher use ml_reference_launcher and ml_dereference_launcher when you are done.  <a href="#a2bddbaf124badc54bf6e5abf7e729543">More...</a><br/></td></tr>
 <tr class="separator:a2bddbaf124badc54bf6e5abf7e729543"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,11 +182,11 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L506">506</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L510">510</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a767708763fb6fbf05411ca974c13492c"></a>
+<a class="anchor" id="a892662f59af52456fce3cde51bc97179"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -194,8 +194,18 @@ Functions</h2></td></tr>
           <td class="memname">int16_t ml_get_launcher_array </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structml__launcher__t.html">ml_launcher_t</a> ***&#160;</td>
-          <td class="paramname"><em>new_arr</em>)</td><td></td>
+          <td class="paramname"><em>new_arr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint32_t *&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -203,13 +213,14 @@ Functions</h2></td></tr>
 <p>Allocates space for and returns a new array of launchers. To clean up use ml_free_launcher_array. Modifying values in the array will produce undexpected results. Treat this array as a constant. NOTE: if you don't want to lose access to a launcher use ml_reference_launcher and ml_dereference_launcher when you are done. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">new_arr</td><td>Pointer to where you want the array</td></tr>
+    <tr><td class="paramname">new_arr</td><td>Pointer to where you want the array </td></tr>
+    <tr><td class="paramname">count</td><td>The number of items found</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A status code, ML_OK if everything went well. </dd></dl>
 
-<p>Definition at line <a class="el" href="#L453">453</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L454">454</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
@@ -363,7 +374,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 6 2014 22:22:17 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 6 2014 22:51:39 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>
