@@ -73,7 +73,7 @@ int16_t ml_init_library(){
 int16_t _ml_init_controller(ml_controller_t *controller) {
   if(controller->control_initialized) {
     TRACE("Controller already initialized\n");
-    return ML_CONTROL_ALREADY_INIT;
+    return ML_LIBRARY_ALREADY_INIT;
   }
   // Setup the array
   controller->launchers = calloc(sizeof(ml_arr_launcher_t),
@@ -135,12 +135,12 @@ int16_t _ml_cleanup_controller(ml_controller_t *controller) {
   // Error checking
   if(controller == NULL) {
     TRACE("Could not clean up, control was null.\n");
-    return ML_CONTROL_FREE_NULL;
+    return ML_LIBRARY_NOT_INIT;
   }
 
   if(controller->launchers == NULL) {
     TRACE("Could not clean up, launcher array was null.\n");
-    return ML_CONTROL_ARR_NULL;
+    return ML_LAUNCHER_ARRAY_INCONSISTENT;
   }
   // Cleaning up the library. Free up every launcher.
   for(int16_t i = 0; i < controller->launcher_array_size; i++) {
@@ -639,7 +639,7 @@ int16_t ml_free_launcher_array(ml_launcher_t **free_arr) {
   
   if(free_arr == NULL) {
     TRACE("Could not free array, array was null. (ml_free_launcher_array)\n");
-    return ML_ARRAY_WAS_NULL;
+    return ML_NULL_POINTER;
   }
   
   while((cur_launcher = free_arr[index]) != NULL) {

@@ -20,16 +20,16 @@
 #include "ml_errors.h"
 
 // ********** Controller Definitions **********
-#define ML_DEFAULT_POLL_RATE 2
-#define ML_MAX_POLL_RATE 120
-#define ML_MIN_POLL_RATE 1
+#define ML_DEFAULT_POLL_RATE 2 ///< 2 Seconds is the default polling rate
+#define ML_MAX_POLL_RATE 120 ///< 120 Seconds or 2 minutes is the maximum wait between polling
+#define ML_MIN_POLL_RATE 1 ///< 1 Second is the minimum wait between polling
 
-typedef void(*ml_void_event_handler)();
-typedef struct ml_controller_t ml_controller_t;
+typedef void(*ml_void_event_handler)(); ///< A future object, currently not implemented.
+typedef struct ml_controller_t ml_controller_t; ///< Controller typedef, Don't use this object directly.
 
 // ********** Launcher Definitions **********
-#define ML_STD_VENDOR_ID 8483
-#define ML_STD_PRODUCT_ID 4112
+#define ML_STD_VENDOR_ID 8483 ///< The Vendor ID of a standard launcher
+#define ML_STD_PRODUCT_ID 4112 ///< The Product ID of a standard launcer
 
 /// Use this enumeration to determine the type of launcher. 
 typedef enum ml_launcher_type {
@@ -45,7 +45,7 @@ typedef enum ml_launcher_direction {
   ML_RIGHT ///< Move the launcher to the righ
 } ml_launcher_direction;
 
-typedef struct ml_launcher_t ml_launcher_t; 
+typedef struct ml_launcher_t ml_launcher_t; ///< Launcher typedef, Don't use this object directly.
 
 // ********** API Functions **********
 // Library init
