@@ -447,10 +447,11 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
  * ml_reference_launcher and ml_dereference_launcher when you are done.
  *
  * @param new_arr Pointer to where you want the array
+ * @param count The number of items found
  *
  * @return A status code, ML_OK if everything went well.
  */
-int16_t ml_get_launcher_array(ml_launcher_t ***new_arr) {
+int16_t ml_get_launcher_array(ml_launcher_t ***new_arr, uint32_t *count) {
   ml_launcher_t *cur_launcher;
   int16_t new_index = 0, new_count = 0;
   // Error checking
@@ -461,7 +462,10 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr) {
   // Lock the launcher array for read
   pthread_rwlock_rdlock(&(ml_main_controller->launcher_array_lock));
   new_count = ml_main_controller->launcher_count;
-
+  (*count) = new_count;
+  if(new_count == 0) {
+    return ML_NO_LAUNCHERS;
+  }
   // Allocate space for the new array.
   (*new_arr) = malloc(sizeof(ml_launcher_t *) * (new_count + 1));
   if((*new_arr) == NULL) {

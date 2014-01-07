@@ -33,7 +33,8 @@ typedef enum ml_error_codes {
   ML_ARRAY_WAS_NULL,
   ML_ALLOC_FAILED,
   ML_LAUNCHER_ARRAY_INCONSISTENT,
-  ML_NULL_POINTER
+  ML_NULL_POINTER,
+  ML_NO_LAUNCHERS
 } ml_error_codes;
 
 #endif

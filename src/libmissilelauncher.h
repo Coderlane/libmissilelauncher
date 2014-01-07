@@ -56,7 +56,7 @@ uint8_t ml_is_polling();
 uint8_t ml_get_poll_rate();
 int16_t ml_set_poll_rate(uint8_t);
 
-int16_t ml_get_launcher_array(ml_launcher_t ***);
+int16_t ml_get_launcher_array(ml_launcher_t ***, uint32_t *);
 int16_t ml_free_launcher_array(ml_launcher_t **);
 
 
