@@ -98,8 +98,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a6320a404ac37214992ce39974731e956"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a6320a404ac37214992ce39974731e956">ml_reference_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
+<tr class="memdesc:a6320a404ac37214992ce39974731e956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refrences a launcher so that it isn't destroyed. If a launcher isn't refrenced, when you call ml_free_launcher_array the refrence may or may not be freed. Thus you can't guarantee that the memory is still there for you to use. Using ml_refrence_launcher with ml_dereference_launcher avoids this issue.  <a href="#a6320a404ac37214992ce39974731e956">More...</a><br/></td></tr>
 <tr class="separator:a6320a404ac37214992ce39974731e956"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75093ea64c6ed2c9726ebbf73c610c0f"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a75093ea64c6ed2c9726ebbf73c610c0f">ml_dereference_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
+<tr class="memdesc:a75093ea64c6ed2c9726ebbf73c610c0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dereferences a launcher so that it can be eventually destroyed. Just as with malloc and free, when using ml_reference_launcher you must use ml_dereference_launcher or suffer memory leaks.  <a href="#a75093ea64c6ed2c9726ebbf73c610c0f">More...</a><br/></td></tr>
 <tr class="separator:a75093ea64c6ed2c9726ebbf73c610c0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d430808bf05265a55d4707f1bb9fa63"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a6d430808bf05265a55d4707f1bb9fa63">ml_fire_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
 <tr class="memdesc:a6d430808bf05265a55d4707f1bb9fa63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fires a missile from the launcher.  <a href="#a6d430808bf05265a55d4707f1bb9fa63">More...</a><br/></td></tr>
@@ -111,13 +113,16 @@ Functions</h2></td></tr>
 <tr class="memdesc:a731ca6f2559b102e635ea3aa6f0d67f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the launcher to 0 degrees of elevation and then centers the launcher.  <a href="#a731ca6f2559b102e635ea3aa6f0d67f7">More...</a><br/></td></tr>
 <tr class="separator:a731ca6f2559b102e635ea3aa6f0d67f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a181e7ce2970f533fc089312029973984"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a181e7ce2970f533fc089312029973984">ml_led_on</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
+<tr class="memdesc:a181e7ce2970f533fc089312029973984"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns on the led of the selected launcher.  <a href="#a181e7ce2970f533fc089312029973984">More...</a><br/></td></tr>
 <tr class="separator:a181e7ce2970f533fc089312029973984"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a783ca2735050c1a4dfc155e95506b61a"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a783ca2735050c1a4dfc155e95506b61a">ml_led_off</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
+<tr class="memdesc:a783ca2735050c1a4dfc155e95506b61a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns off the led of the selected launcher.  <a href="#a783ca2735050c1a4dfc155e95506b61a">More...</a><br/></td></tr>
 <tr class="separator:a783ca2735050c1a4dfc155e95506b61a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17c43597b5c1654028182cb341d5ca62"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a17c43597b5c1654028182cb341d5ca62">ml_get_led_stat</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
 <tr class="memdesc:a17c43597b5c1654028182cb341d5ca62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the LED is on or off.  <a href="#a17c43597b5c1654028182cb341d5ca62">More...</a><br/></td></tr>
 <tr class="separator:a17c43597b5c1654028182cb341d5ca62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade8d4c74409d42c6aee6601e2a34d4bd"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#ade8d4c74409d42c6aee6601e2a34d4bd">ml_move_launcher_mseconds</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher, ml_launcher_direction direction, uint32_t mseconds)</td></tr>
+<tr class="memdesc:ade8d4c74409d42c6aee6601e2a34d4bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the specified launcher, in the specified direction for the specified number of milliseconds. Don't use this in combination with ml_move_launcher_degrees without zeroing the launcher afterwards.  <a href="#ade8d4c74409d42c6aee6601e2a34d4bd">More...</a><br/></td></tr>
 <tr class="separator:ade8d4c74409d42c6aee6601e2a34d4bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -140,15 +145,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Dereferences a launcher so that it can be eventually destroyed. Just as with malloc and free, when using ml_reference_launcher you must use ml_dereference_launcher or suffer memory leaks. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">launcher</td><td></td></tr>
+    <tr><td class="paramname">launcher</td><td>The launcher to dereference</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L87">87</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+<p>Definition at line <a class="el" href="#L94">94</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -169,13 +176,13 @@ Functions</h2></td></tr>
 <p>Fires a missile from the launcher. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">launcher</td><td>The launcher to fire from</td></tr>
+    <tr><td class="paramname">launcher</td><td>The launcher to fire from.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L111">111</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+<p>Definition at line <a class="el" href="#L118">118</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -202,7 +209,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 = on 0 = off </dd></dl>
 
-<p>Definition at line <a class="el" href="#L226">226</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+<p>Definition at line <a class="el" href="#L235">235</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -219,15 +226,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Turns off the led of the selected launcher. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">launcher</td><td></td></tr>
+    <tr><td class="paramname">launcher</td><td>The launcher to get it's led turned off</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L208">208</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+<p>Definition at line <a class="el" href="#L216">216</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -244,15 +253,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Turns on the led of the selected launcher. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">launcher</td><td></td></tr>
+    <tr><td class="paramname">launcher</td><td>The launcher to get it's led turned on</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L190">190</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+<p>Definition at line <a class="el" href="#L197">197</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -297,7 +308,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L130">130</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+<p>Definition at line <a class="el" href="#L137">137</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -330,17 +341,19 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Moves the specified launcher, in the specified direction for the specified number of milliseconds. Don't use this in combination with ml_move_launcher_degrees without zeroing the launcher afterwards. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">launcher</td><td></td></tr>
-    <tr><td class="paramname">direction</td><td></td></tr>
-    <tr><td class="paramname">meseconds</td><td></td></tr>
+    <tr><td class="paramname">launcher</td><td>The launcher the move. </td></tr>
+    <tr><td class="paramname">direction</td><td>The direction to move in. </td></tr>
+    <tr><td class="paramname">mseconds</td><td>The number of milliseconds to move for.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L245">245</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+<p>Definition at line <a class="el" href="#L256">256</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -357,15 +370,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Refrences a launcher so that it isn't destroyed. If a launcher isn't refrenced, when you call ml_free_launcher_array the refrence may or may not be freed. Thus you can't guarantee that the memory is still there for you to use. Using ml_refrence_launcher with ml_dereference_launcher avoids this issue. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">launcher</td><td></td></tr>
+    <tr><td class="paramname">launcher</td><td>The launcher to reference.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L69">69</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+<p>Definition at line <a class="el" href="#L74">74</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -392,14 +407,14 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L151">151</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+<p>Definition at line <a class="el" href="#L158">158</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 6 2014 16:34:18 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 6 2014 22:22:17 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>
