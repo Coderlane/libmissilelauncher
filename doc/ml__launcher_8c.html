@@ -70,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -106,7 +106,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a6d430808bf05265a55d4707f1bb9fa63"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a6d430808bf05265a55d4707f1bb9fa63">ml_fire_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
 <tr class="memdesc:a6d430808bf05265a55d4707f1bb9fa63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fires a missile from the launcher.  <a href="#a6d430808bf05265a55d4707f1bb9fa63">More...</a><br/></td></tr>
 <tr class="separator:a6d430808bf05265a55d4707f1bb9fa63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ff1a9618794ea9ed69f69cb961deb35"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a1ff1a9618794ea9ed69f69cb961deb35">ml_move_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher, ml_launcher_direction direction, uint16_t degrees)</td></tr>
+<tr class="memitem:a1ff1a9618794ea9ed69f69cb961deb35"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a1ff1a9618794ea9ed69f69cb961deb35">ml_move_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher, <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a> direction, uint16_t degrees)</td></tr>
 <tr class="memdesc:a1ff1a9618794ea9ed69f69cb961deb35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the launcher in the specified direction, x degrees.  <a href="#a1ff1a9618794ea9ed69f69cb961deb35">More...</a><br/></td></tr>
 <tr class="separator:a1ff1a9618794ea9ed69f69cb961deb35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a731ca6f2559b102e635ea3aa6f0d67f7"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a731ca6f2559b102e635ea3aa6f0d67f7">ml_zero_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
@@ -121,9 +121,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a17c43597b5c1654028182cb341d5ca62"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a17c43597b5c1654028182cb341d5ca62">ml_get_led_stat</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
 <tr class="memdesc:a17c43597b5c1654028182cb341d5ca62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the LED is on or off.  <a href="#a17c43597b5c1654028182cb341d5ca62">More...</a><br/></td></tr>
 <tr class="separator:a17c43597b5c1654028182cb341d5ca62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade8d4c74409d42c6aee6601e2a34d4bd"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#ade8d4c74409d42c6aee6601e2a34d4bd">ml_move_launcher_mseconds</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher, ml_launcher_direction direction, uint32_t mseconds)</td></tr>
+<tr class="memitem:ade8d4c74409d42c6aee6601e2a34d4bd"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#ade8d4c74409d42c6aee6601e2a34d4bd">ml_move_launcher_mseconds</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher, <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a> direction, uint32_t mseconds)</td></tr>
 <tr class="memdesc:ade8d4c74409d42c6aee6601e2a34d4bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the specified launcher, in the specified direction for the specified number of milliseconds. Don't use this in combination with ml_move_launcher_degrees without zeroing the launcher afterwards.  <a href="#ade8d4c74409d42c6aee6601e2a34d4bd">More...</a><br/></td></tr>
 <tr class="separator:ade8d4c74409d42c6aee6601e2a34d4bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1deaf6e456a768bb26e78964b73b3a51"><td class="memItemLeft" align="right" valign="top"><a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7">ml_launcher_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__launcher_8c.html#a1deaf6e456a768bb26e78964b73b3a51">ml_get_launcher_type</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *launcher)</td></tr>
+<tr class="memdesc:a1deaf6e456a768bb26e78964b73b3a51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the type of launcher from the launcher.  <a href="#a1deaf6e456a768bb26e78964b73b3a51">More...</a><br/></td></tr>
+<tr class="separator:a1deaf6e456a768bb26e78964b73b3a51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Travis Lane </dd></dl>
@@ -183,6 +186,33 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
 <p>Definition at line <a class="el" href="#L118">118</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1deaf6e456a768bb26e78964b73b3a51"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7">ml_launcher_type</a> ml_get_launcher_type </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *&#160;</td>
+          <td class="paramname"><em>launcher</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the type of launcher from the launcher. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">launcher</td><td>The launcher to check</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The launcher type </dd></dl>
+
+<p>Definition at line <a class="el" href="#L368">368</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -280,7 +310,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ml_launcher_direction&#160;</td>
+          <td class="paramtype"><a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a>&#160;</td>
           <td class="paramname"><em>direction</em>, </td>
         </tr>
         <tr>
@@ -325,7 +355,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ml_launcher_direction&#160;</td>
+          <td class="paramtype"><a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a>&#160;</td>
           <td class="paramname"><em>direction</em>, </td>
         </tr>
         <tr>
@@ -414,7 +444,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 09:14:50 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 15:45:13 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

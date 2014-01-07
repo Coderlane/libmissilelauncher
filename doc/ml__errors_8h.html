@@ -70,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -101,45 +101,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:acf567445e94e69f4f5a8b73840f61ed1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf567445e94e69f4f5a8b73840f61ed1"></a>
-typedef enum ml_error_codes&#160;</td><td class="memItemRight" valign="bottom"><b>ml_error_codes</b></td></tr>
+typedef enum <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7d">ml_error_codes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__errors_8h.html#acf567445e94e69f4f5a8b73840f61ed1">ml_error_codes</a></td></tr>
+<tr class="memdesc:acf567445e94e69f4f5a8b73840f61ed1"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt; Error codes used in the library an enumeration is used <br/></td></tr>
 <tr class="separator:acf567445e94e69f4f5a8b73840f61ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a3cf42082f18847a290395b5f78c45a7d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>ml_error_codes</b> { <br/>
-&#160;&#160;<b>ML_OK</b>, 
-<b>ML_NOT_IMPLEMENTED</b>, 
-<b>ML_TEST_ERROR</b>, 
-<b>ML_LIBRARY_ALREADY_INIT</b>, 
+<tr class="memitem:a3cf42082f18847a290395b5f78c45a7d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7d">ml_error_codes</a> { <br/>
+&#160;&#160;<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da4edb3b13e70da60d732e3b520461ea23">ML_OK</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dabac98a6018500498c065bc97f187dcb6">ML_NOT_IMPLEMENTED</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da0987e5cc25d7e84cf894489406fb867a">ML_TEST_ERROR</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7daa4dc14f338a7dc5fbcc6bb499fb98488">ML_LIBRARY_ALREADY_INIT</a>, 
 <br/>
-&#160;&#160;<b>ML_LIBRARY_NOT_INIT</b>, 
-<b>ML_CONTROL_ALREADY_INIT</b>, 
-<b>ML_CONTROL_ALREADY_NULL</b>, 
-<b>ML_CONTROL_WAS_NULL</b>, 
+&#160;&#160;<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da0e1a397aea178fb20739275154e54dbb">ML_LIBRARY_NOT_INIT</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da6862002ebc00c778a5516d6363398511">ML_LIBUSB_INIT_FAILED</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7daed366bc96f14d726e0be9fced48bf6a8">ML_INVALID_POLL_RATE</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da4b09f8ef143f2f8d39a25316f93b959a">ML_FAILED_POLL_START</a>, 
 <br/>
-&#160;&#160;<b>ML_CONTROL_FREE_NULL</b>, 
-<b>ML_CONTROL_ARR_NULL</b>, 
-<b>ML_LIBUSB_INIT_FAILED</b>, 
-<b>ML_INVALID_POLL_RATE</b>, 
+&#160;&#160;<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dab378cd5a5179eb26638707bd1cea8ca9">ML_NULL_LAUNCHER</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dad209f9886ce25a8ee8f131d962a72dcd">ML_POSITION_WAS_NOT_NULL</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da29baed0807e03e2258d7d139ceb591cc">ML_POSITION_WAS_NULL</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dacbe8f218a8743ecf2fff758e78ccb16c">ML_INDEX_OUT_OF_BOUNDS</a>, 
 <br/>
-&#160;&#160;<b>ML_FAILED_POLL_START</b>, 
-<b>ML_NULL_LAUNCHER</b>, 
-<b>ML_POSITION_WAS_NOT_NULL</b>, 
-<b>ML_POSITION_WAS_NULL</b>, 
+&#160;&#160;<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da993b83b5e414054f082d059b4c4f71db">ML_COUNT_ZERO</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dad7c1bdb280611017e532df90191b1a3a">ML_NOT_FOUND</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da935a08a4b7b7ded3ac0d292bf43d1350">ML_ARRAY_NOT_NULL</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da65b957fc9134cb005ac21892781b2f08">ML_ALLOC_FAILED</a>, 
 <br/>
-&#160;&#160;<b>ML_INDEX_OUT_OF_BOUNDS</b>, 
-<b>ML_COUNT_ZERO</b>, 
-<b>ML_NOT_FOUND</b>, 
-<b>ML_ARRAY_NOT_NULL</b>, 
-<br/>
-&#160;&#160;<b>ML_ARRAY_WAS_NULL</b>, 
-<b>ML_ALLOC_FAILED</b>, 
-<b>ML_LAUNCHER_ARRAY_INCONSISTENT</b>, 
-<b>ML_NULL_POINTER</b>, 
-<br/>
-&#160;&#160;<b>ML_NO_LAUNCHERS</b>
+&#160;&#160;<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dafe1cc869f8eff42088d760857b832d65">ML_LAUNCHER_ARRAY_INCONSISTENT</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da01d43975c592e8845f96349ba51794b1">ML_NULL_POINTER</a>, 
+<a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da3f929cb58aa8c34974f9677093aac29f">ML_NO_LAUNCHERS</a>
 <br/>
  }</td></tr>
+<tr class="memdesc:a3cf42082f18847a290395b5f78c45a7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt; Error codes used in the library an enumeration is used  <a href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7d">More...</a><br/></td></tr>
 <tr class="separator:a3cf42082f18847a290395b5f78c45a7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -149,10 +143,86 @@ Enumerations</h2></td></tr>
 <dl class="section date"><dt>Date</dt><dd>2013-12-14 </dd></dl>
 
 <p>Definition in file <a class="el" href="">ml_errors.h</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="a3cf42082f18847a290395b5f78c45a7d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7d">ml_error_codes</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>&lt; Error codes used in the library an enumeration is used </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da4edb3b13e70da60d732e3b520461ea23"></a>ML_OK</em>&nbsp;</td><td class="fielddoc">
+<p>Everything is OK. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7dabac98a6018500498c065bc97f187dcb6"></a>ML_NOT_IMPLEMENTED</em>&nbsp;</td><td class="fielddoc">
+<p>Specific function not implemented. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da0987e5cc25d7e84cf894489406fb867a"></a>ML_TEST_ERROR</em>&nbsp;</td><td class="fielddoc">
+<p>A test failed. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7daa4dc14f338a7dc5fbcc6bb499fb98488"></a>ML_LIBRARY_ALREADY_INIT</em>&nbsp;</td><td class="fielddoc">
+<p>Library was already initialized. ml_init_library called more than once. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da0e1a397aea178fb20739275154e54dbb"></a>ML_LIBRARY_NOT_INIT</em>&nbsp;</td><td class="fielddoc">
+<p>Library was not initialized, call ml_init_library before using any function. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da6862002ebc00c778a5516d6363398511"></a>ML_LIBUSB_INIT_FAILED</em>&nbsp;</td><td class="fielddoc">
+<p>libusb-1.0 failed to initialize. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7daed366bc96f14d726e0be9fced48bf6a8"></a>ML_INVALID_POLL_RATE</em>&nbsp;</td><td class="fielddoc">
+<p>An invalid poll rate was specified, try a value between 1 and 120 or 0 for default (2). </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da4b09f8ef143f2f8d39a25316f93b959a"></a>ML_FAILED_POLL_START</em>&nbsp;</td><td class="fielddoc">
+<p>Polling failed to start. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7dab378cd5a5179eb26638707bd1cea8ca9"></a>ML_NULL_LAUNCHER</em>&nbsp;</td><td class="fielddoc">
+<p>A launcher was expected, but a null pointer was found. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7dad209f9886ce25a8ee8f131d962a72dcd"></a>ML_POSITION_WAS_NOT_NULL</em>&nbsp;</td><td class="fielddoc">
+<p>The specified position was not null when a null position was expected. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da29baed0807e03e2258d7d139ceb591cc"></a>ML_POSITION_WAS_NULL</em>&nbsp;</td><td class="fielddoc">
+<p>The specified position was null when a valid pointer was expected. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7dacbe8f218a8743ecf2fff758e78ccb16c"></a>ML_INDEX_OUT_OF_BOUNDS</em>&nbsp;</td><td class="fielddoc">
+<p>An array went past the end . </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da993b83b5e414054f082d059b4c4f71db"></a>ML_COUNT_ZERO</em>&nbsp;</td><td class="fielddoc">
+<p>No items are in the array so it would be impossible to remove one. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7dad7c1bdb280611017e532df90191b1a3a"></a>ML_NOT_FOUND</em>&nbsp;</td><td class="fielddoc">
+<p>An item was not found. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da935a08a4b7b7ded3ac0d292bf43d1350"></a>ML_ARRAY_NOT_NULL</em>&nbsp;</td><td class="fielddoc">
+<p>A null pointer was expected, but one with possible data was encountered. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da65b957fc9134cb005ac21892781b2f08"></a>ML_ALLOC_FAILED</em>&nbsp;</td><td class="fielddoc">
+<p>An allocate failed. Having memory issues? </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7dafe1cc869f8eff42088d760857b832d65"></a>ML_LAUNCHER_ARRAY_INCONSISTENT</em>&nbsp;</td><td class="fielddoc">
+<p>The launcher array is in an inconsisten state. This is the library's fault. Please file a bug report. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da01d43975c592e8845f96349ba51794b1"></a>ML_NULL_POINTER</em>&nbsp;</td><td class="fielddoc">
+<p>A requred pointer was null. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a3cf42082f18847a290395b5f78c45a7da3f929cb58aa8c34974f9677093aac29f"></a>ML_NO_LAUNCHERS</em>&nbsp;</td><td class="fielddoc">
+<p>No launchers were detected. </p>
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="#L13">13</a> of file <a class="el" href="">ml_errors.h</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 09:14:50 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 15:45:13 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

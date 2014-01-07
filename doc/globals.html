@@ -69,6 +69,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li class="current"><a href="globals.html"><span>All</span></a></li>
       <li><a href="globals_func.html"><span>Functions</span></a></li>
+      <li><a href="globals_type.html"><span>Typedefs</span></a></li>
+      <li><a href="globals_enum.html"><span>Enumerations</span></a></li>
+      <li><a href="globals_eval.html"><span>Enumerator</span></a></li>
+      <li><a href="globals_defs.html"><span>Macros</span></a></li>
     </ul>
   </div>
   <div id="navrow4" class="tabs3">
@@ -82,7 +86,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -95,25 +99,53 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock">Here is a list of all documented functions, variables, defines, enums, and typedefs with links to the documentation:</div>
 
 <h3><a class="anchor" id="index_m"></a>- m -</h3><ul>
+<li>ML_ALLOC_FAILED
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da65b957fc9134cb005ac21892781b2f08">ml_errors.h</a>
+</li>
+<li>ML_ARRAY_NOT_NULL
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da935a08a4b7b7ded3ac0d292bf43d1350">ml_errors.h</a>
+</li>
 <li>ml_cleanup_library()
-: <a class="el" href="libmissilelauncher_8h.html#ad45489dfca4c755a8dea9b3fdab506e7">libmissilelauncher.h</a>
-, <a class="el" href="ml__controller_8c.html#ad45489dfca4c755a8dea9b3fdab506e7">ml_controller.c</a>
+: <a class="el" href="ml__controller_8c.html#ad45489dfca4c755a8dea9b3fdab506e7">ml_controller.c</a>
+, <a class="el" href="libmissilelauncher_8h.html#ad45489dfca4c755a8dea9b3fdab506e7">libmissilelauncher.h</a>
+</li>
+<li>ml_controller_t
+: <a class="el" href="libmissilelauncher_8h.html#a576dbd8ecbc4116b88252bbcbc94a4b4">libmissilelauncher.h</a>
+</li>
+<li>ML_COUNT_ZERO
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da993b83b5e414054f082d059b4c4f71db">ml_errors.h</a>
+</li>
+<li>ML_DEFAULT_POLL_RATE
+: <a class="el" href="libmissilelauncher_8h.html#a3bb83e7d33247481720c10c4d8555d47">libmissilelauncher.h</a>
 </li>
 <li>ml_dereference_launcher()
-: <a class="el" href="ml__launcher_8c.html#a75093ea64c6ed2c9726ebbf73c610c0f">ml_launcher.c</a>
-, <a class="el" href="libmissilelauncher_8h.html#aa93571f9be30238038001c5620810b73">libmissilelauncher.h</a>
+: <a class="el" href="libmissilelauncher_8h.html#aa93571f9be30238038001c5620810b73">libmissilelauncher.h</a>
+, <a class="el" href="ml__launcher_8c.html#a75093ea64c6ed2c9726ebbf73c610c0f">ml_launcher.c</a>
+</li>
+<li>ML_DOWN
+: <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608ab9163ad2023526f5e8d62733efde64e6">libmissilelauncher.h</a>
+</li>
+<li>ml_error_codes
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7d">ml_errors.h</a>
+</li>
+<li>ML_FAILED_POLL_START
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da4b09f8ef143f2f8d39a25316f93b959a">ml_errors.h</a>
 </li>
 <li>ml_fire_launcher()
 : <a class="el" href="libmissilelauncher_8h.html#a64ceca471ddfd77299a1da089d08e55e">libmissilelauncher.h</a>
 , <a class="el" href="ml__launcher_8c.html#a6d430808bf05265a55d4707f1bb9fa63">ml_launcher.c</a>
 </li>
 <li>ml_free_launcher_array()
-: <a class="el" href="ml__controller_8c.html#a2bddbaf124badc54bf6e5abf7e729543">ml_controller.c</a>
-, <a class="el" href="libmissilelauncher_8h.html#a24aaa010309764796d6fa19420174b6d">libmissilelauncher.h</a>
+: <a class="el" href="libmissilelauncher_8h.html#a24aaa010309764796d6fa19420174b6d">libmissilelauncher.h</a>
+, <a class="el" href="ml__controller_8c.html#a2bddbaf124badc54bf6e5abf7e729543">ml_controller.c</a>
 </li>
 <li>ml_get_launcher_array()
 : <a class="el" href="libmissilelauncher_8h.html#a236d84507f437d2ffd53d5f55f089575">libmissilelauncher.h</a>
 , <a class="el" href="ml__controller_8c.html#a892662f59af52456fce3cde51bc97179">ml_controller.c</a>
+</li>
+<li>ml_get_launcher_type()
+: <a class="el" href="libmissilelauncher_8h.html#aa317a243d4f297f745733e35a09f868d">libmissilelauncher.h</a>
+, <a class="el" href="ml__launcher_8c.html#a1deaf6e456a768bb26e78964b73b3a51">ml_launcher.c</a>
 </li>
 <li>ml_get_led_stat()
 : <a class="el" href="libmissilelauncher_8h.html#af1923ee6e2d22605509c06517e460dac">libmissilelauncher.h</a>
@@ -123,9 +155,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="libmissilelauncher_8h.html#a093dff39490baea5b50586802c125943">libmissilelauncher.h</a>
 , <a class="el" href="ml__controller_8c.html#a093dff39490baea5b50586802c125943">ml_controller.c</a>
 </li>
+<li>ML_INDEX_OUT_OF_BOUNDS
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dacbe8f218a8743ecf2fff758e78ccb16c">ml_errors.h</a>
+</li>
 <li>ml_init_library()
-: <a class="el" href="ml__controller_8c.html#a79bc8c33e0a7d0d2fd4826165d3bd69c">ml_controller.c</a>
-, <a class="el" href="libmissilelauncher_8h.html#a79bc8c33e0a7d0d2fd4826165d3bd69c">libmissilelauncher.h</a>
+: <a class="el" href="libmissilelauncher_8h.html#a79bc8c33e0a7d0d2fd4826165d3bd69c">libmissilelauncher.h</a>
+, <a class="el" href="ml__controller_8c.html#a79bc8c33e0a7d0d2fd4826165d3bd69c">ml_controller.c</a>
+</li>
+<li>ML_INVALID_POLL_RATE
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7daed366bc96f14d726e0be9fced48bf6a8">ml_errors.h</a>
 </li>
 <li>ml_is_library_init()
 : <a class="el" href="libmissilelauncher_8h.html#a29d6ea01879aba602ba77f33bb1e885f">libmissilelauncher.h</a>
@@ -135,36 +173,114 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="libmissilelauncher_8h.html#a5ff77a8c8ca0879bd97e3bd489bafd4c">libmissilelauncher.h</a>
 , <a class="el" href="ml__controller_8c.html#a5ff77a8c8ca0879bd97e3bd489bafd4c">ml_controller.c</a>
 </li>
+<li>ML_LAUNCHER_ARRAY_INCONSISTENT
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dafe1cc869f8eff42088d760857b832d65">ml_errors.h</a>
+</li>
+<li>ml_launcher_direction
+: <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">libmissilelauncher.h</a>
+</li>
+<li>ml_launcher_t
+: <a class="el" href="libmissilelauncher_8h.html#a80c2cb5e924a34080a45d8f786030773">libmissilelauncher.h</a>
+</li>
+<li>ml_launcher_type
+: <a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7">libmissilelauncher.h</a>
+</li>
 <li>ml_led_off()
 : <a class="el" href="libmissilelauncher_8h.html#a3fb13a2dcaa8a3a84da2ea84068d75ba">libmissilelauncher.h</a>
 , <a class="el" href="ml__launcher_8c.html#a783ca2735050c1a4dfc155e95506b61a">ml_launcher.c</a>
 </li>
 <li>ml_led_on()
-: <a class="el" href="libmissilelauncher_8h.html#ad711b1b8bbcd3665e9d638f3f16ec7a4">libmissilelauncher.h</a>
-, <a class="el" href="ml__launcher_8c.html#a181e7ce2970f533fc089312029973984">ml_launcher.c</a>
+: <a class="el" href="ml__launcher_8c.html#a181e7ce2970f533fc089312029973984">ml_launcher.c</a>
+, <a class="el" href="libmissilelauncher_8h.html#ad711b1b8bbcd3665e9d638f3f16ec7a4">libmissilelauncher.h</a>
+</li>
+<li>ML_LEFT
+: <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608a59e801b57b4e366b38008f911bc8e086">libmissilelauncher.h</a>
+</li>
+<li>ML_LIBRARY_ALREADY_INIT
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7daa4dc14f338a7dc5fbcc6bb499fb98488">ml_errors.h</a>
+</li>
+<li>ML_LIBRARY_NOT_INIT
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da0e1a397aea178fb20739275154e54dbb">ml_errors.h</a>
+</li>
+<li>ML_LIBUSB_INIT_FAILED
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da6862002ebc00c778a5516d6363398511">ml_errors.h</a>
+</li>
+<li>ML_MAX_POLL_RATE
+: <a class="el" href="libmissilelauncher_8h.html#a65648d19836eefe4619e399d366f0fbf">libmissilelauncher.h</a>
+</li>
+<li>ML_MIN_POLL_RATE
+: <a class="el" href="libmissilelauncher_8h.html#a728de81b58466be07e3a59a93a52a4b0">libmissilelauncher.h</a>
 </li>
 <li>ml_move_launcher()
 : <a class="el" href="ml__launcher_8c.html#a1ff1a9618794ea9ed69f69cb961deb35">ml_launcher.c</a>
 </li>
 <li>ml_move_launcher_mseconds()
-: <a class="el" href="libmissilelauncher_8h.html#a297b4e15a1d7d325a05fb60f18b13cbe">libmissilelauncher.h</a>
-, <a class="el" href="ml__launcher_8c.html#ade8d4c74409d42c6aee6601e2a34d4bd">ml_launcher.c</a>
+: <a class="el" href="ml__launcher_8c.html#ade8d4c74409d42c6aee6601e2a34d4bd">ml_launcher.c</a>
+, <a class="el" href="libmissilelauncher_8h.html#a297b4e15a1d7d325a05fb60f18b13cbe">libmissilelauncher.h</a>
+</li>
+<li>ML_NO_LAUNCHERS
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da3f929cb58aa8c34974f9677093aac29f">ml_errors.h</a>
+</li>
+<li>ML_NOT_FOUND
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dad7c1bdb280611017e532df90191b1a3a">ml_errors.h</a>
+</li>
+<li>ML_NOT_IMPLEMENTED
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dabac98a6018500498c065bc97f187dcb6">ml_errors.h</a>
+</li>
+<li>ML_NOT_LAUNCHER
+: <a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7acf36571ae2de6ac855f641be70f30675">libmissilelauncher.h</a>
+</li>
+<li>ML_NULL_LAUNCHER
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dab378cd5a5179eb26638707bd1cea8ca9">ml_errors.h</a>
+</li>
+<li>ML_NULL_POINTER
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da01d43975c592e8845f96349ba51794b1">ml_errors.h</a>
+</li>
+<li>ML_OK
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da4edb3b13e70da60d732e3b520461ea23">ml_errors.h</a>
+</li>
+<li>ML_POSITION_WAS_NOT_NULL
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7dad209f9886ce25a8ee8f131d962a72dcd">ml_errors.h</a>
+</li>
+<li>ML_POSITION_WAS_NULL
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da29baed0807e03e2258d7d139ceb591cc">ml_errors.h</a>
 </li>
 <li>ml_reference_launcher()
-: <a class="el" href="ml__launcher_8c.html#a6320a404ac37214992ce39974731e956">ml_launcher.c</a>
-, <a class="el" href="libmissilelauncher_8h.html#a0332e2291119d51ca14e70fe4ddcfbae">libmissilelauncher.h</a>
+: <a class="el" href="libmissilelauncher_8h.html#a0332e2291119d51ca14e70fe4ddcfbae">libmissilelauncher.h</a>
+, <a class="el" href="ml__launcher_8c.html#a6320a404ac37214992ce39974731e956">ml_launcher.c</a>
+</li>
+<li>ML_RIGHT
+: <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608a93f1492acc140752488498a0caedd2f7">libmissilelauncher.h</a>
 </li>
 <li>ml_set_poll_rate()
-: <a class="el" href="libmissilelauncher_8h.html#a5cb058ebbeccd30b58d847a55a115584">libmissilelauncher.h</a>
-, <a class="el" href="ml__controller_8c.html#ab7c8a3c153eb4476ff0b73cd45c59414">ml_controller.c</a>
+: <a class="el" href="ml__controller_8c.html#ab7c8a3c153eb4476ff0b73cd45c59414">ml_controller.c</a>
+, <a class="el" href="libmissilelauncher_8h.html#a5cb058ebbeccd30b58d847a55a115584">libmissilelauncher.h</a>
+</li>
+<li>ML_STANDARD_LAUNCHER
+: <a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7ab847bcc5a4b55af870023f4a3ac3180a">libmissilelauncher.h</a>
 </li>
 <li>ml_start_continuous_poll()
-: <a class="el" href="ml__controller_8c.html#ae9183ffd9bb59742a11aeb63a097709b">ml_controller.c</a>
-, <a class="el" href="libmissilelauncher_8h.html#ae9183ffd9bb59742a11aeb63a097709b">libmissilelauncher.h</a>
+: <a class="el" href="libmissilelauncher_8h.html#ae9183ffd9bb59742a11aeb63a097709b">libmissilelauncher.h</a>
+, <a class="el" href="ml__controller_8c.html#ae9183ffd9bb59742a11aeb63a097709b">ml_controller.c</a>
+</li>
+<li>ML_STD_PRODUCT_ID
+: <a class="el" href="libmissilelauncher_8h.html#a06db7c3c2ad602b4645991e806bb3036">libmissilelauncher.h</a>
+</li>
+<li>ML_STD_VENDOR_ID
+: <a class="el" href="libmissilelauncher_8h.html#a1bf7ae6b7448528a2a5400d7ad356103">libmissilelauncher.h</a>
 </li>
 <li>ml_stop_continuous_poll()
 : <a class="el" href="libmissilelauncher_8h.html#a4e2833c47b7a57368436ea2ec9d491cf">libmissilelauncher.h</a>
 , <a class="el" href="ml__controller_8c.html#a4e2833c47b7a57368436ea2ec9d491cf">ml_controller.c</a>
+</li>
+<li>ML_TEST_ERROR
+: <a class="el" href="ml__errors_8h.html#a3cf42082f18847a290395b5f78c45a7da0987e5cc25d7e84cf894489406fb867a">ml_errors.h</a>
+</li>
+<li>ML_UP
+: <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608a12385a3f9208577fe0ba7ce2f96b8f48">libmissilelauncher.h</a>
+</li>
+<li>ml_void_event_handler
+: <a class="el" href="libmissilelauncher_8h.html#ab6d66d61002fa8553e8aacf91b3ff007">libmissilelauncher.h</a>
 </li>
 <li>ml_zero_launcher()
 : <a class="el" href="ml__launcher_8c.html#a731ca6f2559b102e635ea3aa6f0d67f7">ml_launcher.c</a>
@@ -174,7 +290,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 09:14:51 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 15:45:13 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

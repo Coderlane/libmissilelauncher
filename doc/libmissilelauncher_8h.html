@@ -70,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -110,50 +110,62 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a3bb83e7d33247481720c10c4d8555d47"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3bb83e7d33247481720c10c4d8555d47"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ML_DEFAULT_POLL_RATE</b>&#160;&#160;&#160;2</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a3bb83e7d33247481720c10c4d8555d47">ML_DEFAULT_POLL_RATE</a>&#160;&#160;&#160;2</td></tr>
+<tr class="memdesc:a3bb83e7d33247481720c10c4d8555d47"><td class="mdescLeft">&#160;</td><td class="mdescRight">2 Seconds is the default polling rate <br/></td></tr>
 <tr class="separator:a3bb83e7d33247481720c10c4d8555d47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65648d19836eefe4619e399d366f0fbf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a65648d19836eefe4619e399d366f0fbf"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ML_MAX_POLL_RATE</b>&#160;&#160;&#160;120</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a65648d19836eefe4619e399d366f0fbf">ML_MAX_POLL_RATE</a>&#160;&#160;&#160;120</td></tr>
+<tr class="memdesc:a65648d19836eefe4619e399d366f0fbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">120 Seconds or 2 minutes is the maximum wait between polling <br/></td></tr>
 <tr class="separator:a65648d19836eefe4619e399d366f0fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a728de81b58466be07e3a59a93a52a4b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a728de81b58466be07e3a59a93a52a4b0"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ML_MIN_POLL_RATE</b>&#160;&#160;&#160;1</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a728de81b58466be07e3a59a93a52a4b0">ML_MIN_POLL_RATE</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:a728de81b58466be07e3a59a93a52a4b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">1 Second is the minimum wait between polling <br/></td></tr>
 <tr class="separator:a728de81b58466be07e3a59a93a52a4b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bf7ae6b7448528a2a5400d7ad356103"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1bf7ae6b7448528a2a5400d7ad356103"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ML_STD_VENDOR_ID</b>&#160;&#160;&#160;8483</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a1bf7ae6b7448528a2a5400d7ad356103">ML_STD_VENDOR_ID</a>&#160;&#160;&#160;8483</td></tr>
+<tr class="memdesc:a1bf7ae6b7448528a2a5400d7ad356103"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Vendor ID of a standard launcher. <br/></td></tr>
 <tr class="separator:a1bf7ae6b7448528a2a5400d7ad356103"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06db7c3c2ad602b4645991e806bb3036"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06db7c3c2ad602b4645991e806bb3036"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ML_STD_PRODUCT_ID</b>&#160;&#160;&#160;4112</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a06db7c3c2ad602b4645991e806bb3036">ML_STD_PRODUCT_ID</a>&#160;&#160;&#160;4112</td></tr>
+<tr class="memdesc:a06db7c3c2ad602b4645991e806bb3036"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Product ID of a standard launcer. <br/></td></tr>
 <tr class="separator:a06db7c3c2ad602b4645991e806bb3036"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:ab6d66d61002fa8553e8aacf91b3ff007"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6d66d61002fa8553e8aacf91b3ff007"></a>
-typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>ml_void_event_handler</b> )()</td></tr>
+typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#ab6d66d61002fa8553e8aacf91b3ff007">ml_void_event_handler</a> )()</td></tr>
+<tr class="memdesc:ab6d66d61002fa8553e8aacf91b3ff007"><td class="mdescLeft">&#160;</td><td class="mdescRight">A future object, currently not implemented. <br/></td></tr>
 <tr class="separator:ab6d66d61002fa8553e8aacf91b3ff007"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a576dbd8ecbc4116b88252bbcbc94a4b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a576dbd8ecbc4116b88252bbcbc94a4b4"></a>
-typedef struct <a class="el" href="structml__controller__t.html">ml_controller_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ml_controller_t</b></td></tr>
+typedef struct <a class="el" href="structml__controller__t.html">ml_controller_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a576dbd8ecbc4116b88252bbcbc94a4b4">ml_controller_t</a></td></tr>
+<tr class="memdesc:a576dbd8ecbc4116b88252bbcbc94a4b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controller typedef, Don't use this object directly. <br/></td></tr>
 <tr class="separator:a576dbd8ecbc4116b88252bbcbc94a4b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae44444536844b9ef966e494191629b67"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae44444536844b9ef966e494191629b67"></a>
-typedef enum ml_launcher_type&#160;</td><td class="memItemRight" valign="bottom"><b>ml_launcher_type</b></td></tr>
+typedef enum <a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7">ml_launcher_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#ae44444536844b9ef966e494191629b67">ml_launcher_type</a></td></tr>
+<tr class="memdesc:ae44444536844b9ef966e494191629b67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use this enumeration to determine the type of launcher. <br/></td></tr>
 <tr class="separator:ae44444536844b9ef966e494191629b67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45b085fa0b18fb74ff46293a8391fe9d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45b085fa0b18fb74ff46293a8391fe9d"></a>
-typedef enum ml_launcher_direction&#160;</td><td class="memItemRight" valign="bottom"><b>ml_launcher_direction</b></td></tr>
+typedef enum <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a45b085fa0b18fb74ff46293a8391fe9d">ml_launcher_direction</a></td></tr>
+<tr class="memdesc:a45b085fa0b18fb74ff46293a8391fe9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use this enumerationt to specify which direction to move the launcher in. <br/></td></tr>
 <tr class="separator:a45b085fa0b18fb74ff46293a8391fe9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80c2cb5e924a34080a45d8f786030773"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80c2cb5e924a34080a45d8f786030773"></a>
-typedef struct <a class="el" href="structml__launcher__t.html">ml_launcher_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ml_launcher_t</b></td></tr>
+typedef struct <a class="el" href="structml__launcher__t.html">ml_launcher_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a80c2cb5e924a34080a45d8f786030773">ml_launcher_t</a></td></tr>
+<tr class="memdesc:a80c2cb5e924a34080a45d8f786030773"><td class="mdescLeft">&#160;</td><td class="mdescRight">Launcher typedef, Don't use this object directly. <br/></td></tr>
 <tr class="separator:a80c2cb5e924a34080a45d8f786030773"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ae2ec7cfb5fed798ad9a6094f53775cc7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>ml_launcher_type</b> { <b>ML_NOT_LAUNCHER</b>, 
-<b>ML_STANDARD_LAUNCHER</b>
+<tr class="memitem:ae2ec7cfb5fed798ad9a6094f53775cc7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7">ml_launcher_type</a> { <a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7acf36571ae2de6ac855f641be70f30675">ML_NOT_LAUNCHER</a>, 
+<a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7ab847bcc5a4b55af870023f4a3ac3180a">ML_STANDARD_LAUNCHER</a>
  }</td></tr>
+<tr class="memdesc:ae2ec7cfb5fed798ad9a6094f53775cc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use this enumeration to determine the type of launcher.  <a href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7">More...</a><br/></td></tr>
 <tr class="separator:ae2ec7cfb5fed798ad9a6094f53775cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2594c1dc68f58abcce52abd4070a2608"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>ml_launcher_direction</b> { <b>ML_DOWN</b>, 
-<b>ML_UP</b>, 
-<b>ML_LEFT</b>, 
-<b>ML_RIGHT</b>
+<tr class="memitem:a2594c1dc68f58abcce52abd4070a2608"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a> { <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608ab9163ad2023526f5e8d62733efde64e6">ML_DOWN</a>, 
+<a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608a12385a3f9208577fe0ba7ce2f96b8f48">ML_UP</a>, 
+<a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608a59e801b57b4e366b38008f911bc8e086">ML_LEFT</a>, 
+<a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608a93f1492acc140752488498a0caedd2f7">ML_RIGHT</a>
  }</td></tr>
+<tr class="memdesc:a2594c1dc68f58abcce52abd4070a2608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use this enumerationt to specify which direction to move the launcher in.  <a href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">More...</a><br/></td></tr>
 <tr class="separator:a2594c1dc68f58abcce52abd4070a2608"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -168,7 +180,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a29d6ea01879aba602ba77f33bb1e885f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks to see if the library is currently initialized.  <a href="#a29d6ea01879aba602ba77f33bb1e885f">More...</a><br/></td></tr>
 <tr class="separator:a29d6ea01879aba602ba77f33bb1e885f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9183ffd9bb59742a11aeb63a097709b"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#ae9183ffd9bb59742a11aeb63a097709b">ml_start_continuous_poll</a> ()</td></tr>
-<tr class="memdesc:ae9183ffd9bb59742a11aeb63a097709b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts continuous polling.  <a href="#ae9183ffd9bb59742a11aeb63a097709b">More...</a><br/></td></tr>
+<tr class="memdesc:ae9183ffd9bb59742a11aeb63a097709b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts continuous polling in a safe manner.  <a href="#ae9183ffd9bb59742a11aeb63a097709b">More...</a><br/></td></tr>
 <tr class="separator:ae9183ffd9bb59742a11aeb63a097709b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e2833c47b7a57368436ea2ec9d491cf"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a4e2833c47b7a57368436ea2ec9d491cf">ml_stop_continuous_poll</a> ()</td></tr>
 <tr class="memdesc:a4e2833c47b7a57368436ea2ec9d491cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cancels the continuous polling.  <a href="#a4e2833c47b7a57368436ea2ec9d491cf">More...</a><br/></td></tr>
@@ -194,13 +206,16 @@ Functions</h2></td></tr>
 <tr class="memitem:aa93571f9be30238038001c5620810b73"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#aa93571f9be30238038001c5620810b73">ml_dereference_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *)</td></tr>
 <tr class="memdesc:aa93571f9be30238038001c5620810b73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dereferences a launcher so that it can be eventually destroyed. Just as with malloc and free, when using ml_reference_launcher you must use ml_dereference_launcher or suffer memory leaks.  <a href="#aa93571f9be30238038001c5620810b73">More...</a><br/></td></tr>
 <tr class="separator:aa93571f9be30238038001c5620810b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa317a243d4f297f745733e35a09f868d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7">ml_launcher_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#aa317a243d4f297f745733e35a09f868d">ml_get_launcher_type</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *)</td></tr>
+<tr class="memdesc:aa317a243d4f297f745733e35a09f868d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the type of launcher from the launcher.  <a href="#aa317a243d4f297f745733e35a09f868d">More...</a><br/></td></tr>
+<tr class="separator:aa317a243d4f297f745733e35a09f868d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64ceca471ddfd77299a1da089d08e55e"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a64ceca471ddfd77299a1da089d08e55e">ml_fire_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *)</td></tr>
 <tr class="memdesc:a64ceca471ddfd77299a1da089d08e55e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fires a missile from the launcher.  <a href="#a64ceca471ddfd77299a1da089d08e55e">More...</a><br/></td></tr>
 <tr class="separator:a64ceca471ddfd77299a1da089d08e55e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9272eafa323d4ef5b2935c197b39df0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae9272eafa323d4ef5b2935c197b39df0"></a>
-int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_degrees</b> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *, ml_launcher_direction, uint16_t)</td></tr>
+int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_degrees</b> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *, <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a>, uint16_t)</td></tr>
 <tr class="separator:ae9272eafa323d4ef5b2935c197b39df0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a297b4e15a1d7d325a05fb60f18b13cbe"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a297b4e15a1d7d325a05fb60f18b13cbe">ml_move_launcher_mseconds</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *, ml_launcher_direction, uint32_t)</td></tr>
+<tr class="memitem:a297b4e15a1d7d325a05fb60f18b13cbe"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#a297b4e15a1d7d325a05fb60f18b13cbe">ml_move_launcher_mseconds</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *, <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a>, uint32_t)</td></tr>
 <tr class="memdesc:a297b4e15a1d7d325a05fb60f18b13cbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the specified launcher, in the specified direction for the specified number of milliseconds. Don't use this in combination with ml_move_launcher_degrees without zeroing the launcher afterwards.  <a href="#a297b4e15a1d7d325a05fb60f18b13cbe">More...</a><br/></td></tr>
 <tr class="separator:a297b4e15a1d7d325a05fb60f18b13cbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcf13d6bcaf5f0be0bf43cfe1068c019"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libmissilelauncher_8h.html#adcf13d6bcaf5f0be0bf43cfe1068c019">ml_zero_launcher</a> (<a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *)</td></tr>
@@ -223,7 +238,62 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 <dl class="section date"><dt>Date</dt><dd>2014-01-02 </dd></dl>
 
 <p>Definition in file <a class="el" href="">libmissilelauncher.h</a>.</p>
-</div><h2 class="groupheader">Function Documentation</h2>
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="a2594c1dc68f58abcce52abd4070a2608"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Use this enumerationt to specify which direction to move the launcher in. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a2594c1dc68f58abcce52abd4070a2608ab9163ad2023526f5e8d62733efde64e6"></a>ML_DOWN</em>&nbsp;</td><td class="fielddoc">
+<p>Aim the launcher downwards. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a2594c1dc68f58abcce52abd4070a2608a12385a3f9208577fe0ba7ce2f96b8f48"></a>ML_UP</em>&nbsp;</td><td class="fielddoc">
+<p>Aim the launcher upwards. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a2594c1dc68f58abcce52abd4070a2608a59e801b57b4e366b38008f911bc8e086"></a>ML_LEFT</em>&nbsp;</td><td class="fielddoc">
+<p>Move the launcher to the left. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a2594c1dc68f58abcce52abd4070a2608a93f1492acc140752488498a0caedd2f7"></a>ML_RIGHT</em>&nbsp;</td><td class="fielddoc">
+<p>Move the launcher to the righ. </p>
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="#L41">41</a> of file <a class="el" href="">libmissilelauncher.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae2ec7cfb5fed798ad9a6094f53775cc7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7">ml_launcher_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Use this enumeration to determine the type of launcher. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ae2ec7cfb5fed798ad9a6094f53775cc7acf36571ae2de6ac855f641be70f30675"></a>ML_NOT_LAUNCHER</em>&nbsp;</td><td class="fielddoc">
+<p>The object isn't a launcher. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ae2ec7cfb5fed798ad9a6094f53775cc7ab847bcc5a4b55af870023f4a3ac3180a"></a>ML_STANDARD_LAUNCHER</em>&nbsp;</td><td class="fielddoc">
+<p>The object is a standard thunder launcher. </p>
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="#L35">35</a> of file <a class="el" href="">libmissilelauncher.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ad45489dfca4c755a8dea9b3fdab506e7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -240,7 +310,7 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 <p>Cleans up the library when you are done. </p>
 <dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L100">100</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L103">103</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
@@ -321,7 +391,7 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L580">580</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L636">636</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
@@ -359,7 +429,34 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A status code, ML_OK if everything went well. </dd></dl>
 
-<p>Definition at line <a class="el" href="#L524">524</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L576">576</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa317a243d4f297f745733e35a09f868d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="libmissilelauncher_8h.html#ae2ec7cfb5fed798ad9a6094f53775cc7">ml_launcher_type</a> ml_get_launcher_type </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structml__launcher__t.html">ml_launcher_t</a> *&#160;</td>
+          <td class="paramname"><em>launcher</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the type of launcher from the launcher. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">launcher</td><td>The launcher to check</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The launcher type </dd></dl>
+
+<p>Definition at line <a class="el" href="#L368">368</a> of file <a class="el" href="">ml_launcher.c</a>.</p>
 
 </div>
 </div>
@@ -406,7 +503,7 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 <p>Gets the current poll rate. </p>
 <dl class="section return"><dt>Returns</dt><dd>the current poll rate, or 0 if something went wrong. </dd></dl>
 
-<p>Definition at line <a class="el" href="#L279">279</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L329">329</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
@@ -446,7 +543,7 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 <p>Checks to see if the library is currently initialized. </p>
 <dl class="section return"><dt>Returns</dt><dd>0 - false 1 - true </dd></dl>
 
-<p>Definition at line <a class="el" href="#L151">151</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L175">175</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
@@ -466,7 +563,7 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 <p>Checks to see if the controller is currently polling. </p>
 <dl class="section return"><dt>Returns</dt><dd>0 - false , 1 - true </dd></dl>
 
-<p>Definition at line <a class="el" href="#L262">262</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L312">312</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
@@ -537,7 +634,7 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ml_launcher_direction&#160;</td>
+          <td class="paramtype"><a class="el" href="libmissilelauncher_8h.html#a2594c1dc68f58abcce52abd4070a2608">ml_launcher_direction</a>&#160;</td>
           <td class="paramname"><em>direction</em>, </td>
         </tr>
         <tr>
@@ -619,7 +716,7 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A result code, 0 (OK), ML_LIBRARY_NOT_INIT, or ML_INVALID_POLL_RATE </dd></dl>
 
-<p>Definition at line <a class="el" href="#L300">300</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L350">350</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
@@ -636,10 +733,10 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
       </table>
 </div><div class="memdoc">
 
-<p>Starts continuous polling. </p>
+<p>Starts continuous polling in a safe manner. </p>
 <dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L164">164</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L193">193</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
@@ -659,7 +756,7 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 <p>Cancels the continuous polling. </p>
 <dl class="section return"><dt>Returns</dt><dd>A status code </dd></dl>
 
-<p>Definition at line <a class="el" href="#L200">200</a> of file <a class="el" href="">ml_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="#L242">242</a> of file <a class="el" href="">ml_controller.c</a>.</p>
 
 </div>
 </div>
@@ -693,7 +790,7 @@ int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ml_move_launcher_d
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 09:14:50 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 15:45:13 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

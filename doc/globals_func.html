@@ -69,6 +69,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="globals.html"><span>All</span></a></li>
       <li class="current"><a href="globals_func.html"><span>Functions</span></a></li>
+      <li><a href="globals_type.html"><span>Typedefs</span></a></li>
+      <li><a href="globals_enum.html"><span>Enumerations</span></a></li>
+      <li><a href="globals_eval.html"><span>Enumerator</span></a></li>
+      <li><a href="globals_defs.html"><span>Macros</span></a></li>
     </ul>
   </div>
   <div id="navrow4" class="tabs3">
@@ -82,7 +86,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -115,17 +119,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="libmissilelauncher_8h.html#a236d84507f437d2ffd53d5f55f089575">libmissilelauncher.h</a>
 , <a class="el" href="ml__controller_8c.html#a892662f59af52456fce3cde51bc97179">ml_controller.c</a>
 </li>
+<li>ml_get_launcher_type()
+: <a class="el" href="libmissilelauncher_8h.html#aa317a243d4f297f745733e35a09f868d">libmissilelauncher.h</a>
+, <a class="el" href="ml__launcher_8c.html#a1deaf6e456a768bb26e78964b73b3a51">ml_launcher.c</a>
+</li>
 <li>ml_get_led_stat()
 : <a class="el" href="libmissilelauncher_8h.html#af1923ee6e2d22605509c06517e460dac">libmissilelauncher.h</a>
 , <a class="el" href="ml__launcher_8c.html#a17c43597b5c1654028182cb341d5ca62">ml_launcher.c</a>
 </li>
 <li>ml_get_poll_rate()
-: <a class="el" href="libmissilelauncher_8h.html#a093dff39490baea5b50586802c125943">libmissilelauncher.h</a>
-, <a class="el" href="ml__controller_8c.html#a093dff39490baea5b50586802c125943">ml_controller.c</a>
+: <a class="el" href="ml__controller_8c.html#a093dff39490baea5b50586802c125943">ml_controller.c</a>
+, <a class="el" href="libmissilelauncher_8h.html#a093dff39490baea5b50586802c125943">libmissilelauncher.h</a>
 </li>
 <li>ml_init_library()
-: <a class="el" href="ml__controller_8c.html#a79bc8c33e0a7d0d2fd4826165d3bd69c">ml_controller.c</a>
-, <a class="el" href="libmissilelauncher_8h.html#a79bc8c33e0a7d0d2fd4826165d3bd69c">libmissilelauncher.h</a>
+: <a class="el" href="libmissilelauncher_8h.html#a79bc8c33e0a7d0d2fd4826165d3bd69c">libmissilelauncher.h</a>
+, <a class="el" href="ml__controller_8c.html#a79bc8c33e0a7d0d2fd4826165d3bd69c">ml_controller.c</a>
 </li>
 <li>ml_is_library_init()
 : <a class="el" href="libmissilelauncher_8h.html#a29d6ea01879aba602ba77f33bb1e885f">libmissilelauncher.h</a>
@@ -147,34 +155,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="ml__launcher_8c.html#a1ff1a9618794ea9ed69f69cb961deb35">ml_launcher.c</a>
 </li>
 <li>ml_move_launcher_mseconds()
-: <a class="el" href="libmissilelauncher_8h.html#a297b4e15a1d7d325a05fb60f18b13cbe">libmissilelauncher.h</a>
-, <a class="el" href="ml__launcher_8c.html#ade8d4c74409d42c6aee6601e2a34d4bd">ml_launcher.c</a>
+: <a class="el" href="ml__launcher_8c.html#ade8d4c74409d42c6aee6601e2a34d4bd">ml_launcher.c</a>
+, <a class="el" href="libmissilelauncher_8h.html#a297b4e15a1d7d325a05fb60f18b13cbe">libmissilelauncher.h</a>
 </li>
 <li>ml_reference_launcher()
-: <a class="el" href="ml__launcher_8c.html#a6320a404ac37214992ce39974731e956">ml_launcher.c</a>
-, <a class="el" href="libmissilelauncher_8h.html#a0332e2291119d51ca14e70fe4ddcfbae">libmissilelauncher.h</a>
+: <a class="el" href="libmissilelauncher_8h.html#a0332e2291119d51ca14e70fe4ddcfbae">libmissilelauncher.h</a>
+, <a class="el" href="ml__launcher_8c.html#a6320a404ac37214992ce39974731e956">ml_launcher.c</a>
 </li>
 <li>ml_set_poll_rate()
 : <a class="el" href="libmissilelauncher_8h.html#a5cb058ebbeccd30b58d847a55a115584">libmissilelauncher.h</a>
 , <a class="el" href="ml__controller_8c.html#ab7c8a3c153eb4476ff0b73cd45c59414">ml_controller.c</a>
 </li>
 <li>ml_start_continuous_poll()
-: <a class="el" href="ml__controller_8c.html#ae9183ffd9bb59742a11aeb63a097709b">ml_controller.c</a>
-, <a class="el" href="libmissilelauncher_8h.html#ae9183ffd9bb59742a11aeb63a097709b">libmissilelauncher.h</a>
+: <a class="el" href="libmissilelauncher_8h.html#ae9183ffd9bb59742a11aeb63a097709b">libmissilelauncher.h</a>
+, <a class="el" href="ml__controller_8c.html#ae9183ffd9bb59742a11aeb63a097709b">ml_controller.c</a>
 </li>
 <li>ml_stop_continuous_poll()
 : <a class="el" href="libmissilelauncher_8h.html#a4e2833c47b7a57368436ea2ec9d491cf">libmissilelauncher.h</a>
 , <a class="el" href="ml__controller_8c.html#a4e2833c47b7a57368436ea2ec9d491cf">ml_controller.c</a>
 </li>
 <li>ml_zero_launcher()
-: <a class="el" href="ml__launcher_8c.html#a731ca6f2559b102e635ea3aa6f0d67f7">ml_launcher.c</a>
-, <a class="el" href="libmissilelauncher_8h.html#adcf13d6bcaf5f0be0bf43cfe1068c019">libmissilelauncher.h</a>
+: <a class="el" href="libmissilelauncher_8h.html#adcf13d6bcaf5f0be0bf43cfe1068c019">libmissilelauncher.h</a>
+, <a class="el" href="ml__launcher_8c.html#a731ca6f2559b102e635ea3aa6f0d67f7">ml_launcher.c</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 7 2014 09:14:51 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 7 2014 15:45:13 for C Launcher API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>
