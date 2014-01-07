@@ -16,7 +16,8 @@
 *.exe
 *.out
 *.app
-bin/*
+examples/bin/*
+test/bin/*
 
 #Temp Files
 .*.sw*
