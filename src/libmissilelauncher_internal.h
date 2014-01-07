@@ -110,6 +110,8 @@ static unsigned char __attribute__ ((unused)) *ml_cmd_arr[ML_COMMAND_COUNT] = {
 int16_t _ml_init_controller(ml_controller_t *);
 int16_t _ml_cleanup_controller(ml_controller_t *);
 // Polling
+int16_t _ml_start_poll_unsafe();
+int16_t _ml_stop_poll_unsafe();
 void *_ml_poll_for_launchers(void *);
 int16_t _ml_update_launchers(struct libusb_device **, int);
 int16_t _ml_get_launchers_from_devices(libusb_device **, int, libusb_device ***, uint32_t *);
