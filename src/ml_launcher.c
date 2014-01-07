@@ -249,7 +249,7 @@ uint8_t ml_get_led_stat(ml_launcher_t *launcher) {
  *
  * @param launcher The launcher the move.
  * @param direction The direction to move in.
- * @param meseconds The number of milliseconds to move for.
+ * @param mseconds The number of milliseconds to move for.
  *
  * @return A status code
  */
