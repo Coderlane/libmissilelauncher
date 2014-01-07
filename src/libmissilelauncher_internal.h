@@ -77,6 +77,7 @@ typedef struct ml_time_t {
 static ml_controller_t __attribute__ ((unused)) *ml_main_controller = NULL;
 static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+// Launcher commands
 static unsigned char ml_down_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x01};
 static unsigned char ml_up_cmd[ML_CMD_ARR_SIZE] =      {0x02, 0x02};
 static unsigned char ml_left_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x04};
@@ -86,6 +87,7 @@ static unsigned char ml_led_off_cmd[ML_CMD_ARR_SIZE] = {0x03, 0x00};
 static unsigned char ml_fire_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x10};
 static unsigned char ml_stop_cmd[ML_CMD_ARR_SIZE] =    {0x02, 0x20};
 
+// Launcher Command Enum
 typedef enum ml_launcher_cmd {
   ML_DOWN_CMD,
   ML_UP_CMD,
@@ -98,39 +100,39 @@ typedef enum ml_launcher_cmd {
   ML_COMMAND_COUNT
 } ml_launcher_cmd;
 
+// Launcher command array for fast look up
 static unsigned char __attribute__ ((unused)) *ml_cmd_arr[ML_COMMAND_COUNT] = {
   ml_down_cmd, ml_up_cmd, ml_left_cmd, ml_right_cmd, ml_fire_cmd,
   ml_stop_cmd, ml_led_on_cmd, ml_led_off_cmd};
 
 // ********** Library Functions **********
+// Controller Init
 int16_t _ml_init_controller(ml_controller_t *);
 int16_t _ml_cleanup_controller(ml_controller_t *);
-
-int16_t _ml_init_launcher(ml_launcher_t *, libusb_device *);
-int16_t _ml_cleanup_launcher(ml_launcher_t **);
-
+// Polling
+void *_ml_poll_for_launchers(void *);
+int16_t _ml_update_launchers(struct libusb_device **, int);
+int16_t _ml_get_launchers_from_devices(libusb_device **, int, libusb_device ***, uint32_t *);
+int16_t _ml_remove_disconnected_launchers(libusb_device **, uint32_t);
+int16_t _ml_add_new_launchers(libusb_device **, uint32_t);
+// Launcher Array
 int16_t _ml_remove_launcher(ml_launcher_t *);
 int16_t _ml_remove_launcher_index(int16_t);
 int16_t _ml_add_launcher(ml_launcher_t *);
 int16_t _ml_add_launcher_index(ml_launcher_t *, int16_t);
-
-void *_ml_poll_for_launchers(void *);
-int16_t _ml_get_launchers_from_devices(libusb_device **, int, libusb_device ***, uint32_t *);
-int16_t _ml_remove_disconnected_launchers(libusb_device **, uint32_t);
-int16_t _ml_add_new_launchers(libusb_device **, uint32_t);
-
+// Launcher Init
+int16_t _ml_init_launcher(ml_launcher_t *, libusb_device *);
+int16_t _ml_cleanup_launcher(ml_launcher_t **);
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
-int16_t _ml_update_launchers(struct libusb_device **, int);
-
+// Launcher Control
 int16_t _ml_move_launcher_unsafe(ml_launcher_t *, ml_launcher_direction, ml_time_t *);
 int16_t _ml_send_command_unsafe(ml_launcher_t *, ml_launcher_cmd);
-
+// Time Conversions
 int16_t _ml_mseconds_to_time(uint32_t, ml_time_t *);
+int16_t _ml_degrees_to_time(uint16_t, ml_time_t *); //TODO Take measurements and finish
 
-
-// TODO Implement these functions
-int16_t _ml_degrees_to_time(uint16_t, ml_time_t *);
 /*
+// TODO Implement these functions
 int16_t _ml_start_launcher_tread(ml_launcher_t *);
 int16_t _ml_stop_launcher_tread(ml_launcher_t *);
 void *_ml_launcher_thread_task(void *);

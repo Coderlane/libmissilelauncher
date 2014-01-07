@@ -360,13 +360,24 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
   return ML_NOT_IMPLEMENTED;
 }
 
+/**
+ * @brief Determines what devices returned by libusb were launcher devices.
+ * Collects them and adds them to an array.
+ *
+ * @param devices The devices detected by libusb.
+ * @param device_count The number of devices detected.
+ * @param found_launchers The launchers detected.
+ * @param found_launchers_count The number of launchers detected.
+ *
+ * @return A status code
+ */
 int16_t _ml_get_launchers_from_devices(libusb_device **devices, int device_count,
-    libusb_device ***found_launchers, uint32_t *launchers_found) {
+    libusb_device ***found_launchers, uint32_t *found_launchers_count) {
 
   libusb_device *found_device = NULL;
   uint32_t found_count = 0;
 
-  (*launchers_found) = 0;
+  (*found_launchers_count) = 0;
 
   // Make a new array of devices
   for(int i = 0; i < device_count && (found_device = devices[i]) != NULL; i++) {
@@ -377,7 +388,7 @@ int16_t _ml_get_launchers_from_devices(libusb_device **devices, int device_count
     if(_ml_catagorize_device(&device_descriptor) != ML_NOT_LAUNCHER) {
       // Device is launcher
       found_count += 1;
-
+      // Resize array
       (*found_launchers) = realloc((*found_launchers), 
           (found_count + 1) * sizeof(libusb_device *));
 
@@ -385,16 +396,25 @@ int16_t _ml_get_launchers_from_devices(libusb_device **devices, int device_count
         TRACE("realloc failed. _ml_update_launchers\n");
         return ML_ALLOC_FAILED;
       }
-
+      // Add to array and set last to null.
       (*found_launchers)[found_count - 1] = found_device;
       (*found_launchers)[found_count] = NULL;
     } 
   }
 
-  (*launchers_found) = found_count;
+  (*found_launchers_count) = found_count;
   return ML_OK;
 }
 
+/**
+ * @brief Sets launchers that have been removed as such and frees them if proper.
+ * Don't use this function without locking the launcher_array_lock for writing first.
+ *
+ * @param found_launchers An array of libusb_devices which are all launchers
+ * @param found_launchers_count The number of launchers in the array
+ *
+ * @return A status code
+ */
 int16_t _ml_remove_disconnected_launchers(libusb_device **found_launchers,
           uint32_t found_launchers_count) {
 
@@ -441,6 +461,15 @@ int16_t _ml_remove_disconnected_launchers(libusb_device **found_launchers,
   return ML_OK;
 }
 
+/**
+ * @brief Adds new launchers to the main array.
+ * Don't use this function without locking the launcher_array_lock for writing first.
+ *
+ * @param found_launchers The launchers found previously
+ * @param found_launchers_count The number of launchers found
+ *
+ * @return A status code 
+ */
 int16_t _ml_add_new_launchers(libusb_device **found_launchers,
           uint32_t found_launchers_count) {
   
