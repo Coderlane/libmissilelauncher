@@ -71,7 +71,7 @@ int16_t _ml_init_controller(ml_controller_t *controller) {
   }
   // Setup the array
   controller->launchers = calloc(sizeof(ml_arr_launcher_t),
-                                 ML_INITIAL_LAUNCHER_ARRAY_SIZE);
+      ML_INITIAL_LAUNCHER_ARRAY_SIZE);
 
   if(controller->launchers == NULL) {
     TRACE("Failed to initialize library. Launcher array was null.\n");
@@ -170,7 +170,7 @@ int16_t ml_start_continuous_poll() {
   }
 
   thread_code = pthread_create(&(ml_main_controller->poll_thread), NULL,
-                   _ml_poll_for_launchers, (void *) ml_main_controller);
+      _ml_poll_for_launchers, (void *) ml_main_controller);
 
   if(thread_code != 0) {
     // Thread failed to start
@@ -260,9 +260,9 @@ uint8_t ml_is_polling() {
   if(!ml_is_library_init()) return ML_LIBRARY_NOT_INIT;
 
   pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
-  
+
   polling = ml_main_controller->currently_polling;
-  
+
   pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
   return polling;
 }
@@ -279,7 +279,7 @@ uint8_t ml_get_poll_rate() {
   pthread_rwlock_rdlock(&(ml_main_controller->poll_rate_lock));
 
   poll_rate = ml_main_controller->poll_rate_seconds;
-  
+
   pthread_rwlock_unlock(&(ml_main_controller->poll_rate_lock));
   return poll_rate;
 }
@@ -325,7 +325,7 @@ int16_t ml_set_poll_rate(uint8_t poll_rate_seconds) {
  */
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *desc) {
   if(desc->idProduct == ML_STD_PRODUCT_ID && 
-     desc->idVendor == ML_STD_VENDOR_ID) {
+      desc->idVendor == ML_STD_VENDOR_ID) {
     TRACE("found std launcher\n");
     return ML_STANDARD_LAUNCHER;
   }
@@ -342,11 +342,32 @@ uint8_t _ml_catagorize_device(struct libusb_device_descriptor *desc) {
  * @return A status code, ML_OK if everything went well
  */
 int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
-  libusb_device *found_device = NULL;
   libusb_device **found_launchers = NULL;
-  ml_launcher_t *known_device = NULL;
-  int16_t launchers_found = 0;
-  
+  uint32_t found_launchers_count = 0;
+
+  _ml_get_launchers_from_devices(devices, device_count, &found_launchers,
+                                 &found_launchers_count);
+
+  pthread_rwlock_wrlock(&(ml_main_controller->launcher_array_lock));
+
+  _ml_remove_disconnected_launchers(found_launchers, found_launchers_count);
+
+  _ml_add_new_launchers(found_launchers, found_launchers_count);
+
+  pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
+
+  free(found_launchers);
+  return ML_NOT_IMPLEMENTED;
+}
+
+int16_t _ml_get_launchers_from_devices(libusb_device **devices, int device_count,
+    libusb_device ***found_launchers, uint32_t *launchers_found) {
+
+  libusb_device *found_device = NULL;
+  uint32_t found_count = 0;
+
+  (*launchers_found) = 0;
+
   // Make a new array of devices
   for(int i = 0; i < device_count && (found_device = devices[i]) != NULL; i++) {
     struct libusb_device_descriptor device_descriptor;
@@ -355,69 +376,88 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
     // Check if the device is a launcher
     if(_ml_catagorize_device(&device_descriptor) != ML_NOT_LAUNCHER) {
       // Device is launcher
-      launchers_found += 1;
+      found_count += 1;
 
-      found_launchers = realloc(found_launchers, 
-                          (launchers_found + 1) * sizeof(libusb_device *));
+      (*found_launchers) = realloc((*found_launchers), 
+          (found_count + 1) * sizeof(libusb_device *));
 
-      if(found_launchers == NULL) {
+      if((*found_launchers) == NULL) {
         TRACE("realloc failed. _ml_update_launchers\n");
         return ML_ALLOC_FAILED;
       }
-      
-      found_launchers[launchers_found - 1] = found_device;
-      found_launchers[launchers_found] = NULL;
+
+      (*found_launchers)[found_count - 1] = found_device;
+      (*found_launchers)[found_count] = NULL;
     } 
   }
-  // Update the main array
 
-  pthread_rwlock_wrlock(&(ml_main_controller->launcher_array_lock));
-  
+  (*launchers_found) = found_count;
+  return ML_OK;
+}
+
+int16_t _ml_remove_disconnected_launchers(libusb_device **found_launchers,
+          uint32_t found_launchers_count) {
+
+  libusb_device *found_device = NULL;
+  ml_launcher_t *known_launcher = NULL;
+
   // Check to see if we need to remove any devices 
   for(uint16_t known_it = 0; known_it < ml_main_controller->launcher_array_size; known_it++){
     // We'll be checking if the known device was not found in the new array of mounted devices. 
     uint8_t found = 0;
 
-    known_device = ml_main_controller->launchers[known_it];
-    if(known_device == NULL) {
+    known_launcher = ml_main_controller->launchers[known_it];
+    if(known_launcher == NULL) {
       continue;
     }
-    pthread_mutex_lock(&(known_device->main_lock));
-   
-    // Check the devices we found
-    for(uint16_t found_it = 0; found_it < launchers_found && 
-        (found_device = found_launchers[found_it]) != NULL && found == 0; found_it++) {
+    pthread_mutex_lock(&(known_launcher->main_lock));
+    
+    // Check if any devices were found.
+    if(found_launchers != NULL) { 
+      // Check the devices we found
+      for(uint16_t found_it = 0; found_it < found_launchers_count && 
+          (found_device = found_launchers[found_it]) != NULL && found == 0; found_it++) {
 
-      if(known_device->usb_device == found_device){
-        found = 1;
+        if(known_launcher->usb_device == found_device){
+          found = 1;
+        }
       }
     }
     // Update the connected state
-    known_device->device_connected = found;
+    known_launcher->device_connected = found;
 
-    if(known_device->device_connected == 0 &&
-       known_device->ref_count == 0) {
+    if(known_launcher->device_connected == 0 &&
+        known_launcher->ref_count == 0) {
 
       // No one is refrencing the device, so we can free it.
-      pthread_mutex_unlock(&(known_device->main_lock));
+      pthread_mutex_unlock(&(known_launcher->main_lock));
       _ml_remove_launcher_index(known_it);
-      _ml_cleanup_launcher(&known_device);
+      _ml_cleanup_launcher(&known_launcher);
     } else {
-      pthread_mutex_unlock(&(known_device->main_lock));
+      pthread_mutex_unlock(&(known_launcher->main_lock));
     }
   }
 
+  return ML_OK;
+}
+
+int16_t _ml_add_new_launchers(libusb_device **found_launchers,
+          uint32_t found_launchers_count) {
+  
+  libusb_device *found_device = NULL;
+  ml_launcher_t *known_launcher = NULL;
+
   // Check for any new devices
-  for(uint16_t found_it = 0; found_it < launchers_found &&
-        (found_device = found_launchers[found_it]) != NULL; found_it++){
+  for(uint16_t found_it = 0; found_it < found_launchers_count &&
+      (found_device = found_launchers[found_it]) != NULL; found_it++){
     // We'll be checking if the device is already present
     uint8_t found = 0;
 
     for(uint16_t known_it = 0; known_it < ml_main_controller->launcher_array_size &&
         found == 0; known_it++) {
 
-      known_device = ml_main_controller->launchers[known_it];
-      if(known_device != NULL && known_device->usb_device == found_device) {
+      known_launcher = ml_main_controller->launchers[known_it];
+      if(known_launcher != NULL && known_launcher->usb_device == found_device) {
         // Found something identical
         found = 1;
       }
@@ -433,11 +473,8 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
       }
     }
   }
-  free(found_launchers);
-  pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
-  return ML_NOT_IMPLEMENTED;
+  return ML_OK;
 }
-
 
 /**
  * @brief Allocates space for and returns a new array of launchers.
@@ -473,7 +510,7 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr, uint32_t *count) {
     pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
     return ML_ALLOC_FAILED;
   }
- 
+
   (*new_arr)[new_count] = NULL;
 
   // Find the launchers
@@ -510,7 +547,7 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr, uint32_t *count) {
 int16_t ml_free_launcher_array(ml_launcher_t **free_arr) {
   ml_launcher_t *cur_launcher = NULL;
   int16_t index = 0;
-  
+
   if(free_arr == NULL) {
     TRACE("Could not free array, array was null. (ml_free_launcher_array)\n");
     return ML_ARRAY_WAS_NULL;

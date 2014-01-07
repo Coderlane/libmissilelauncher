@@ -115,6 +115,9 @@ int16_t _ml_add_launcher(ml_launcher_t *);
 int16_t _ml_add_launcher_index(ml_launcher_t *, int16_t);
 
 void *_ml_poll_for_launchers(void *);
+int16_t _ml_get_launchers_from_devices(libusb_device **, int, libusb_device ***, uint32_t *);
+int16_t _ml_remove_disconnected_launchers(libusb_device **, uint32_t);
+int16_t _ml_add_new_launchers(libusb_device **, uint32_t);
 
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
 int16_t _ml_update_launchers(struct libusb_device **, int);
