@@ -9,7 +9,7 @@ LIBUSB_INCLUDE_PATH=/usr/include/libusb-1.0
 
 
 CC=clang
-CFLAGS=-c -Wall -fPIC -std=gnu99 -Wextra -D$(SYSTEM) -I$(LIBUSB_INCLUDE_PATH) 
+CFLAGS=-c -Wall -fPIC -std=gnu99 -Wextra -D$(SYSTEM) -I$(LIBUSB_INCLUDE_PATH)
 
 PWD=$(shell pwd)
 UNAME=$(shell uname)
@@ -95,7 +95,7 @@ clean:
 	rm -f $(OBJ_DIR)/*.o $(LIB_DIR)/*.so $(LIB_DIR)/*.dll $(TEST_BIN_DIR)/*_test $(EXAMPLE_BIN_DIR)/*_example
 
 # Release target
-$(RELEASE_TARGET): CFLAGS += -DNDEBUG 
+$(RELEASE_TARGET): CFLAGS += -DNDEBUG
 $(RELEASE_TARGET): $(RELEASE_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(RELEASE_LIB) -o $(RELEASE_TARGET) $^
 
