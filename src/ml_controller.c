@@ -131,15 +131,26 @@ int16_t ml_cleanup_library() {
  * @return A status code
  */
 int16_t _ml_cleanup_controller(ml_controller_t *controller) {
+  ml_launcher_t *cur_launcher = NULL;
   // Error checking
   if(controller == NULL) {
     TRACE("Could not clean up, control was null.\n");
     return ML_CONTROL_FREE_NULL;
   }
+
   if(controller->launchers == NULL) {
     TRACE("Could not clean up, launcher array was null.\n");
     return ML_CONTROL_ARR_NULL;
   }
+  // Cleaning up the library. Free up every launcher.
+  for(int16_t i = 0; i < controller->launcher_array_size; i++) {
+    cur_launcher = controller->launchers[i];
+    if(cur_launcher != NULL) {
+      // Free current launcher
+      _ml_cleanup_launcher(&cur_launcher);
+    }
+  }
+
   // Clean up array
   free(controller->launchers);
   controller->launchers = NULL;
