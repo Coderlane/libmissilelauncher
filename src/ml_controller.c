@@ -589,6 +589,7 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr, uint32_t *count) {
   new_count = ml_main_controller->launcher_count;
   (*count) = new_count;
   if(new_count == 0) {
+    pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
     return ML_NO_LAUNCHERS;
   }
   // Allocate space for the new array.
