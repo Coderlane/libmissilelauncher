@@ -17,7 +17,7 @@
 *.out
 *.app
 examples/bin/*
-test/bin/*
+tests/bin/*
 
 #Temp Files
 .*.sw*
@@ -25,12 +25,11 @@ test/bin/*
 #Object Files
 obj/*
 
+examples/obj/*
+tests/obj/*
+
 #Personal
 .ycm_extra_conf.pyc
-old/*
-
-#ignore test for a bit
-test/*
 
 #Ignore Documentation until finished.
 doc/*
