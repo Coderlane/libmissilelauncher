@@ -19,6 +19,7 @@ int16_t ml_init_library(){
   int16_t failed = 0;
 
   pthread_mutex_lock(&ml_main_controller_mutex);
+  
   if(ml_main_controller != NULL) {
     TRACE("Main launch control was not null, possibly already initialized\n");
     pthread_mutex_unlock(&ml_main_controller_mutex);
@@ -57,7 +58,7 @@ int16_t ml_init_library(){
     free(ml_main_controller);
     ml_main_controller = NULL;
   }
-  // UNlock mutex
+  // Unlock mutex
   pthread_mutex_unlock(&ml_main_controller_mutex);
   
   return failed;
@@ -104,9 +105,9 @@ int16_t ml_cleanup_library() {
   int16_t failed = 0;
   // Lock main mutex
   pthread_mutex_lock(&ml_main_controller_mutex);
-
   if(ml_main_controller == NULL) {
     TRACE("Could not clean up library. Library not initialized.\n");
+    pthread_mutex_unlock(&ml_main_controller_mutex);
     return ML_LIBRARY_NOT_INIT;
   }
   // Stop polling
@@ -191,16 +192,10 @@ uint8_t ml_is_library_init() {
  * @return A status code
  */
 int16_t ml_start_continuous_poll() {
-  int16_t failed = 0;
   if(ml_is_library_init() == 0) return ML_LIBRARY_NOT_INIT;
-  // Lock the mutexe
-  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
-  // Try to start polling
-  failed = _ml_start_poll_unsafe();
-  // Unlock
-  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
 
-  return failed;
+  // Try to start polling
+  return _ml_start_poll_unsafe();
 }
 
 /**
@@ -210,27 +205,34 @@ int16_t ml_start_continuous_poll() {
  */
 int16_t _ml_start_poll_unsafe() {
   int thread_code = 0;
-  
- // CHecks to see if we are currently polling 
+
+  // Lock the mutex
+  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
+ 
+ // Checks to see if we are currently polling 
   if(ml_main_controller->currently_polling) {
     // If it is already polling we can exit
+    // Unlock
+    pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
     return ML_OK;
   }
+
   // Starts the thread
   thread_code = pthread_create(&(ml_main_controller->poll_thread), NULL,
       _ml_poll_for_launchers, (void *) ml_main_controller);
-  // CHeck the result
+  
+  // Check the result
   if(thread_code != 0) {
     // Thread failed to start
     TRACE("Thread failed to start. (ml_start_continuous_poll)\n");
-
     ml_main_controller->currently_polling = 0;
+    // Unlock
     pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
-
     return ML_FAILED_POLL_START;
   }
   ml_main_controller->currently_polling = 1;
-
+  // Unlock
+  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
   return ML_OK;
 }
 
@@ -240,15 +242,9 @@ int16_t _ml_start_poll_unsafe() {
  * @return A status code
  */
 int16_t ml_stop_continuous_poll() {
-  int16_t failed = 0;
   if(ml_is_library_init() == 0) return ML_LIBRARY_NOT_INIT;
 
-  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
-
-  failed = _ml_stop_poll_unsafe();
-
-  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
-  return failed;
+  return _ml_stop_poll_unsafe();
 }
 
 /**
@@ -257,7 +253,9 @@ int16_t ml_stop_continuous_poll() {
  * @return A status code
  */
 int16_t _ml_stop_poll_unsafe() {
-  
+  // Lock the mutex
+  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
+  // Check polling state
   if((ml_main_controller->currently_polling) == 0) {
     // Already not polling
     pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
@@ -267,7 +265,9 @@ int16_t _ml_stop_poll_unsafe() {
   pthread_cancel(ml_main_controller->poll_thread);
   // Wait for thread to exit
   pthread_join(ml_main_controller->poll_thread, NULL);
+  
   ml_main_controller->currently_polling = 0;
+  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
   return ML_OK;
 }
 
@@ -279,13 +279,9 @@ int16_t _ml_stop_poll_unsafe() {
  */
 void *_ml_poll_for_launchers(void * __attribute__ ((unused)) unused) {
   int device_count = 0;
-  uint8_t poll_rate = 0;
+  uint8_t poll_rate = ML_DEFAULT_POLL_RATE;
   libusb_device **devices = NULL;
-
-  if(ml_is_library_init() == 0) return NULL;
-  TRACE("Polling\n");
-  poll_rate = ml_get_poll_rate();
-
+ 
   // This loop won't exit. We just check to see if the 
   for(;;) {
     // The cancellation point 
