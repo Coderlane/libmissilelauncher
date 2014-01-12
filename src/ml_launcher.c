@@ -291,6 +291,8 @@ int16_t _ml_move_launcher_unsafe(ml_launcher_t *launcher,
   ml_msecond_sleep(time->mseconds);
   // Stop movement
   result = _ml_send_command_unsafe(launcher, ML_STOP_CMD);
+  // Wait for device to stop coasting
+  ml_msecond_sleep(200);
 
   return result;
 }
