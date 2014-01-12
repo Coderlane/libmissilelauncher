@@ -10,6 +10,8 @@ PROJECT=missilelauncher
 
 CC=clang
 CFLAGS=-Wall -std=gnu99 -Wextra 
+
+PWD=$(shell pwd)
  
 SRC_DIR=.
 OBJ_DIR=obj
@@ -21,8 +23,8 @@ EXAMPLES=$(patsubst $(SRC_DIR)/%.c,%_example,$(SOURCES))
 TARGETS=$(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%_example,$(SOURCES))
 
 LIBRARY_NAME=l$(PROJECT)
-LIBRARY_PATH=../lib
-INCLUDE_PATH=../src
+LIBRARY_PATH=$(PWD)/../lib
+INCLUDE_PATH=$(PWD)/../src
 
 .PHONY: all dir clean build
 

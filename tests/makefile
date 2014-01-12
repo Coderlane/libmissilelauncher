@@ -1,16 +1,18 @@
-# Makefile for libmissilelauncher examples
+# Makefile for libmissilelauncher tests
 # Author: Travis Lane
 # Version: 0.1.0
 #
 # Options:
-# make (default) 	Build the examples
+# make (default) 	Build the tests 
 # make clean			Clean up all files
 
 PROJECT=missilelauncher
 
 CC=clang
 CFLAGS=-Wall -std=gnu99 -Wextra
- 
+
+PWD=$(shell pwd)
+
 SRC_DIR=.
 OBJ_DIR=obj
 BIN_DIR=bin
@@ -21,8 +23,8 @@ EXAMPLES=$(patsubst $(SRC_DIR)/%.c,%,$(SOURCES))
 TARGETS=$(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%_test,$(SOURCES))
 
 LIBRARY_NAME=l$(PROJECT)_debug
-LIBRARY_PATH=../lib
-INCLUDE_PATH=../src
+LIBRARY_PATH=$(PWD)/../lib
+INCLUDE_PATH=$(PWD)/../src
 
 .PHONY: all dir clean build
 
