@@ -33,16 +33,16 @@ typedef struct ml_controller_t ml_controller_t; ///< Controller typedef, Don't u
 
 /// Use this enumeration to determine the type of launcher. 
 typedef enum ml_launcher_type {
-  ML_NOT_LAUNCHER, ///< The object isn't a launcher
-  ML_STANDARD_LAUNCHER ///< The object is a standard thunder launcher
+	ML_NOT_LAUNCHER, ///< The object isn't a launcher
+	ML_STANDARD_LAUNCHER ///< The object is a standard thunder launcher
 } ml_launcher_type;
 
 /// Use this enumerationt to specify which direction to move the launcher in
 typedef enum ml_launcher_direction {
-  ML_DOWN, ///< Aim the launcher downwards
-  ML_UP,   ///< Aim the launcher upwards
-  ML_LEFT, ///< Move the launcher to the left
-  ML_RIGHT ///< Move the launcher to the righ
+	ML_DOWN, ///< Aim the launcher downwards
+	ML_UP,	 ///< Aim the launcher upwards
+	ML_LEFT, ///< Move the launcher to the left
+	ML_RIGHT ///< Move the launcher to the righ
 } ml_launcher_direction;
 
 typedef struct ml_launcher_t ml_launcher_t; ///< Launcher typedef, Don't use this object directly.
