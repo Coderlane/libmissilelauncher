@@ -24,6 +24,10 @@ tests/bin/*
 
 #Object Files
 obj/*
+debug/*
+Debug/*
+release/*
+Release/*
 
 examples/obj/*
 tests/obj/*
