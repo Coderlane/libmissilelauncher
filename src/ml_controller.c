@@ -18,11 +18,11 @@ int16_t ml_init_library() {
   int init_result;
   int16_t failed = 0;
 
-  pthread_mutex_lock(&ml_main_controller_mutex);
+  ////pthread_mutex_lock(&ml_main_controller_mutex);
 
   if (ml_main_controller != NULL) {
     TRACE("Main launch control was not null, possibly already initialized\n");
-    pthread_mutex_unlock(&ml_main_controller_mutex);
+   // //pthread_mutex_unlock(&ml_main_controller_mutex);
     return ML_LIBRARY_ALREADY_INIT;
   }
 
@@ -30,7 +30,7 @@ int16_t ml_init_library() {
   ml_main_controller = calloc(sizeof(ml_controller_t), 1);
   if (ml_main_controller == NULL) {
     TRACE("Could not allocate memory for a new launch control\n");
-    pthread_mutex_unlock(&ml_main_controller_mutex);
+    ////pthread_mutex_unlock(&ml_main_controller_mutex);
     return ML_ALLOC_FAILED;
   }
 
@@ -40,7 +40,7 @@ int16_t ml_init_library() {
     TRACE("libusb failed with code: %d\n", init_result);
     free(ml_main_controller);
     ml_main_controller = NULL;
-    pthread_mutex_unlock(&ml_main_controller_mutex);
+    ////pthread_mutex_unlock(&ml_main_controller_mutex);
     return ML_LIBUSB_INIT_FAILED;
   }
 
@@ -49,7 +49,7 @@ int16_t ml_init_library() {
   // Check result
   if (failed == ML_OK) {
     // Start polling
-    _ml_start_poll_unsafe();
+    //_ml_start_poll_unsafe();
   } else {
     // Setup failed
     if (ml_main_controller->launchers != NULL) {
@@ -59,7 +59,7 @@ int16_t ml_init_library() {
     ml_main_controller = NULL;
   }
   // Unlock mutex
-  pthread_mutex_unlock(&ml_main_controller_mutex);
+  ////pthread_mutex_unlock(&ml_main_controller_mutex);
 
   return failed;
 }
@@ -89,8 +89,8 @@ int16_t _ml_init_controller(ml_controller_t *controller) {
   controller->launcher_array_size = ML_INITIAL_LAUNCHER_ARRAY_SIZE;
   controller->launcher_count = 0;
   // Initialize mutexes and locks
-  pthread_rwlock_init(&(controller->poll_rate_lock), NULL);
-  pthread_mutex_init(&(controller->poll_control_mutex), NULL);
+ // //pthread_rwlock_init(&(controller->poll_rate_lock), NULL);
+ // //pthread_mutex_init(&(controller->poll_control_mutex), NULL);
   // Good to go!
   controller->control_initialized = 1;
   return ML_OK;
@@ -104,14 +104,14 @@ int16_t _ml_init_controller(ml_controller_t *controller) {
 int16_t ml_cleanup_library() {
   int16_t failed = 0;
   // Lock main mutex
-  pthread_mutex_lock(&ml_main_controller_mutex);
+ // //pthread_mutex_lock(&ml_main_controller_mutex);
   if (ml_main_controller == NULL) {
     TRACE("Could not clean up library. Library not initialized.\n");
-    pthread_mutex_unlock(&ml_main_controller_mutex);
+   // //pthread_mutex_unlock(&ml_main_controller_mutex);
     return ML_LIBRARY_NOT_INIT;
   }
   // Stop polling
-  _ml_stop_poll_unsafe();
+  //_ml_stop_poll_unsafe();
   // Cleanup the controller
   failed = _ml_cleanup_controller(ml_main_controller);
   // Free everything
@@ -120,7 +120,7 @@ int16_t ml_cleanup_library() {
   // Cleanup libusb
   libusb_exit(NULL);
   // Unlock main mutex
-  pthread_mutex_unlock(&ml_main_controller_mutex);
+ // //pthread_mutex_unlock(&ml_main_controller_mutex);
   return failed;
 }
 
@@ -158,11 +158,11 @@ int16_t _ml_cleanup_controller(ml_controller_t *controller) {
   controller->launcher_array_size = 0;
   controller->launcher_count = 0;
   // Attempt to lock before destroying
-  pthread_mutex_lock(&(controller->poll_control_mutex));
-  pthread_rwlock_wrlock(&(controller->poll_rate_lock));
+  ////pthread_mutex_lock(&(controller->poll_control_mutex));
+  ////pthread_rwlock_wrlock(&(controller->poll_rate_lock));
   // Destroy locks
-  pthread_mutex_destroy(&(controller->poll_control_mutex));
-  pthread_rwlock_destroy(&(controller->poll_rate_lock));
+  ////pthread_mutex_destroy(&(controller->poll_control_mutex));
+  ////pthread_rwlock_destroy(&(controller->poll_rate_lock));
   // Controll is no longer initialized
   controller->control_initialized = 0;
   return ML_OK;
@@ -175,7 +175,7 @@ int16_t _ml_cleanup_controller(ml_controller_t *controller) {
  */
 uint8_t ml_is_library_init() {
   uint8_t result = 0;
-  pthread_mutex_lock(&ml_main_controller_mutex);
+  //pthread_mutex_lock(&ml_main_controller_mutex);
   if (ml_main_controller == NULL ||
       ml_main_controller->control_initialized == 0) {
     TRACE("Library not initialized.\n");
@@ -183,7 +183,7 @@ uint8_t ml_is_library_init() {
   } else {
     result = 1;
   }
-  pthread_mutex_unlock(&ml_main_controller_mutex);
+  //pthread_mutex_unlock(&ml_main_controller_mutex);
   return result;
 }
 
@@ -201,81 +201,6 @@ int16_t ml_start_continuous_poll() {
 }
 
 /**
- * @brief Unsafe start to continuous polling.
- *
- * @return A status code
- */
-int16_t _ml_start_poll_unsafe() {
-  int thread_code = 0;
-
-  // Lock the mutex
-  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
-
-  // Checks to see if we are currently polling
-  if (ml_main_controller->currently_polling) {
-    // If it is already polling we can exit
-    // Unlock
-    pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
-    return ML_OK;
-  }
-
-  // Starts the thread
-  thread_code =
-      pthread_create(&(ml_main_controller->poll_thread), NULL,
-                     _ml_poll_for_launchers, (void *)ml_main_controller);
-
-  // Check the result
-  if (thread_code != 0) {
-    // Thread failed to start
-    TRACE("Thread failed to start. (ml_start_continuous_poll)\n");
-    ml_main_controller->currently_polling = 0;
-    // Unlock
-    pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
-    return ML_FAILED_POLL_START;
-  }
-  ml_main_controller->currently_polling = 1;
-  // Unlock
-  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
-  return ML_OK;
-}
-
-/**
- * @brief Cancels the continuous polling
- *
- * @return A status code
- */
-int16_t ml_stop_continuous_poll() {
-  if (ml_is_library_init() == 0)
-    return ML_LIBRARY_NOT_INIT;
-
-  return _ml_stop_poll_unsafe();
-}
-
-/**
- * @brief Cancels the polling in an unsafe manner
- *
- * @return A status code
- */
-int16_t _ml_stop_poll_unsafe() {
-  // Lock the mutex
-  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
-  // Check polling state
-  if ((ml_main_controller->currently_polling) == 0) {
-    // Already not polling
-    pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
-    return ML_OK;
-  }
-  // Cancel the thread and exit
-  pthread_cancel(ml_main_controller->poll_thread);
-  // Wait for thread to exit
-  pthread_join(ml_main_controller->poll_thread, NULL);
-
-  ml_main_controller->currently_polling = 0;
-  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
-  return ML_OK;
-}
-
-/**
  * @brief Thread function to poll for new devices
  *
  * @return NULL on error
@@ -288,7 +213,7 @@ void *_ml_poll_for_launchers(void *__attribute__((unused)) unused) {
   // This loop won't exit. We just check to see if the
   for (;;) {
     // The cancellation point
-    pthread_testcancel();
+    ////pthread_testcancel();
     TRACE("loop\n");
     // Get devices
     device_count = libusb_get_device_list(NULL, &devices);
@@ -296,78 +221,11 @@ void *_ml_poll_for_launchers(void *__attribute__((unused)) unused) {
     // TODO: Scan and add to array if new. Else continue
 
     // Free
-    libusb_free_device_list(devices, 1);
+    //libusb_free_device_list(devices, 1);
     // Sleep and update poll rate
     ml_second_sleep(poll_rate);
     poll_rate = ml_get_poll_rate();
   }
-}
-
-/**
- * @brief Checks to see if the controller is currently polling.
- *
- * @return 0 - false , 1 - true
- */
-uint8_t ml_is_polling() {
-  uint8_t polling = 0;
-  if (ml_is_library_init() == 0)
-    return ML_LIBRARY_NOT_INIT;
-
-  pthread_mutex_lock(&(ml_main_controller->poll_control_mutex));
-
-  polling = ml_main_controller->currently_polling;
-
-  pthread_mutex_unlock(&(ml_main_controller->poll_control_mutex));
-  return polling;
-}
-
-/**
- * @brief Gets the current poll rate
- *
- * @return the current poll rate, or 0 if something went wrong.
- */
-uint8_t ml_get_poll_rate() {
-  uint8_t poll_rate;
-  if (ml_is_library_init() == 0)
-    return 0;
-
-  pthread_rwlock_rdlock(&(ml_main_controller->poll_rate_lock));
-
-  poll_rate = ml_main_controller->poll_rate_seconds;
-
-  pthread_rwlock_unlock(&(ml_main_controller->poll_rate_lock));
-  return poll_rate;
-}
-
-/**
- * @brief Sets a new poll rate for the library to use.
- *
- * @param poll_rate_seconds The new pollrate in seconds equal to
- * or between ML_MAX_POLL_RATE and ML_MIN_POLL_RATE or
- * 0 to reset to the default poll rate
- *
- * @return A result code, 0 (OK),  ML_LIBRARY_NOT_INIT, or ML_INVALID_POLL_RATE
- */
-int16_t ml_set_poll_rate(uint8_t poll_rate_seconds) {
-
-  if (ml_is_library_init() == 0)
-    return ML_LIBRARY_NOT_INIT;
-
-  if (poll_rate_seconds == 0) {
-    pthread_rwlock_wrlock(&(ml_main_controller->poll_rate_lock));
-    ml_main_controller->poll_rate_seconds = ML_DEFAULT_POLL_RATE;
-    pthread_rwlock_unlock(&(ml_main_controller->poll_rate_lock));
-    return ML_OK;
-  }
-
-  if (poll_rate_seconds > ML_MAX_POLL_RATE ||
-      poll_rate_seconds < ML_MIN_POLL_RATE) {
-    return ML_INVALID_POLL_RATE;
-  }
-  pthread_rwlock_wrlock(&(ml_main_controller->poll_rate_lock));
-  ml_main_controller->poll_rate_seconds = poll_rate_seconds;
-  pthread_rwlock_unlock(&(ml_main_controller->poll_rate_lock));
-  return ML_OK;
 }
 
 /**
@@ -405,13 +263,13 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
   _ml_get_launchers_from_devices(devices, device_count, &found_launchers,
                                  &found_launchers_count);
 
-  pthread_rwlock_wrlock(&(ml_main_controller->launcher_array_lock));
+  //pthread_rwlock_wrlock(&(ml_main_controller->launcher_array_lock));
 
   _ml_remove_disconnected_launchers(found_launchers, found_launchers_count);
 
   _ml_add_new_launchers(found_launchers, found_launchers_count);
 
-  pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
+  //pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
 
   free(found_launchers);
   return ML_NOT_IMPLEMENTED;
@@ -494,7 +352,7 @@ int16_t _ml_remove_disconnected_launchers(libusb_device **found_launchers,
     if (known_launcher == NULL) {
       continue;
     }
-    pthread_mutex_lock(&(known_launcher->main_lock));
+    //pthread_mutex_lock(&(known_launcher->main_lock));
 
     // Check if any devices were found.
     if (found_launchers != NULL) {
@@ -516,11 +374,11 @@ int16_t _ml_remove_disconnected_launchers(libusb_device **found_launchers,
         known_launcher->ref_count == 0) {
 
       // No one is refrencing the device, so we can free it.
-      pthread_mutex_unlock(&(known_launcher->main_lock));
+      //pthread_mutex_unlock(&(known_launcher->main_lock));
       _ml_remove_launcher_index(known_it);
       _ml_cleanup_launcher(&known_launcher);
     } else {
-      pthread_mutex_unlock(&(known_launcher->main_lock));
+      //pthread_mutex_unlock(&(known_launcher->main_lock));
     }
   }
 
@@ -601,18 +459,18 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr, uint32_t *count) {
     return ML_ARRAY_NOT_NULL;
   }
   // Lock the launcher array for read
-  pthread_rwlock_rdlock(&(ml_main_controller->launcher_array_lock));
+  //pthread_rwlock_rdlock(&(ml_main_controller->launcher_array_lock));
   new_count = ml_main_controller->launcher_count;
   (*count) = new_count;
   if (new_count == 0) {
-    pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
+    //pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
     return ML_NO_LAUNCHERS;
   }
   // Allocate space for the new array.
   (*new_arr) = malloc(sizeof(ml_launcher_t *) * (new_count + 1));
   if ((*new_arr) == NULL) {
     TRACE("Launcher array was null after malloc. (ml_get_launcher_array)\n");
-    pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
+    //pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
     return ML_ALLOC_FAILED;
   }
 
@@ -626,7 +484,7 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr, uint32_t *count) {
       if (new_index >= ml_main_controller->launcher_count) {
         TRACE("Found more launchers than should be present. "
               "(ml_get_launcher_array)\n");
-        pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
+        //pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
         return ML_LAUNCHER_ARRAY_INCONSISTENT;
       }
       // Refrence the launcher since this will be going back to the programmer
@@ -636,7 +494,7 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr, uint32_t *count) {
     }
   }
 
-  pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
+  //pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
   return ML_OK;
 }
 

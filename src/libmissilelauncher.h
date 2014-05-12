@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <libusb-1.0/libusb.h>
-#include <pthread.h>
+//#include <pthread.h>
 
 #include "ml_errors.h"
 

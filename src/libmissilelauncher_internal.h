@@ -47,7 +47,7 @@ typedef struct ml_launcher_t {
 	libusb_device *usb_device;
 	libusb_device_handle *usb_handle;
 
-	pthread_mutex_t main_lock;
+	//pthread_mutex_t main_lock;
 } ml_arr_launcher_t;
 
 struct ml_controller_t {
@@ -61,11 +61,11 @@ struct ml_controller_t {
 	// Event Handlers
 	ml_void_event_handler on_launchers_updated;
 	//	Mutexes and Locks
-	pthread_rwlock_t poll_rate_lock;
-	pthread_rwlock_t launcher_array_lock;
-	pthread_mutex_t poll_control_mutex;
+	//pthread_rwlock_t poll_rate_lock;
+	//pthread_rwlock_t launcher_array_lock;
+	//pthread_mutex_t poll_control_mutex;
 	// The polling thread
-	pthread_t poll_thread;
+	//pthread_t poll_thread;
 };
 
 typedef struct ml_time_t {
@@ -75,7 +75,7 @@ typedef struct ml_time_t {
 
 // ***** Global Statics *****
 static ml_controller_t __attribute__ ((unused)) *ml_main_controller = NULL;
-static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHREAD_MUTEX_INITIALIZER;
+//static pthread_mutex_t __attribute__ ((unused)) ml_main_controller_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 // Launcher commands
 static unsigned char ml_down_cmd[ML_CMD_ARR_SIZE] =		 {0x02, 0x01};
@@ -110,8 +110,8 @@ static unsigned char __attribute__ ((unused)) *ml_cmd_arr[ML_COMMAND_COUNT] = {
 int16_t _ml_init_controller(ml_controller_t *);
 int16_t _ml_cleanup_controller(ml_controller_t *);
 // Polling
-int16_t _ml_start_poll_unsafe();
-int16_t _ml_stop_poll_unsafe();
+//int16_t _ml_start_poll_unsafe();
+//int16_t _ml_stop_poll_unsafe();
 void *_ml_poll_for_launchers(void *);
 int16_t _ml_update_launchers(struct libusb_device **, int);
 int16_t _ml_get_launchers_from_devices(libusb_device **, int, libusb_device ***, uint32_t *);
