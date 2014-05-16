@@ -59,7 +59,7 @@ int16_t ml_init_library() {
     ml_main_controller = NULL;
   }
   // Unlock mutex
-  ////pthread_mutex_unlock(&ml_main_controller_mutex);
+  //pthread_mutex_unlock(&ml_main_controller_mutex);
 
   return failed;
 }
@@ -85,7 +85,7 @@ int16_t _ml_init_controller(ml_controller_t *controller) {
     return ML_ALLOC_FAILED;
   }
   // Set default variables
-  controller->poll_rate_seconds = ML_DEFAULT_POLL_RATE;
+  //controller->poll_rate_seconds = ML_DEFAULT_POLL_RATE;
   controller->launcher_array_size = ML_INITIAL_LAUNCHER_ARRAY_SIZE;
   controller->launcher_count = 0;
   // Initialize mutexes and locks
@@ -191,41 +191,21 @@ uint8_t ml_is_library_init() {
  * @brief Starts continuous polling in a safe manner
  *
  * @return A status code
- */
+ *
 int16_t ml_start_continuous_poll() {
   if (ml_is_library_init() == 0)
     return ML_LIBRARY_NOT_INIT;
 
   // Try to start polling
   return _ml_start_poll_unsafe();
-}
+}*/
 
-/**
- * @brief Thread function to poll for new devices
- *
- * @return NULL on error
- */
-void *_ml_poll_for_launchers(void *__attribute__((unused)) unused) {
-  int device_count = 0;
-  uint8_t poll_rate = ML_DEFAULT_POLL_RATE;
+
+uint8_t _ml_poll_for_launchers(ml_controller_t *cont) {
+	int device_count = 0;
   libusb_device **devices = NULL;
-
-  // This loop won't exit. We just check to see if the
-  for (;;) {
-    // The cancellation point
-    ////pthread_testcancel();
-    TRACE("loop\n");
-    // Get devices
-    device_count = libusb_get_device_list(NULL, &devices);
-    _ml_update_launchers(devices, device_count);
-    // TODO: Scan and add to array if new. Else continue
-
-    // Free
-    //libusb_free_device_list(devices, 1);
-    // Sleep and update poll rate
-    ml_second_sleep(poll_rate);
-    poll_rate = ml_get_poll_rate();
-  }
+	device_count = libusb_get_device_list(NULL, &devices);
+  _ml_update_launchers(cont, devices, device_count);
 }
 
 /**
@@ -256,8 +236,10 @@ uint8_t _ml_catagorize_device(struct libusb_device_descriptor *desc) {
  *
  * @return A status code, ML_OK if everything went well
  */
-int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
-  libusb_device **found_launchers = NULL;
+int16_t _ml_update_launchers(ml_controller_t *cont, 
+		struct libusb_device **devices, int device_count) {
+  
+	libusb_device **found_launchers = NULL;
   uint32_t found_launchers_count = 0;
 
   _ml_get_launchers_from_devices(devices, device_count, &found_launchers,
@@ -265,9 +247,10 @@ int16_t _ml_update_launchers(struct libusb_device **devices, int device_count) {
 
   //pthread_rwlock_wrlock(&(ml_main_controller->launcher_array_lock));
 
-  _ml_remove_disconnected_launchers(found_launchers, found_launchers_count);
+  _ml_remove_disconnected_launchers(cont,
+		 	found_launchers, found_launchers_count);
 
-  _ml_add_new_launchers(found_launchers, found_launchers_count);
+  _ml_add_new_launchers(cont, found_launchers, found_launchers_count);
 
   //pthread_rwlock_unlock(&(ml_main_controller->launcher_array_lock));
 
@@ -335,20 +318,20 @@ int16_t _ml_get_launchers_from_devices(libusb_device **devices,
  *
  * @return A status code
  */
-int16_t _ml_remove_disconnected_launchers(libusb_device **found_launchers,
-                                          uint32_t found_launchers_count) {
+int16_t _ml_remove_disconnected_launchers(ml_controller_t *cont,
+		libusb_device **found_launchers, uint32_t found_launchers_count) {
 
   libusb_device *found_device = NULL;
   ml_launcher_t *known_launcher = NULL;
 
   // Check to see if we need to remove any devices
   for (uint16_t known_it = 0;
-       known_it < ml_main_controller->launcher_array_size; known_it++) {
+       known_it < cont->launcher_array_size; known_it++) {
     // We'll be checking if the known device was not found in the new array of
     // mounted devices.
     uint8_t found = 0;
 
-    known_launcher = ml_main_controller->launchers[known_it];
+    known_launcher = cont->launchers[known_it];
     if (known_launcher == NULL) {
       continue;
     }
@@ -375,7 +358,7 @@ int16_t _ml_remove_disconnected_launchers(libusb_device **found_launchers,
 
       // No one is refrencing the device, so we can free it.
       //pthread_mutex_unlock(&(known_launcher->main_lock));
-      _ml_remove_launcher_index(known_it);
+      _ml_remove_launcher_index(cont, known_it);
       _ml_cleanup_launcher(&known_launcher);
     } else {
       //pthread_mutex_unlock(&(known_launcher->main_lock));
@@ -395,8 +378,8 @@ int16_t _ml_remove_disconnected_launchers(libusb_device **found_launchers,
  *
  * @return A status code
  */
-int16_t _ml_add_new_launchers(libusb_device **found_launchers,
-                              uint32_t found_launchers_count) {
+int16_t _ml_add_new_launchers(ml_controller_t *cont, 
+		libusb_device **found_launchers, uint32_t found_launchers_count) {
 
   libusb_device *found_device = NULL;
   ml_launcher_t *known_launcher = NULL;
@@ -410,10 +393,10 @@ int16_t _ml_add_new_launchers(libusb_device **found_launchers,
     uint8_t found = 0;
 
     for (uint16_t known_it = 0;
-         known_it < ml_main_controller->launcher_array_size && found == 0;
+         known_it < cont->launcher_array_size && found == 0;
          known_it++) {
 
-      known_launcher = ml_main_controller->launchers[known_it];
+      known_launcher = cont->launchers[known_it];
       if (known_launcher != NULL &&
           known_launcher->usb_device == found_device) {
         // Found something identical
@@ -427,7 +410,7 @@ int16_t _ml_add_new_launchers(libusb_device **found_launchers,
         TRACE("Failed to allocate a new launcher. (_ml_update_launchers)\n");
       } else {
         _ml_init_launcher(new_launcher, found_device);
-        _ml_add_launcher(new_launcher);
+        _ml_add_launcher(cont, new_launcher);
       }
     }
   }
@@ -535,13 +518,13 @@ int16_t ml_free_launcher_array(ml_launcher_t **free_arr) {
  *
  * @return A status value, ML_OK if it is okay.
  */
-int16_t _ml_remove_launcher(ml_launcher_t *launcher) {
+int16_t _ml_remove_launcher(ml_controller_t *cont, ml_launcher_t *launcher) {
   /* This function is not thread safe, please lock the array first */
 
-  for (int16_t i = 0; i < ml_main_controller->launcher_count; i++) {
+  for (int16_t i = 0; i < cont->launcher_count; i++) {
     // Search for the launcher of interest
-    if (ml_main_controller->launchers[i] == launcher) {
-      return _ml_remove_launcher_index(i);
+    if (cont->launchers[i] == launcher) {
+      return _ml_remove_launcher_index(cont, i);
     }
   }
   return ML_NOT_FOUND;
@@ -555,25 +538,25 @@ int16_t _ml_remove_launcher(ml_launcher_t *launcher) {
  *
  * @return A status value, ML_OK if it is okay.
  */
-int16_t _ml_remove_launcher_index(int16_t index) {
+int16_t _ml_remove_launcher_index(ml_controller_t *cont, int16_t index) {
   /* This function is not thread safe, please lock the array first */
 
   // Error checking
-  if (ml_main_controller->launchers[index] == NULL) {
+  if (cont->launchers[index] == NULL) {
     TRACE("Addition position was null.\n");
     return ML_POSITION_WAS_NULL;
   }
-  if (index >= ml_main_controller->launcher_array_size || index < 0) {
+  if (index >= cont->launcher_array_size || index < 0) {
     TRACE("Index out of bounds.\n");
     return ML_INDEX_OUT_OF_BOUNDS;
   }
-  if (ml_main_controller->launcher_count <= 0) {
+  if (cont->launcher_count <= 0) {
     TRACE("Nothing to remove.\n");
     return ML_COUNT_ZERO;
   }
   // Everything looks good, decrement and set as null. We do not free here.
-  ml_main_controller->launcher_count -= 1;
-  ml_main_controller->launchers[index] = NULL;
+  cont->launcher_count -= 1;
+  cont->launchers[index] = NULL;
   return ML_OK;
 }
 
@@ -585,14 +568,14 @@ int16_t _ml_remove_launcher_index(int16_t index) {
  *
  * @return A status value, ML_OK if it is okay
  */
-int16_t _ml_add_launcher(ml_launcher_t *launcher) {
+int16_t _ml_add_launcher(ml_controller_t *cont, ml_launcher_t *launcher) {
   /* This function is not thread safe, please lock the array first */
 
-  for (int16_t i = 0; i < ml_main_controller->launcher_array_size; i++) {
+  for (int16_t i = 0; i < cont->launcher_array_size; i++) {
     // Find an empty spot
-    if (ml_main_controller->launchers[i] == NULL) {
+    if (cont->launchers[i] == NULL) {
       TRACE("adding launcher to index: %d\n", i);
-      return _ml_add_launcher_index(launcher, i);
+      return _ml_add_launcher_index(cont, launcher, i);
     }
   }
   // No freespace found, needs a resize.
@@ -609,14 +592,15 @@ int16_t _ml_add_launcher(ml_launcher_t *launcher) {
  *
  * @return A status code, ML_OK if it is okay
  */
-int16_t _ml_add_launcher_index(ml_launcher_t *launcher, int16_t index) {
+int16_t _ml_add_launcher_index(ml_controller_t *cont,
+		ml_launcher_t *launcher, int16_t index) {
   /* This function is not thread safe, please lock the array first */
-  if (ml_main_controller->launchers[index] != NULL) {
+  if (cont->launchers[index] != NULL) {
     TRACE("Addition position was not null.\n");
     return ML_POSITION_WAS_NOT_NULL;
   }
   // Update index and add
-  ml_main_controller->launcher_count += 1;
-  ml_main_controller->launchers[index] = launcher;
-  return ML_NOT_IMPLEMENTED;
+  cont->launcher_count += 1;
+  cont->launchers[index] = launcher;
+  return ML_OK;
 }
