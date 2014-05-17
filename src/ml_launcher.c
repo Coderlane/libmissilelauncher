@@ -343,8 +343,9 @@ int16_t _ml_send_command_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd) {
 
   status = libusb_control_transfer(launcher->usb_handle, request_type, request_field,
                           wValue, wIndex, ml_cmd_arr[cmd], ML_CMD_ARR_SIZE, 0);
-	if (status > 0) {
-		TRACE("Error sending command.\n");
+	if (status < 0) {
+		WARNING("Error sending command.\n");
+		TRACE("Error Code: %d\n", status);
 		return status;
 	} else {
   	return ML_OK;
