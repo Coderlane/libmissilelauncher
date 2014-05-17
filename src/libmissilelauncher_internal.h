@@ -107,6 +107,10 @@ static unsigned char __attribute__ ((unused)) *ml_cmd_arr[ML_COMMAND_COUNT] = {
 	ml_stop_cmd, ml_led_on_cmd, ml_led_off_cmd};
 
 // ********** Library Functions **********
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
 // Controller Init
 int16_t _ml_init_controller(ml_controller_t *);
 int16_t _ml_cleanup_controller(ml_controller_t *);
@@ -135,5 +139,9 @@ int16_t _ml_send_command_unsafe(ml_launcher_t *, ml_launcher_cmd);
 // Time Conversions
 int16_t _ml_mseconds_to_time(uint32_t, ml_time_t *);
 int16_t _ml_degrees_to_time(uint16_t, ml_time_t *); //TODO Take measurements and finish
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
