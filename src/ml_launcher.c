@@ -17,8 +17,11 @@
  *
  * @return A status code
  */
-int16_t _ml_init_launcher(ml_launcher_t *launcher, libusb_device *device) {
+int16_t _ml_init_launcher(ml_controller_t *controller,
+		ml_launcher_t *launcher, libusb_device *device) {
+
   struct libusb_device_descriptor desc;
+	int status = 0;
   if (launcher == NULL) {
     TRACE("Launcher was null. _ml_init_launcher\n");
     return ML_NULL_LAUNCHER;
@@ -29,9 +32,18 @@ int16_t _ml_init_launcher(ml_launcher_t *launcher, libusb_device *device) {
   launcher->usb_device = device;
   launcher->ref_count = 0;
   launcher->device_connected = 1;
-  libusb_open(device, &(launcher->usb_handle));
+	launcher->controller = controller;
+  status = libusb_open(device, &(launcher->usb_handle));
+	if(status != 0) {
+		WARNING("Failed to open device descriptor, do you have permissions?\n");
+		TRACE("Error Code: %d\n", status);
+		return status;
+	}
 #ifdef LINUX
-  libusb_detach_kernel_driver(launcher->usb_handle, 0);
+	status = libusb_kernel_driver_active(launcher->usb_handle, 0);
+	if(status == 1) {
+  	libusb_detach_kernel_driver(launcher->usb_handle, 0);
+	}
   libusb_claim_interface(launcher->usb_handle, 0);
 #endif
   //pthread_mutex_init(&(launcher->main_lock), NULL);
@@ -104,7 +116,7 @@ int16_t ml_dereference_launcher(ml_launcher_t *launcher) {
   launcher->ref_count -= 1;
   if (launcher->ref_count == 0 && launcher->device_connected == 0) {
     // Not connected and not refrenced
-    _ml_remove_launcher(launcher);
+    _ml_remove_launcher(launcher->controller, launcher);
     _ml_cleanup_launcher(&launcher);
   }
   //pthread_mutex_unlock(&(launcher->main_lock));

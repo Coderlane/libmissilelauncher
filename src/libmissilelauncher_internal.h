@@ -47,6 +47,7 @@ typedef struct ml_launcher_t {
 	libusb_device *usb_device;
 	libusb_device_handle *usb_handle;
 
+	struct ml_controller_t *controller;
 	//pthread_mutex_t main_lock;
 } ml_arr_launcher_t;
 
@@ -110,22 +111,26 @@ static unsigned char __attribute__ ((unused)) *ml_cmd_arr[ML_COMMAND_COUNT] = {
 int16_t _ml_init_controller(ml_controller_t *);
 int16_t _ml_cleanup_controller(ml_controller_t *);
 // Polling
-void *_ml_poll_for_launchers(void *);
-int16_t _ml_update_launchers(struct libusb_device **, int);
-int16_t _ml_get_launchers_from_devices(libusb_device **, int, libusb_device ***, uint32_t *);
-int16_t _ml_remove_disconnected_launchers(libusb_device **, uint32_t);
-int16_t _ml_add_new_launchers(libusb_device **, uint32_t);
+//void *_ml_poll_for_launchers(void *);
+int16_t _ml_poll_for_launchers(ml_controller_t *cont);
+int16_t _ml_update_launchers(ml_controller_t *, struct libusb_device **, int);
+int16_t _ml_get_launchers_from_devices(libusb_device **, 
+		int, libusb_device ***, uint32_t *);
+int16_t _ml_remove_disconnected_launchers(ml_controller_t *, 
+		libusb_device **, uint32_t);
+int16_t _ml_add_new_launchers(ml_controller_t *, libusb_device **, uint32_t *);
 // Launcher Array
-int16_t _ml_remove_launcher(ml_launcher_t *);
-int16_t _ml_remove_launcher_index(int16_t);
-int16_t _ml_add_launcher(ml_launcher_t *);
-int16_t _ml_add_launcher_index(ml_launcher_t *, int16_t);
+int16_t _ml_remove_launcher(ml_controller_t *, ml_launcher_t *);
+int16_t _ml_remove_launcher_index(ml_controller_t *, int16_t);
+int16_t _ml_add_launcher(ml_controller_t *, ml_launcher_t *);
+int16_t _ml_add_launcher_index(ml_controller_t *, ml_launcher_t *, int16_t);
 // Launcher Init
-int16_t _ml_init_launcher(ml_launcher_t *, libusb_device *);
+int16_t _ml_init_launcher(ml_controller_t *, ml_launcher_t *, libusb_device *);
 int16_t _ml_cleanup_launcher(ml_launcher_t **);
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
 // Launcher Control
-int16_t _ml_move_launcher_unsafe(ml_launcher_t *, ml_launcher_direction, ml_time_t *);
+int16_t _ml_move_launcher_unsafe(ml_launcher_t *, 
+		ml_launcher_direction, ml_time_t *);
 int16_t _ml_send_command_unsafe(ml_launcher_t *, ml_launcher_cmd);
 // Time Conversions
 int16_t _ml_mseconds_to_time(uint32_t, ml_time_t *);

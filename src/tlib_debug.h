@@ -15,4 +15,6 @@
 #define TRACE(...)
 #endif
 
+#define WARNING(...) fprintf(stderr, __VA_ARGS__)
+
 #endif

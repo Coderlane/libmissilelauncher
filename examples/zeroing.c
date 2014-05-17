@@ -27,7 +27,8 @@ int main() {
       ml_cleanup_library();
       exit(EXIT_SUCCESS);
     }
-    // Get a new launcher array and see if anything was detected
+    
+		// Get a new launcher array and see if anything was detected
     failed = ml_get_launcher_array(&launchers, &launchers_count);
     // Check exit code
     if(launchers_count == 0 || failed == ML_NO_LAUNCHERS) {

@@ -53,11 +53,13 @@ int16_t ml_init_library();
 int16_t ml_cleanup_library();
 uint8_t ml_is_library_init();
 // Polling
+/*
 int16_t ml_start_continuous_poll();
 int16_t ml_stop_continuous_poll();
 uint8_t ml_is_polling();
 uint8_t ml_get_poll_rate();
 int16_t ml_set_poll_rate(uint8_t);
+*/
 // Launcher arrays
 int16_t ml_get_launcher_array(ml_launcher_t ***, uint32_t *);
 int16_t ml_free_launcher_array(ml_launcher_t **);

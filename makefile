@@ -108,6 +108,7 @@ $(RELEASE_TARGET): $(RELEASE_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(RELEASE_LIB) -o $(RELEASE_TARGET) $^
 
 #d Debug Target
+$(DEBUG_TARGET): CFLAGS += -DDEBUG
 $(DEBUG_TARGET): $(DEBUG_OBJECTS)
 	$(CC) -shared -Wl,-soname,$(DEBUG_LIB) -o $(DEBUG_TARGET) $^
 
@@ -116,7 +117,7 @@ test_build: $(DEBUG_TARGET)
 	cd tests && $(MAKE)
 
 # Example targets
-example_build: $(RELEASE_TARGET)
+example_build: $(DEBUG_TARGET)
 	cd examples && $(MAKE)
 
 #TODO implement installing
@@ -130,7 +131,3 @@ $(OBJ_DIR)/%_release.o: $(SRC_DIR)/%.c
 # Make debug object files 
 $(OBJ_DIR)/%_debug.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -o $@ $<
-
-# Create example binaries
-$(EXAMPLE_BIN_DIR)/%_example: $(DEBUG_LIBRARY) $(EXAMPLE_DIR)/%.c
-	$(CC) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(LIBRARY_NAME) -lusb-1.0

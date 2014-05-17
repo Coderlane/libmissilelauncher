@@ -6,8 +6,6 @@
 # make (default) 	Build the examples
 # make clean			Clean up all files
 
-PROJECT=missilelauncher
-
 CC=clang
 CFLAGS=-Wall -std=gnu99 -Wextra 
 
@@ -22,7 +20,7 @@ OBJECTS=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 EXAMPLES=$(patsubst $(SRC_DIR)/%.c,%_example,$(SOURCES))
 TARGETS=$(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%_example,$(SOURCES))
 
-LIBRARY_NAME=l$(PROJECT)
+LIBRARY_NAME=lmissilelauncher
 LIBRARY_PATH=$(PWD)/../lib
 INCLUDE_PATH=$(PWD)/../src
 
@@ -45,7 +43,7 @@ build: library $(OBJECTS) $(TARGETS)
 
 # Make sure that the library has been built
 library: 
-	cd .. && $(MAKE) release
+	cd .. && $(MAKE) release 
 
 # Make objects
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
