@@ -459,7 +459,6 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr, uint32_t *count) {
 		TRACE("Failed to poll for launchers\n");
 		return status;
 	}
-	printf("new count: %d\n", ml_main_controller->launcher_count);
 	// Lock the launcher array for read
 	//pthread_rwlock_rdlock(&(ml_main_controller->launcher_array_lock));
 	new_count = ml_main_controller->launcher_count;
