@@ -38,12 +38,16 @@ TARGET_LINK_LIBRARIES(missilelauncher ${LIBUSB_1_LIBRARIES})
 
 ### Installation
 
+set_target_properties(missilelauncher PROPERTIES
+ 	PUBLIC_HEADER "src/libmissilelauncher.h")
+
 # Offer the user the choice of overriding the installation directories
 set(INSTALL_LIBRARY_DIR lib CACHE PATH 
 	"Installation directory for libraries")
 set(INSTALL_INCLUDE_DIR include CACHE PATH
   "Installation directory for header files")
 
+# CMake install dir
 if(WIN32 AND NOT CYGWIN)
   set(DEF_INSTALL_CMAKE_DIR CMake)
 else()
@@ -52,59 +56,17 @@ endif()
 set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH
   "Installation directory for CMake files")
  
-# Make relative paths absolute
-foreach(p LIB INCLUDE CMAKE)
-  set(var INSTALL_${p}_DIR)
-  if(NOT IS_ABSOLUTE "${${var}}")
-    set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
-  endif()
-endforeach()
-
-#configure_file(config.h.in "${CMAKE_CURRENT_BINARY_DIR}/config.h" @ONLY)
- 
-set_target_properties(missilelauncher PROPERTIES
- 	PUBLIC_HEADER "src/libmissilelauncher.h")
- 
-install(TARGETS missilelauncher 
-	EXPORT MissileLauncherTargets
-  DESTINATION "${INSTALL_LIBRARY_DIR}" COMPONENT shlib
-  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}/libmissilelauncher"
-    COMPONENT dev)
-
-	#INSTALL(TARGETS missilelauncher DESTINATION lib)
-	#INSTALL(FILES ${HEADER_FILES} DESTINATION include/libmissilelauncher)
-
-# Add all targets to the build-tree export set
-export(TARGETS missilelauncher
-	FILE "${PROJECT_BINARY_DIR}/libmissilelauncher-targets.cmake")
- 
-# Export the package for use from the build-tree
-# (this registers the build-tree with a global CMake-registry)
-EXPORT(PACKAGE MissileLauncher)
- 
-# Create the libmissilelauncher-config.cmake and Libmissilelauncher-config files
-#EXPORT(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INSTALL_INCLUDE_DIR}")
-# ... for the build tree
-#set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
-#configure_file(libmissilelauncher.cmake.in
-#  "${PROJECT_BINARY_DIR}/libmissilelauncher.cmake" @ONLY)
-
-# ... for the install tree
-#set(CONF_INCLUDE_DIRS "\${LIBMISSILELAUNCHER_CMAKE_DIR}/${REL_INCLUDE_DIR}")
-#configure_file(libmissilelauncher-config.cmake.in
-#  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/libmissilelauncher-config.cmake" @ONLY)
-# ... for both
-
 configure_package_config_file(libmissilelauncher-config.cmake.in 
 	${PROJECT_BINARY_DIR}/libmissilelauncher-config.cmake
   INSTALL_DESTINATION ${LIB_INSTALL_DIR}/libmissilelauncher/cmake
 	PATH_VARS INSTALL_INCLUDE_DIR INSTALL_LIBRARY_DIR)
 
+install(TARGETS missilelauncher 
+  DESTINATION "${INSTALL_LIBRARY_DIR}" COMPONENT shlib
+  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}/libmissilelauncher"
+    COMPONENT dev)
+
 install(FILES
   "${PROJECT_BINARY_DIR}/libmissilelauncher-config.cmake"
   "${PROJECT_BINARY_DIR}/libmissilelauncher-config-version.cmake"
   DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
- 
-# Install the export set for use with the install-tree
-#install(EXPORT MissileLauncherTargets DESTINATION
-# "${INSTALL_CMAKE_DIR}" COMPONENT dev)

@@ -191,7 +191,7 @@ int16_t ml_zero_launcher(ml_launcher_t *launcher) {
     return ML_NOT_IMPLEMENTED;
   }
 
-  TRACE("zeroing\n");
+  TRACE("Zeroing!\n");
 
   // Move to known position then to 0 deg vert and center
   _ml_move_launcher_unsafe(launcher, ML_LEFT, &left_time);
@@ -329,7 +329,7 @@ int16_t _ml_move_launcher_unsafe(ml_launcher_t *launcher,
 int16_t _ml_send_command_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd) {
   uint8_t request_type = 0, request_field = 0;
   uint16_t wValue = 0, wIndex = 0;
-
+	int16_t status = 0;
   switch (launcher->type) {
   case ML_STANDARD_LAUNCHER:
     request_type = ML_REQUEST_TYPE_SEND;
@@ -341,10 +341,14 @@ int16_t _ml_send_command_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd) {
     return ML_NOT_IMPLEMENTED;
   }
 
-  libusb_control_transfer(launcher->usb_handle, request_type, request_field,
+  status = libusb_control_transfer(launcher->usb_handle, request_type, request_field,
                           wValue, wIndex, ml_cmd_arr[cmd], ML_CMD_ARR_SIZE, 0);
-
-  return ML_OK;
+	if (status > 0) {
+		TRACE("Error sending command.\n");
+		return status;
+	} else {
+  	return ML_OK;
+	}
 }
 
 /**

@@ -20,10 +20,6 @@ OBJECTS=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 EXAMPLES=$(patsubst $(SRC_DIR)/%.c,%_example,$(SOURCES))
 TARGETS=$(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%_example,$(SOURCES))
 
-LIBRARY_NAME=lmissilelauncher
-LIBRARY_PATH=$(PWD)/../lib
-INCLUDE_PATH=$(PWD)/../src
-
 .PHONY: all dir clean build
 
 all: dir build
@@ -39,11 +35,7 @@ clean:
 	rm -f $(BIN_DIR)/*_example
 
 # Main Build task
-build: library $(OBJECTS) $(TARGETS)
-
-# Make sure that the library has been built
-library: 
-	cd .. && $(MAKE) release 
+build: $(OBJECTS) $(TARGETS)
 
 # Make objects
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -51,4 +43,4 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 # Make executables
 $(BIN_DIR)/%_example: $(OBJ_DIR)/%.o
-	$(CC) $(CFLAGS) -Wl,-rpath,$(LIBRARY_PATH) -L$(LIBRARY_PATH) -I$(INCLUDE_PATH) -o $@ $< -$(LIBRARY_NAME) -lusb-1.0
+	$(CC) $(CFLAGS) -o $@ $< -lmissilelauncher -lusb-1.0
