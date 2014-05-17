@@ -1,0 +1,22 @@
+#
+#
+#
+#
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(MissileLauncherExamples)
+
+INCLUDE(FindPkgConfig)
+
+#Uncomment to make makefiles verbose
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Wall -Wextra")
+SET(CMAKE_C_FLAGS_DEBUG "-DDEBUG -O0")
+SET(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O3")
+
+# Find Build Deps
+PKG_SEARCH_MODULE(LIBUSB_1 REQUIRED libusb-1.0)
+PKG_SEARCH_MODULE(LIBMISSILELAUNCHER REQUIRED libmissilelauncher)
+
+ADD_SUBDIRECTORY(zeroing)

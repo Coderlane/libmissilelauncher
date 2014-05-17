@@ -6,7 +6,7 @@
  * @date 2014-01-07
  */
 
-#include "../src/libmissilelauncher.h"
+#include <libmissilelauncher/libmissilelauncher.h>
 
 int main() {
   ml_launcher_t **launchers = NULL;

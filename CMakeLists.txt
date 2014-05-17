@@ -18,18 +18,29 @@ WRITE_BASIC_PACKAGE_VERSION_FILE(libmissilelauncher-config-version.cmake
 	VERSION ${LIBMISSILELAUNCHER_VERSION} COMPATIBILITY SameMajorVersion)
 
 #Uncomment to make makefiles verbose
-#set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# Determine the system type
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLINUX")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDARWIN")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWINDOWS")
+else()
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUNKNOWN")
+endif()
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Wall -Wextra")
-SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -DDEBUG -O0")
-SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG -O3")
+SET(CMAKE_C_FLAGS_DEBUG "-DDEBUG -O0")
+SET(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O3")
 
 #Source Code
 ADD_SUBDIRECTORY(src)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 
 # lib 
-ADD_LIBRARY(missilelauncher ${SOURCE_FILES})
+ADD_LIBRARY(missilelauncher SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 # Find Build Deps
 PKG_SEARCH_MODULE(LIBUSB_1 REQUIRED libusb-1.0)
@@ -55,7 +66,16 @@ else()
 endif()
 set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH
   "Installation directory for CMake files")
- 
+
+# CMake install dir
+if(WIN32 AND NOT CYGWIN)
+	set(DEF_INSTALL_PKGCONFIG_DIR pkgconfig)
+else()
+	set(DEF_INSTALL_PKGCONFIG_DIR lib/pkgconfig)
+endif()
+set(INSTALL_PKGCONFIG_DIR ${DEF_INSTALL_PKGCONFIG_DIR} CACHE PATH
+  "Installation directory for pkg-config files")
+
 configure_package_config_file(libmissilelauncher-config.cmake.in 
 	${PROJECT_BINARY_DIR}/libmissilelauncher-config.cmake
   INSTALL_DESTINATION ${LIB_INSTALL_DIR}/libmissilelauncher/cmake
@@ -70,3 +90,7 @@ install(FILES
   "${PROJECT_BINARY_DIR}/libmissilelauncher-config.cmake"
   "${PROJECT_BINARY_DIR}/libmissilelauncher-config-version.cmake"
   DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+
+install(FILES
+	"${PROJECT_SOURCE_DIR}/libmissilelauncher.pc"
+	DESTINATION "${INSTALL_PKGCONFIG_DIR}" COMPONENT dev)
