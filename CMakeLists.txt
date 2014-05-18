@@ -6,15 +6,15 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(MissileLauncher)
 
-INCLUDE(FindPkgConfig)
-INCLUDE(CMakePackageConfigHelpers)
+include(FindPkgConfig)
+include(CMakePackageConfigHelpers)
 
 set(MAJOR_VERSION 0)
 set(MINOR_VERSION 1)
 set(PATCH_VERSION 0)
 set(LIBMISSILELAUNCHER_VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
 
-WRITE_BASIC_PACKAGE_VERSION_FILE(libmissilelauncher-config-version.cmake 
+write_basic_package_version_file(libmissilelauncher-config-version.cmake 
 	VERSION ${LIBMISSILELAUNCHER_VERSION} COMPATIBILITY SameMajorVersion)
 
 #Uncomment to make makefiles verbose
@@ -31,21 +31,21 @@ else()
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUNKNOWN")
 endif()
 
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Wall -Wextra")
-SET(CMAKE_C_FLAGS_DEBUG "-DDEBUG -O0")
-SET(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O3")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Wall -Wextra")
+set(CMAKE_C_FLAGS_DEBUG "-DDEBUG -O0")
+set(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O3")
 
 #Source Code
-ADD_SUBDIRECTORY(src)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
+add_subdirectory(src)
+include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # lib 
-ADD_LIBRARY(missilelauncher SHARED ${SOURCE_FILES} ${HEADER_FILES})
+add_library(missilelauncher SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 # Find Build Deps
-PKG_SEARCH_MODULE(LIBUSB_1 REQUIRED libusb-1.0)
-INCLUDE_DIRECTORIES(${LIBUSB_1_INCLUDE_DIRS})
-TARGET_LINK_LIBRARIES(missilelauncher ${LIBUSB_1_LIBRARIES})
+pkg_search_module(LIBUSB_1 REQUIRED libusb-1.0)
+include_directories(${LIBUSB_1_INCLUDE_DIRS})
+target_link_libraries(missilelauncher ${LIBUSB_1_LIBRARIES})
 
 ### Installation
 
@@ -94,3 +94,17 @@ install(FILES
 install(FILES
 	"${PROJECT_SOURCE_DIR}/libmissilelauncher.pc"
 	DESTINATION "${INSTALL_PKGCONFIG_DIR}" COMPONENT dev)
+
+### CPACK
+include(InstallRequiredSystemLibraries)
+set(CPACK_PACKAGE_NAME "libmissilelauncher")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A library to enable control of some foam missle launchers.")
+set(CPACK_PACKAGE_VENDOR "Travis Lane")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR ${MAJOR_VERSION})
+set(CPACK_PACKAGE_VERSION_MINOR ${MINOR_VERSION})
+set(CPACK_PACKAGE_VERSION_PATCH ${PATCH_VERSION})
+set(CPACK_PACKAGE_VERSION ${LIBMISSILELAUNCHER_VERSION})
+set(CPACK_PACKAGE_CONTACT "Travis Lane")
+INCLUDE(CPack)
