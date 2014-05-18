@@ -11,18 +11,23 @@ This library allows programatic access to some USB foam dart launchers. The libr
 ###Supported Systems
 
 * Linux
-* OSX - Experimental
-* Windows - Experimental
+* OSX - Experimental (Needs Testing) 
+* Windows - Experimental (Needs Work)
 
 ###Requirementes
 
-This library depends on pthreads and libusbx. Thus if you are compiling on windows, you'll need cygwin or simmilar to compile.
+This library depends on libusb-1.0.
 
 ###Instructions
 
-On Linux it should be as easy as just running make and make install.
+Use cmake to generate makefiles for your system. On Linux and OSX it is as easy as:
 
-Work on OSX and Windows is ongoing.
+`
+mkdir release && cd release
+ccmake ..
+`
+
+Work on Windows support is ongoing, however with cygwin it should be the same as Linux or OSX.
 
 ##Examples
 
