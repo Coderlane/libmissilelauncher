@@ -18,7 +18,7 @@ WRITE_BASIC_PACKAGE_VERSION_FILE(libmissilelauncher-config-version.cmake
 	VERSION ${LIBMISSILELAUNCHER_VERSION} COMPATIBILITY SameMajorVersion)
 
 #Uncomment to make makefiles verbose
-set(CMAKE_VERBOSE_MAKEFILE ON)
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Determine the system type
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
