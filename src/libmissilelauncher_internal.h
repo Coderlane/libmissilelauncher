@@ -133,7 +133,8 @@ int16_t _ml_init_launcher(ml_controller_t *, ml_launcher_t *, libusb_device *);
 int16_t _ml_cleanup_launcher(ml_launcher_t **);
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
 // Launcher Control
-int16_t _ml_move_launcher_unsafe(ml_launcher_t *, 
+int16_t _ml_move_launcher_unsafe(ml_launcher_t *, ml_launcher_direction);
+int16_t _ml_move_launcher_time_unsafe(ml_launcher_t *, 
 		ml_launcher_direction, ml_time_t *);
 int16_t _ml_send_command_unsafe(ml_launcher_t *, ml_launcher_cmd);
 // Time Conversions

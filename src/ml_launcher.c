@@ -131,36 +131,48 @@ int16_t ml_dereference_launcher(ml_launcher_t *launcher) {
  * @return A status code
  */
 int16_t ml_fire_launcher(ml_launcher_t *launcher) {
+	int16_t result = 0;
   //pthread_mutex_lock(&(launcher->main_lock));
 
   // TODO implement error checking
-  _ml_send_command_unsafe(launcher, ML_FIRE_CMD);
+  result = _ml_send_command_unsafe(launcher, ML_FIRE_CMD);
 
   //pthread_mutex_unlock(&(launcher->main_lock));
-  return ML_OK;
+  return result;
 }
 
 /**
- * @brief Moves the launcher in the specified direction, x degrees
+ * @brief Stop moving the launcher.
+ *
+ * @param launcher The launcher to stop. 
+ *
+ * @return A status code.
+ */
+int16_t ml_stop_launcher(ml_launcher_t *launcher) {
+	int16_t result = 0;
+
+	result = _ml_send_command_unsafe(launcher, ML_STOP_CMD);
+
+	return result;
+}
+
+/**
+ * @brief Moves the launcher in the specified direction
  *
  * @param launcher The launcher to move
  * @param direction The specified direction
- * @param degrees The number of degrees to move the launcher.
  *
  * @return A status code
  */
 int16_t ml_move_launcher(ml_launcher_t *launcher,
-                         ml_launcher_direction direction, uint16_t degrees) {
-
-  ml_time_t time;
-
+                         ml_launcher_direction direction) {
+	int16_t result = 0;
   //pthread_mutex_lock(&(launcher->main_lock));
 
-  _ml_degrees_to_time(degrees, &time);
-  _ml_move_launcher_unsafe(launcher, direction, &time);
+	result = _ml_move_launcher_unsafe(launcher, direction);
 
   //pthread_mutex_unlock(&(launcher->main_lock));
-  return ML_NOT_IMPLEMENTED;
+  return result;
 }
 
 /**
@@ -194,10 +206,10 @@ int16_t ml_zero_launcher(ml_launcher_t *launcher) {
   TRACE("Zeroing!\n");
 
   // Move to known position then to 0 deg vert and center
-  _ml_move_launcher_unsafe(launcher, ML_LEFT, &left_time);
-  _ml_move_launcher_unsafe(launcher, ML_DOWN, &down_time);
-  _ml_move_launcher_unsafe(launcher, ML_RIGHT, &right_time);
-  _ml_move_launcher_unsafe(launcher, ML_UP, &up_time);
+  _ml_move_launcher_time_unsafe(launcher, ML_LEFT, &left_time);
+  _ml_move_launcher_time_unsafe(launcher, ML_DOWN, &down_time);
+  _ml_move_launcher_time_unsafe(launcher, ML_RIGHT, &right_time);
+  _ml_move_launcher_time_unsafe(launcher, ML_UP, &up_time);
 
   //pthread_mutex_unlock(&(launcher->main_lock));
   return ML_OK;
@@ -279,7 +291,7 @@ int16_t ml_move_launcher_mseconds(ml_launcher_t *launcher,
   //pthread_mutex_lock(&(launcher->main_lock));
 
   _ml_mseconds_to_time(mseconds, &time);
-  result = _ml_move_launcher_unsafe(launcher, direction, &time);
+  result = _ml_move_launcher_time_unsafe(launcher, direction, &time);
 
   //pthread_mutex_unlock(&(launcher->main_lock));
   return result;
@@ -295,16 +307,17 @@ int16_t ml_move_launcher_mseconds(ml_launcher_t *launcher,
  *
  * @return A status code
  */
-int16_t _ml_move_launcher_unsafe(ml_launcher_t *launcher,
+int16_t _ml_move_launcher_time_unsafe(ml_launcher_t *launcher,
                                  ml_launcher_direction direction,
                                  ml_time_t *time) {
 
   int16_t result = 0;
 
   // Start movement
-  result = _ml_send_command_unsafe(launcher, (ml_launcher_cmd)direction);
-  if (result != ML_OK)
+  result = _ml_move_launcher_unsafe(launcher, direction);
+  if (result != ML_OK) {
     return result;
+	}
   // Sleep the set amount of time
   ml_second_sleep(time->seconds);
   ml_msecond_sleep(time->mseconds);
@@ -314,6 +327,11 @@ int16_t _ml_move_launcher_unsafe(ml_launcher_t *launcher,
   ml_msecond_sleep(200);
 
   return result;
+}
+
+int16_t _ml_move_launcher_unsafe(ml_launcher_t *launcher, 
+		ml_launcher_direction direction) {
+  return _ml_send_command_unsafe(launcher, (ml_launcher_cmd)direction);
 }
 
 /**
@@ -380,7 +398,10 @@ int16_t _ml_mseconds_to_time(uint32_t mseconds, ml_time_t *time) {
  */
 int16_t _ml_degrees_to_time(uint16_t degrees, ml_time_t *time) {
   time->mseconds = 0;
-  time->seconds = 0;
+	// Silence warning
+  time->seconds = degrees;
+	time->seconds = 0;
+
   return ML_NOT_IMPLEMENTED;
 }
 
@@ -402,20 +423,3 @@ ml_launcher_type ml_get_launcher_type(ml_launcher_t *launcher) {
   //pthread_mutex_unlock(&(launcher->main_lock));
   return type;
 }
-
-/*
-int16_t _ml_start_launcher_tread(ml_launcher_t *launcher) {
-
- return ML_NOT_IMPLEMENTED;
-}
-
-int16_t _ml_stop_launcher_tread(ml_launcher_t *launcher) {
-
- return ML_NOT_IMPLEMENTED;
-}
-
-void *_ml_launcher_thread_task(void *launcher_arg) {
-
- return NULL;
-}
-*/
