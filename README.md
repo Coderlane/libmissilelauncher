@@ -20,14 +20,13 @@ This library depends on libusb-1.0.
 
 ###Instructions
 
-Use cmake to generate makefiles for your system. On Linux and OSX it is as easy as:
+Use cmake to generate makefiles for your system. On Linux, OSX, and Cygwin it is as easy as:
 
-`
-mkdir release && cd release
-ccmake ..
-`
+      mkdir release && cd release
+      ccmake .. # Configure to your desire
 
-Work on Windows support is ongoing, however with cygwin it should be the same as Linux or OSX.
+On Linux and Cygwin you can use cpack to make a nice distributable. 
+I'm working on support for Windows and OSX. Run cpack --help for more info on cpack options.
 
 ##Examples
 
