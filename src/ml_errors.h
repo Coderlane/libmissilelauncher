@@ -2,8 +2,8 @@
  * @file ml_errors.h
  * @brief All errors used in the library. 
  * @author Travis Lane
- * @version 0.1.0
- * @date 2013-12-14
+ * @version 0.2.0
+ * @date 2014-05-18
  */
 
 #ifndef ML_ERRORS_H

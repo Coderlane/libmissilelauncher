@@ -1,8 +1,11 @@
-/* File: tlib_debug.h
- * Generic debugging definitions
- * Author: Travis Lane
- * Last Modified Aug 23rd, 2013
+/**
+ * @file tlib_debug.h
+ * @brief Debugging functions.
+ * @author Travis Lane
+ * @version 0.2.0
+ * @date 2014-05-18
  */
+
 
 #ifndef TLIB_DEBUG_H
 #define TLIB_DEBUG_H

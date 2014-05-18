@@ -2,8 +2,8 @@
  * @file ml_controller.c
  * @brief Functions releated to the launcher controller
  * @author Travis Lane
- * @version 0.1.0
- * @date 2013-12-31
+ * @version 0.2.0
+ * @date 2014-05-18
  */
 
 #include "libmissilelauncher_internal.h"
@@ -12,7 +12,7 @@
  * @brief Initializes the library.
  * This function must be called before all others.
  *
- * @return A status code
+ * @return A status code.
  */
 int16_t ml_init_library() {
 	int init_result;
@@ -65,11 +65,11 @@ int16_t ml_init_library() {
 }
 
 /**
- * @brief initializes a controller
+ * @brief initializes a controller.
  *
- * @param controller The controller to initialize
+ * @param controller The controller to initialize.
  *
- * @return A status code
+ * @return A status code.
  */
 int16_t _ml_init_controller(ml_controller_t *controller) {
 	if (controller->control_initialized) {
@@ -97,9 +97,9 @@ int16_t _ml_init_controller(ml_controller_t *controller) {
 }
 
 /**
- * @brief Cleans up the library when you are done
+ * @brief Cleans up the library when you are done.
  *
- * @return A status code
+ * @return A status code.
  */
 int16_t ml_cleanup_library() {
 	int16_t failed = 0;
@@ -125,11 +125,11 @@ int16_t ml_cleanup_library() {
 }
 
 /**
- * @brief Cleans up the controller when the library is done
+ * @brief Cleans up the controller when the library is done.
  *
- * @param controller The controller to clean up
+ * @param controller The controller to clean up.
  *
- * @return A status code
+ * @return A status code.
  */
 int16_t _ml_cleanup_controller(ml_controller_t *controller) {
 	ml_launcher_t *cur_launcher = NULL;
@@ -169,7 +169,7 @@ int16_t _ml_cleanup_controller(ml_controller_t *controller) {
 }
 
 /**
- * @brief Checks to see if the library is currently initialized
+ * @brief Checks to see if the library is currently initialized.
  *
  * @return 0 - false 1 - true
  */
@@ -187,20 +187,14 @@ uint8_t ml_is_library_init() {
 	return result;
 }
 
+
 /**
- * @brief Starts continuous polling in a safe manner
+ * @brief Polls for new launchers.
  *
- * @return A status code
+ * @param cont The controller to poll.
  *
- int16_t ml_start_continuous_poll() {
- if (ml_is_library_init() == 0)
- return ML_LIBRARY_NOT_INIT;
-
-// Try to start polling
-return _ml_start_poll_unsafe();
-}*/
-
-
+ * @return A status code.
+ */
 int16_t _ml_poll_for_launchers(ml_controller_t *cont) {
 	int device_count = 0;
 	int16_t status = 0;
@@ -217,9 +211,9 @@ int16_t _ml_poll_for_launchers(ml_controller_t *cont) {
  * For now we only support:
  * Thunder Launchers - ML_STANDARD_LAUNCHER
  *
- * @param desc The USB device descriptro
+ * @param desc The USB device descriptor.
  *
- * @return They type of launcher or ML_NOT_LAUNCHER if it isn't a launcher
+ * @return They type of launcher or ML_NOT_LAUNCHER if it isn't a launcher.
  */
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *desc) {
 	if (desc->idProduct == ML_STD_PRODUCT_ID &&
@@ -235,10 +229,11 @@ uint8_t _ml_catagorize_device(struct libusb_device_descriptor *desc) {
  * removed.
  * If any devices were added or removed we update the array.
  *
- * @param devices The devices libusb found
- * @param device_count the number of devices found
+ * @param cont The active controller.
+ * @param devices The devices libusb found.
+ * @param device_count the number of devices found.
  *
- * @return A status code, ML_OK if everything went well
+ * @return A status code, ML_OK if everything went well.
  */
 int16_t _ml_update_launchers(ml_controller_t *cont, 
 		struct libusb_device **devices, int device_count) {
@@ -272,7 +267,7 @@ int16_t _ml_update_launchers(ml_controller_t *cont,
  * @param found_launchers The launchers detected.
  * @param found_launchers_count The number of launchers detected.
  *
- * @return A status code
+ * @return A status code.
  */
 int16_t _ml_get_launchers_from_devices(libusb_device **devices,
 		int device_count,
@@ -316,13 +311,12 @@ int16_t _ml_get_launchers_from_devices(libusb_device **devices,
 /**
  * @brief Sets launchers that have been removed as such and frees them if
  * proper.
- * Don't use this function without locking the launcher_array_lock for writing
- * first.
  *
- * @param found_launchers An array of libusb_devices which are all launchers
- * @param found_launchers_count The number of launchers in the array
+ * @param cont The active controller.
+ * @param found_launchers An array of libusb_devices which are all launchers.
+ * @param found_launchers_count The number of launchers in the array.
  *
- * @return A status code
+ * @return A status code.
  */
 int16_t _ml_remove_disconnected_launchers(ml_controller_t *cont,
 		libusb_device **found_launchers, uint32_t found_launchers_count) {
@@ -376,13 +370,12 @@ int16_t _ml_remove_disconnected_launchers(ml_controller_t *cont,
 
 /**
  * @brief Adds new launchers to the main array.
- * Don't use this function without locking the launcher_array_lock for writing
- * first.
  *
- * @param found_launchers The launchers found previously
- * @param found_launchers_count The number of launchers found
+ * @param cont The active controller.
+ * @param found_launchers The launchers found previously.
+ * @param found_launchers_count The number of launchers found.
  *
- * @return A status code
+ * @return A status code.
  */
 int16_t _ml_add_new_launchers(ml_controller_t *cont, 
 		libusb_device **found_launchers, uint32_t *found_launchers_count) {
@@ -436,8 +429,8 @@ int16_t _ml_add_new_launchers(ml_controller_t *cont,
  * NOTE: if you don't want to lose access to a launcher use
  * ml_reference_launcher and ml_dereference_launcher when you are done.
  *
- * @param new_arr Pointer to where you want the array
- * @param count The number of items found
+ * @param new_arr Pointer to where you want the array.
+ * @param count The number of items found.
  *
  * @return A status code, ML_OK if everything went well.
  */
@@ -505,9 +498,9 @@ int16_t ml_get_launcher_array(ml_launcher_t ***new_arr, uint32_t *count) {
  * NOTE: if you don't want to lose access to a launcher use
  * ml_reference_launcher and ml_dereference_launcher when you are done.
  *
- * @param free_arr The array to free
+ * @param free_arr The array to free.
  *
- * @return A status code
+ * @return A status code.
  */
 int16_t ml_free_launcher_array(ml_launcher_t **free_arr) {
 	ml_launcher_t *cur_launcher = NULL;
@@ -529,10 +522,10 @@ int16_t ml_free_launcher_array(ml_launcher_t **free_arr) {
 }
 
 /**
- * @brief Removes a launcher from the array. Be sure to lock the array for
- * writing first
+ * @brief Removes a launcher from the array. 
  *
- * @param launcher The launcher to remove
+ * @param cont The active controller.
+ * @param launcher The launcher to remove.
  *
  * @return A status value, ML_OK if it is okay.
  */
@@ -549,10 +542,10 @@ int16_t _ml_remove_launcher(ml_controller_t *cont, ml_launcher_t *launcher) {
 }
 
 /**
- * @brief Removes a launcher from the array. Be sure to lock the array for
- * writing first
+ * @brief Removes a launcher from the array.
  *
- * @param index The index of the item to remove
+ * @param cont The active controller.
+ * @param index The index of the item to remove.
  *
  * @return A status value, ML_OK if it is okay.
  */
@@ -579,12 +572,12 @@ int16_t _ml_remove_launcher_index(ml_controller_t *cont, int16_t index) {
 }
 
 /**
- * @brief adds a launcher to the array. Be sure to lock the array for writing
- * first
+ * @brief adds a launcher to the array.
  *
- * @param launcher The item to add
+ * @param cont The active controller.
+ * @param launcher The item to add.
  *
- * @return A status value, ML_OK if it is okay
+ * @return A status value, ML_OK if it is okay.
  */
 int16_t _ml_add_launcher(ml_controller_t *cont, ml_launcher_t *launcher) {
 	/* This function is not thread safe, please lock the array first */
@@ -601,13 +594,13 @@ int16_t _ml_add_launcher(ml_controller_t *cont, ml_launcher_t *launcher) {
 }
 
 /**
- * @brief adds a launcher to the array. Be sure to lock the array for writing
- * first
+ * @brief adds a launcher to the array.
  *
- * @param launcher The launcher to add
- * @param index The index to insert it in
+ * @param cont The active controller.
+ * @param launcher The launcher to add.
+ * @param index The index to insert it in.
  *
- * @return A status code, ML_OK if it is okay
+ * @return A status code, ML_OK if it is okay.
  */
 int16_t _ml_add_launcher_index(ml_controller_t *cont,
 		ml_launcher_t *launcher, int16_t index) {
