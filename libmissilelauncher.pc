@@ -5,7 +5,7 @@ libdir=${exec_prefix}/lib
 
 Name: libmissilelauncher
 Description: A simple library to control some usb foam missile launchers
-Version: 0.1.0
-Requires.private: libusb-1.0 >= 1.0.17
+Version: 0.2.0
+Requires: libusb-1.0 >= 1.0.17
 Cflags: -I${includedir}
 Libs: -L${libdir} -lmissilelauncher
