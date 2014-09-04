@@ -68,8 +68,10 @@ typedef enum ml_error_codes {
 	ML_ALLOC_FAILED,///< An allocate failed. Having memory issues?
 	ML_LAUNCHER_ARRAY_INCONSISTENT,///< The launcher array is in an inconsisten state. This is the library's fault. Please file a bug report.
 	ML_NULL_POINTER,///< A requred pointer was null.
-	ML_NO_LAUNCHERS///< No launchers were detected.
+	ML_NO_LAUNCHERS,///< No launchers were detected.
+	ML_LAUNCHER_OPEN///< Launcher already open.
 } ml_error_codes;
+
 
 // ********** API Functions **********
 // Library init
