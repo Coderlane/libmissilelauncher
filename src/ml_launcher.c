@@ -6,7 +6,11 @@
  * @date 2014-05-18
  */
 
-#include "libmissilelauncher_internal.h"
+#include <stdint.h>
+#include <stdlib.h>
+
+#include <libmissilelauncher.h>
+#include <libmissilelauncher_internal.h>
 
 /**
  * @brief Initializes a newly connected launcher.
@@ -18,23 +22,23 @@
  * @return A status code.
  */
 int16_t _ml_init_launcher(ml_controller_t *controller,
-		ml_launcher_t *launcher, libusb_device *device) {
+                          ml_launcher_t *launcher, libusb_device *device)
+{
 
-	struct libusb_device_descriptor desc;
-	
-	if (launcher == NULL) {
-		TRACE("Launcher was null. _ml_init_launcher\n");
-		return ML_NULL_LAUNCHER;
-	}
-	libusb_get_device_descriptor(device, &desc);
+  struct libusb_device_descriptor desc;
 
-	launcher->type = _ml_catagorize_device(&desc);
-	launcher->usb_device = device;
-	launcher->ref_count = 0;
-	launcher->device_connected = 1;
-	launcher->controller = controller;
-	
-	return ML_OK;
+  if (launcher == NULL) {
+    return ML_NULL_LAUNCHER;
+  }
+  libusb_get_device_descriptor(device, &desc);
+
+  launcher->type = _ml_catagorize_device(&desc);
+  launcher->usb_device = device;
+  launcher->ref_count = 0;
+  launcher->device_connected = 1;
+  launcher->controller = controller;
+
+  return ML_OK;
 }
 
 /**
@@ -45,55 +49,54 @@ int16_t _ml_init_launcher(ml_controller_t *controller,
  *
  * @return A status code.
  */
-int16_t _ml_cleanup_launcher(ml_launcher_t **launcher) {
-	if ((*launcher) == NULL) {
-		TRACE("Launcher was null. _ml_cleanup_launcher\n");
-		return ML_NULL_LAUNCHER;
-	}
+int16_t _ml_cleanup_launcher(ml_launcher_t **launcher)
+{
+  if ((*launcher) == NULL) {
+    return ML_NULL_LAUNCHER;
+  }
 
 
-	free((*launcher));
-	launcher = NULL;
-	return ML_OK;
+  free((*launcher));
+  launcher = NULL;
+  return ML_OK;
 }
 
-int16_t ml_usb_open_launcher(ml_launcher_t *launcher) {
-	int status;
+int16_t ml_usb_open_launcher(ml_launcher_t *launcher)
+{
+  int status;
 
-	if(launcher->is_open) {
-		WARNING("Launcher was already open.\n");
-		return 1;
-	}
+  if(launcher->is_open) {
+    return 1;
+  }
 
-	status = libusb_open(launcher->usb_device, &(launcher->usb_handle));
-	if(status != 0) {
-		WARNING("Failed to open device descriptor, do you have permissions?\n");
-		TRACE("Error Code: %d\n", status);
-		return status;
-	}
+  status = libusb_open(launcher->usb_device, &(launcher->usb_handle));
+  if(status != 0) {
+    return status;
+  }
 #ifdef LINUX
-	// Linux needs some workarounds
-	status = libusb_kernel_driver_active(launcher->usb_handle, 0);
-	if(status == 1) {
-		libusb_detach_kernel_driver(launcher->usb_handle, 0);
-	}
-	libusb_claim_interface(launcher->usb_handle, 0);
+  // Linux needs some workarounds
+  status = libusb_kernel_driver_active(launcher->usb_handle, 0);
+  if(status == 1) {
+    libusb_detach_kernel_driver(launcher->usb_handle, 0);
+  }
+  libusb_claim_interface(launcher->usb_handle, 0);
 #endif
 
-	return ML_OK;
+  return ML_OK;
 }
 
-int16_t ml_usb_close_launcher(ml_launcher_t *launcher) {
-	if(!(launcher->is_open)) {
-		goto out;
-	}	
+int16_t ml_usb_close_launcher(ml_launcher_t *launcher)
+{
+  if(!(launcher->is_open)) {
+    goto out;
+  }
 #ifdef LINUX
-	libusb_release_interface(launcher->usb_handle, 0);
+  libusb_release_interface(launcher->usb_handle, 0);
 #endif
-	libusb_close(launcher->usb_handle);
+  libusb_close(launcher->usb_handle);
 out:
-	launcher->is_open = 0;
-	return ML_OK;
+  launcher->is_open = 0;
+  return ML_OK;
 }
 
 /**
@@ -109,15 +112,15 @@ out:
  *
  * @return A status code.
  */
-int16_t ml_reference_launcher(ml_launcher_t *launcher) {
-	if (launcher == NULL) {
-		TRACE("Launcher was null. ml_refrence_launcher\n");
-		return ML_NULL_LAUNCHER;
-	}
-	//pthread_mutex_lock(&(launcher->main_lock));
-	launcher->ref_count += 1;
-	//pthread_mutex_unlock(&(launcher->main_lock));
-	return ML_OK;
+int16_t ml_reference_launcher(ml_launcher_t *launcher)
+{
+  if (launcher == NULL) {
+    return ML_NULL_LAUNCHER;
+  }
+  //pthread_mutex_lock(&(launcher->main_lock));
+  launcher->ref_count += 1;
+  //pthread_mutex_unlock(&(launcher->main_lock));
+  return ML_OK;
 }
 
 /**
@@ -129,20 +132,20 @@ int16_t ml_reference_launcher(ml_launcher_t *launcher) {
  *
  * @return A status code.
  */
-int16_t ml_dereference_launcher(ml_launcher_t *launcher) {
-	if (launcher == NULL) {
-		TRACE("Launcher was null. ml_derefrence_launcher\n");
-		return ML_NULL_LAUNCHER;
-	}
-	//pthread_mutex_lock(&(launcher->main_lock));
-	launcher->ref_count -= 1;
-	if (launcher->ref_count == 0 && launcher->device_connected == 0) {
-		// Not connected and not refrenced
-		_ml_remove_launcher(launcher->controller, launcher);
-		_ml_cleanup_launcher(&launcher);
-	}
-	//pthread_mutex_unlock(&(launcher->main_lock));
-	return ML_OK;
+int16_t ml_dereference_launcher(ml_launcher_t *launcher)
+{
+  if (launcher == NULL) {
+    return ML_NULL_LAUNCHER;
+  }
+  //pthread_mutex_lock(&(launcher->main_lock));
+  launcher->ref_count -= 1;
+  if (launcher->ref_count == 0 && launcher->device_connected == 0) {
+    // Not connected and not refrenced
+    _ml_remove_launcher(launcher->controller, launcher);
+    _ml_cleanup_launcher(&launcher);
+  }
+  //pthread_mutex_unlock(&(launcher->main_lock));
+  return ML_OK;
 }
 
 /**
@@ -152,41 +155,43 @@ int16_t ml_dereference_launcher(ml_launcher_t *launcher) {
  *
  * @return A status code.
  */
-int16_t ml_fire_launcher(ml_launcher_t *launcher) {
-	int16_t result = 0;
-	
-	result = ml_usb_open_launcher(launcher);
-	if(result != ML_OK) {
-		goto out;
-	}
-	// TODO implement error checking
-	result = _ml_send_command_unsafe(launcher, ML_FIRE_CMD);
+int16_t ml_fire_launcher(ml_launcher_t *launcher)
+{
+  int16_t result = 0;
+
+  result = ml_usb_open_launcher(launcher);
+  if(result != ML_OK) {
+    goto out;
+  }
+  // TODO implement error checking
+  result = _ml_send_command_unsafe(launcher, ML_FIRE_CMD);
 
 out:
-	ml_usb_close_launcher(launcher);
-	return result;
+  ml_usb_close_launcher(launcher);
+  return result;
 }
 
 /**
  * @brief Stop moving the launcher.
  *
- * @param launcher The launcher to stop. 
+ * @param launcher The launcher to stop.
  *
  * @return A status code.
  */
-int16_t ml_stop_launcher(ml_launcher_t *launcher) {
-	int16_t result = 0;
+int16_t ml_stop_launcher(ml_launcher_t *launcher)
+{
+  int16_t result = 0;
 
-	result = ml_usb_open_launcher(launcher);
-	if(result != ML_OK) {
-		goto out;
-	}	
-	
-	result = _ml_send_command_unsafe(launcher, ML_STOP_CMD);
+  result = ml_usb_open_launcher(launcher);
+  if(result != ML_OK) {
+    goto out;
+  }
+
+  result = _ml_send_command_unsafe(launcher, ML_STOP_CMD);
 
 out:
-	ml_usb_close_launcher(launcher);
-	return result;
+  ml_usb_close_launcher(launcher);
+  return result;
 }
 
 /**
@@ -198,19 +203,20 @@ out:
  * @return A status code.
  */
 int16_t ml_move_launcher(ml_launcher_t *launcher,
-		ml_launcher_direction direction) {
-	int16_t result = 0;
+                         ml_launcher_direction direction)
+{
+  int16_t result = 0;
 
-	result = ml_usb_open_launcher(launcher);
-	if(result != ML_OK) {
-		goto out;
-	}
+  result = ml_usb_open_launcher(launcher);
+  if(result != ML_OK) {
+    goto out;
+  }
 
-	result = _ml_move_launcher_unsafe(launcher, direction);
-	
+  result = _ml_move_launcher_unsafe(launcher, direction);
+
 out:
-	ml_usb_close_launcher(launcher);
-	return result;
+  ml_usb_close_launcher(launcher);
+  return result;
 }
 
 /**
@@ -221,42 +227,40 @@ out:
  *
  * @return A status code.
  */
-int16_t ml_zero_launcher(ml_launcher_t *launcher) {
-	ml_time_t left_time, down_time, right_time, up_time;
-	int result = ML_OK;
+int16_t ml_zero_launcher(ml_launcher_t *launcher)
+{
+  ml_time_t left_time, down_time, right_time, up_time;
+  int result = ML_OK;
 
-	result = ml_usb_open_launcher(launcher);
-	if(result != ML_OK) {
-		goto out;
-	}
-	TRACE("Starting to zero\n");
+  result = ml_usb_open_launcher(launcher);
+  if(result != ML_OK) {
+    goto out;
+  }
 
-	//pthread_mutex_lock(&(launcher->main_lock));
+  //pthread_mutex_lock(&(launcher->main_lock));
 
-	switch (launcher->type) {
-		case ML_STANDARD_LAUNCHER:
-			// Setup movement constants
-			_ml_mseconds_to_time(6000, &left_time); // Correct
-			_ml_mseconds_to_time(2000, &down_time); // Correct
-			_ml_mseconds_to_time(2750, &right_time);
-			_ml_mseconds_to_time(100, &up_time); // Correct
-			break;
-		default:
-			TRACE("Unknown type.\n");
-			return ML_NOT_IMPLEMENTED;
-	}
+  switch (launcher->type) {
+  case ML_STANDARD_LAUNCHER:
+    // Setup movement constants
+    _ml_mseconds_to_time(6000, &left_time); // Correct
+    _ml_mseconds_to_time(2000, &down_time); // Correct
+    _ml_mseconds_to_time(2750, &right_time);
+    _ml_mseconds_to_time(100, &up_time); // Correct
+    break;
+  default:
+    return ML_NOT_IMPLEMENTED;
+  }
 
-	TRACE("Zeroing!\n");
 
-	// Move to known position then to 0 deg vert and center
-	_ml_move_launcher_time_unsafe(launcher, ML_LEFT, &left_time);
-	_ml_move_launcher_time_unsafe(launcher, ML_DOWN, &down_time);
-	_ml_move_launcher_time_unsafe(launcher, ML_RIGHT, &right_time);
-	_ml_move_launcher_time_unsafe(launcher, ML_UP, &up_time);
+  // Move to known position then to 0 deg vert and center
+  _ml_move_launcher_time_unsafe(launcher, ML_LEFT, &left_time);
+  _ml_move_launcher_time_unsafe(launcher, ML_DOWN, &down_time);
+  _ml_move_launcher_time_unsafe(launcher, ML_RIGHT, &right_time);
+  _ml_move_launcher_time_unsafe(launcher, ML_UP, &up_time);
 
 out:
-	ml_usb_close_launcher(launcher);
-	return result;
+  ml_usb_close_launcher(launcher);
+  return result;
 }
 
 /**
@@ -266,21 +270,22 @@ out:
  *
  * @return A status code.
  */
-int16_t ml_led_on(ml_launcher_t *launcher) {
-	int16_t result = 0;
+int16_t ml_led_on(ml_launcher_t *launcher)
+{
+  int16_t result = 0;
 
-	result = ml_usb_open_launcher(launcher);
-	if(result != ML_OK) {
-		goto out;
-	}
+  result = ml_usb_open_launcher(launcher);
+  if(result != ML_OK) {
+    goto out;
+  }
 
-	// TODO implement error checking
-	result = _ml_send_command_unsafe(launcher, ML_LED_ON_CMD);
-	launcher->led_status = 1;
+  // TODO implement error checking
+  result = _ml_send_command_unsafe(launcher, ML_LED_ON_CMD);
+  launcher->led_status = 1;
 
 out:
-	ml_usb_close_launcher(launcher);
-	return result;
+  ml_usb_close_launcher(launcher);
+  return result;
 }
 
 /**
@@ -290,21 +295,22 @@ out:
  *
  * @return A status code.
  */
-int16_t ml_led_off(ml_launcher_t *launcher) {
-	int16_t result = 0;
+int16_t ml_led_off(ml_launcher_t *launcher)
+{
+  int16_t result = 0;
 
-	result = ml_usb_open_launcher(launcher);
-	if(result != ML_OK) {
-		goto out;
-	}
+  result = ml_usb_open_launcher(launcher);
+  if(result != ML_OK) {
+    goto out;
+  }
 
-	// TODO implement error checking
-	result = _ml_send_command_unsafe(launcher, ML_LED_OFF_CMD);
-	launcher->led_status = 0;
+  // TODO implement error checking
+  result = _ml_send_command_unsafe(launcher, ML_LED_OFF_CMD);
+  launcher->led_status = 0;
 
 out:
-	ml_usb_close_launcher(launcher);
-	return result;
+  ml_usb_close_launcher(launcher);
+  return result;
 }
 
 /**
@@ -314,12 +320,13 @@ out:
  *
  * @return 1 = on 0 = off
  */
-uint8_t ml_get_led_stat(ml_launcher_t *launcher) {
-	uint8_t status = 0;
+uint8_t ml_get_led_stat(ml_launcher_t *launcher)
+{
+  uint8_t status = 0;
 
-	status = launcher->led_status;
+  status = launcher->led_status;
 
-	return status;
+  return status;
 }
 
 /**
@@ -334,23 +341,24 @@ uint8_t ml_get_led_stat(ml_launcher_t *launcher) {
  * @return A status code.
  */
 int16_t ml_move_launcher_mseconds(ml_launcher_t *launcher,
-		ml_launcher_direction direction,
-		uint32_t mseconds) {
+                                  ml_launcher_direction direction,
+                                  uint32_t mseconds)
+{
 
-	int16_t result = 0;
-	ml_time_t time;
+  int16_t result = 0;
+  ml_time_t time;
 
-	result = ml_usb_open_launcher(launcher);
-	if(result != ML_OK) {
-		goto out;
-	}
+  result = ml_usb_open_launcher(launcher);
+  if(result != ML_OK) {
+    goto out;
+  }
 
-	_ml_mseconds_to_time(mseconds, &time);
-	result = _ml_move_launcher_time_unsafe(launcher, direction, &time);
+  _ml_mseconds_to_time(mseconds, &time);
+  result = _ml_move_launcher_time_unsafe(launcher, direction, &time);
 
 out:
-	ml_usb_close_launcher(launcher);
-	return result;
+  ml_usb_close_launcher(launcher);
+  return result;
 }
 
 /**
@@ -363,30 +371,32 @@ out:
  * @return A status code
  */
 int16_t _ml_move_launcher_time_unsafe(ml_launcher_t *launcher,
-		ml_launcher_direction direction,
-		ml_time_t *time) {
+                                      ml_launcher_direction direction,
+                                      ml_time_t *time)
+{
 
-	int16_t result = 0;
+  int16_t result = 0;
 
-	result = _ml_move_launcher_unsafe(launcher, direction);
-	if (result != ML_OK) {
-		goto out;
-	}
-	// Sleep the set amount of time
-	ml_second_sleep(time->seconds);
-	ml_msecond_sleep(time->mseconds);
-	// Stop movement
-	result = _ml_send_command_unsafe(launcher, ML_STOP_CMD);
-	// Wait for device to stop coasting
-	ml_msecond_sleep(200);
+  result = _ml_move_launcher_unsafe(launcher, direction);
+  if (result != ML_OK) {
+    goto out;
+  }
+  // Sleep the set amount of time
+  ml_second_sleep(time->seconds);
+  ml_msecond_sleep(time->mseconds);
+  // Stop movement
+  result = _ml_send_command_unsafe(launcher, ML_STOP_CMD);
+  // Wait for device to stop coasting
+  ml_msecond_sleep(200);
 
 out:
-	return result;
+  return result;
 }
 
-int16_t _ml_move_launcher_unsafe(ml_launcher_t *launcher, 
-		ml_launcher_direction direction) {
-	return _ml_send_command_unsafe(launcher, (ml_launcher_cmd)direction);
+int16_t _ml_move_launcher_unsafe(ml_launcher_t *launcher,
+                                 ml_launcher_direction direction)
+{
+  return _ml_send_command_unsafe(launcher, (ml_launcher_cmd)direction);
 }
 
 /**
@@ -398,30 +408,30 @@ int16_t _ml_move_launcher_unsafe(ml_launcher_t *launcher,
  *
  * @return A status code.
  */
-int16_t _ml_send_command_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd) {
-	uint8_t request_type = 0, request_field = 0;
-	uint16_t wValue = 0, wIndex = 0;
-	int16_t status = 0;
-	switch (launcher->type) {
-		case ML_STANDARD_LAUNCHER:
-			request_type = ML_REQUEST_TYPE_SEND;
-			request_field = ML_REQUEST_FIELD_SEND;
-			wValue = 0;
-			wIndex = 0;
-			break;
-		default:
-			return ML_NOT_IMPLEMENTED;
-	}
+int16_t _ml_send_command_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd)
+{
+  uint8_t request_type = 0, request_field = 0;
+  uint16_t wValue = 0, wIndex = 0;
+  int16_t status = 0;
+  switch (launcher->type) {
+  case ML_STANDARD_LAUNCHER:
+    request_type = ML_REQUEST_TYPE_SEND;
+    request_field = ML_REQUEST_FIELD_SEND;
+    wValue = 0;
+    wIndex = 0;
+    break;
+  default:
+    return ML_NOT_IMPLEMENTED;
+  }
 
-	status = libusb_control_transfer(launcher->usb_handle, request_type, request_field,
-			wValue, wIndex, ml_cmd_arr[cmd], ML_CMD_ARR_SIZE, 0);
-	if (status < 0) {
-		WARNING("Error sending command.\n");
-		TRACE("Error Code: %d\n", status);
-		return status;
-	} else {
-		return ML_OK;
-	}
+  status = libusb_control_transfer(launcher->usb_handle, request_type,
+                                   request_field,
+                                   wValue, wIndex, ml_cmd_arr[cmd], ML_CMD_ARR_SIZE, 0);
+  if (status < 0) {
+    return status;
+  } else {
+    return ML_OK;
+  }
 }
 
 /**
@@ -432,13 +442,15 @@ int16_t _ml_send_command_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd) {
  *
  * @return A status code.
  */
-int16_t _ml_mseconds_to_time(uint32_t mseconds, ml_time_t *time) {
-	if (time == NULL)
-		return ML_NULL_POINTER;
-	// Time conversion
-	time->seconds = (mseconds / 1000);                  // Get the seconds
-	time->mseconds = mseconds - (time->seconds * 1000); // Get leftovers
-	return ML_OK;
+int16_t _ml_mseconds_to_time(uint32_t mseconds, ml_time_t *time)
+{
+  if (time == NULL) {
+    return ML_NULL_POINTER;
+  }
+  // Time conversion
+  time->seconds = (mseconds / 1000);                  // Get the seconds
+  time->mseconds = mseconds - (time->seconds * 1000); // Get leftovers
+  return ML_OK;
 }
 
 /**
@@ -450,13 +462,14 @@ int16_t _ml_mseconds_to_time(uint32_t mseconds, ml_time_t *time) {
  *
  * @return A status code.
  */
-int16_t _ml_degrees_to_time(uint16_t degrees, ml_time_t *time) {
-	time->mseconds = 0;
-	// Silence warning
-	time->seconds = degrees;
-	time->seconds = 0;
+int16_t _ml_degrees_to_time(uint16_t degrees, ml_time_t *time)
+{
+  time->mseconds = 0;
+  // Silence warning
+  time->seconds = degrees;
+  time->seconds = 0;
 
-	return ML_NOT_IMPLEMENTED;
+  return ML_NOT_IMPLEMENTED;
 }
 
 /**
@@ -466,14 +479,15 @@ int16_t _ml_degrees_to_time(uint16_t degrees, ml_time_t *time) {
  *
  * @return The launcher type.
  */
-ml_launcher_type ml_get_launcher_type(ml_launcher_t *launcher) {
-	ml_launcher_type type;
+ml_launcher_type ml_get_launcher_type(ml_launcher_t *launcher)
+{
+  ml_launcher_type type;
 
-	//pthread_mutex_lock(&(launcher->main_lock));
+  //pthread_mutex_lock(&(launcher->main_lock));
 
-	// Grab the type
-	type = launcher->type;
+  // Grab the type
+  type = launcher->type;
 
-	//pthread_mutex_unlock(&(launcher->main_lock));
-	return type;
+  //pthread_mutex_unlock(&(launcher->main_lock));
+  return type;
 }

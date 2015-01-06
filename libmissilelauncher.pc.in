@@ -1,0 +1,12 @@
+prefix=@LIBMISSILELAUNCHER_INSTALL_PREFIX@
+exec_prefix=@LIBMISSILELAUNCHER_INSTALL_EXEC_PREFIX@
+libdir=@LIBMISSILELAUNCHER_INSTALL_LIBDIR@
+includedir=@LIBMISSILELAUNCHER_INSTALL_INCLUDEDIR@
+
+Name: libmissilelauncher
+Description: A library to enable control of some foam missle launchers.
+Version: @LIBMISSILELAUNCHER_VERSION@
+Requires.private: libusb-1.0 >= 1.0.17
+Libs: -L${libdir} -lmissilelauncher
+Libs.private: -lusb-1.0
+Cflags: -I${includedir}
