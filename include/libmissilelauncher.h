@@ -3,7 +3,7 @@
  * @brief Header file for libmissilelauncher.h
  * Use these functions to control your missile launcher
  * @author Travis Lane
- * @version 0.2.0
+ * @version 0.3.0
  * @date 2014-05-18
  */
 
@@ -11,10 +11,6 @@
 #define LIBMISSILELAUNCHER_H
 
 #include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <libusb-1.0/libusb.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -71,8 +67,10 @@ typedef enum ml_error_codes {
   ML_ALLOC_FAILED,///< An allocate failed. Having memory issues?
   ML_LAUNCHER_ARRAY_INCONSISTENT,///< The launcher array is in an inconsisten state. This is the library's fault. Please file a bug report.
   ML_NULL_POINTER,///< A requred pointer was null.
-  ML_NO_LAUNCHERS///< No launchers were detected.
+  ML_NO_LAUNCHERS,///< No launchers were detected.
+  ML_LAUNCHER_OPEN///< Launcher already open.
 } ml_error_codes;
+
 
 // ********** API Functions **********
 // Library init
