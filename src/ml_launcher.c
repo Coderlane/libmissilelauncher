@@ -2,7 +2,7 @@
  * @file ml_launcher.c
  * @brief Functions for control over missile launchers.
  * @author Travis Lane
- * @version 0.2.0
+ * @version 0.3.0
  * @date 2014-05-18
  */
 
