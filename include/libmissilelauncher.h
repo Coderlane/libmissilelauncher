@@ -95,7 +95,7 @@ int16_t ml_move_launcher_mseconds(ml_launcher_t *,
 int16_t ml_zero_launcher(ml_launcher_t *);
 int16_t ml_led_on(ml_launcher_t *);
 int16_t ml_led_off(ml_launcher_t *);
-uint8_t ml_get_led_stat(ml_launcher_t *);
+uint8_t ml_get_led_state(ml_launcher_t *);
 
 #ifdef __cplusplus
 }

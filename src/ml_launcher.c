@@ -320,7 +320,7 @@ out:
  *
  * @return 1 = on 0 = off
  */
-uint8_t ml_get_led_stat(ml_launcher_t *launcher)
+uint8_t ml_get_led_state(ml_launcher_t *launcher)
 {
   uint8_t status = 0;
 
