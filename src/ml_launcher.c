@@ -117,9 +117,7 @@ int16_t ml_reference_launcher(ml_launcher_t *launcher)
   if (launcher == NULL) {
     return ML_NULL_LAUNCHER;
   }
-  //pthread_mutex_lock(&(launcher->main_lock));
   launcher->ref_count += 1;
-  //pthread_mutex_unlock(&(launcher->main_lock));
   return ML_OK;
 }
 
@@ -137,14 +135,12 @@ int16_t ml_dereference_launcher(ml_launcher_t *launcher)
   if (launcher == NULL) {
     return ML_NULL_LAUNCHER;
   }
-  //pthread_mutex_lock(&(launcher->main_lock));
   launcher->ref_count -= 1;
   if (launcher->ref_count == 0 && launcher->device_connected == 0) {
     // Not connected and not refrenced
     _ml_remove_launcher(launcher->controller, launcher);
     _ml_cleanup_launcher(&launcher);
   }
-  //pthread_mutex_unlock(&(launcher->main_lock));
   return ML_OK;
 }
 
@@ -237,7 +233,6 @@ int16_t ml_zero_launcher(ml_launcher_t *launcher)
     goto out;
   }
 
-  //pthread_mutex_lock(&(launcher->main_lock));
 
   switch (launcher->type) {
   case ML_STANDARD_LAUNCHER:
@@ -331,8 +326,7 @@ uint8_t ml_get_led_state(ml_launcher_t *launcher)
 
 /**
  * @brief Moves the specified launcher, in the specified direction
- * for the specified number of milliseconds. Don't use this in combination
- * with ml_move_launcher_degrees without zeroing the launcher afterwards.
+ * for the specified number of milliseconds.
  *
  * @param launcher The launcher the move.
  * @param direction The direction to move in.
@@ -454,25 +448,6 @@ int16_t _ml_mseconds_to_time(uint32_t mseconds, ml_time_t *time)
 }
 
 /**
- * @brief Changes degrees to a time object
- * Not yet implemented
- *
- * @param degrees The degrees to convert.
- * @param time The time object to put the result into.
- *
- * @return A status code.
- */
-int16_t _ml_degrees_to_time(uint16_t degrees, ml_time_t *time)
-{
-  time->mseconds = 0;
-  // Silence warning
-  time->seconds = degrees;
-  time->seconds = 0;
-
-  return ML_NOT_IMPLEMENTED;
-}
-
-/**
  * @brief Gets the type of launcher from the launcher.
  *
  * @param launcher The launcher to check.
@@ -482,12 +457,7 @@ int16_t _ml_degrees_to_time(uint16_t degrees, ml_time_t *time)
 ml_launcher_type ml_get_launcher_type(ml_launcher_t *launcher)
 {
   ml_launcher_type type;
-
-  //pthread_mutex_lock(&(launcher->main_lock));
-
   // Grab the type
   type = launcher->type;
-
-  //pthread_mutex_unlock(&(launcher->main_lock));
   return type;
 }

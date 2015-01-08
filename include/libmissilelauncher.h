@@ -88,8 +88,6 @@ ml_launcher_type ml_get_launcher_type(ml_launcher_t *);
 int16_t ml_fire_launcher(ml_launcher_t *);
 int16_t ml_move_launcher(ml_launcher_t *, ml_launcher_direction);
 int16_t ml_stop_launcher(ml_launcher_t *);
-int16_t ml_move_launcher_degrees(ml_launcher_t *,
-                                 ml_launcher_direction, uint16_t);
 int16_t ml_move_launcher_mseconds(ml_launcher_t *,
                                   ml_launcher_direction, uint32_t);
 int16_t ml_zero_launcher(ml_launcher_t *);
