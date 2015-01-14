@@ -20,13 +20,13 @@ This library depends on libusb-1.0.
 
 ###Instructions
 
-Use cmake to generate makefiles for your system. On Linux, OSX, and Cygwin it is as easy as:
+This project uses CMake to manage building an what not. Simply change into the libmissilelauncher directory and follow the following instructions.
 
-      mkdir release && cd release
-      ccmake .. # Configure to your desire
+      mkdir build && cd build
+      cmake .. -DCMAKE_BUILD_TYPE=Release
 
-On Linux and Cygwin you can use cpack to make a nice distributable. 
-I'm working on support for Windows and OSX. Run cpack --help for more info on cpack options.
+On Linux you can use CPack to make a nice distributable. 
+I'm working on support for Windows and OSX. Run CPack --help for more info on CPack options.
 
 ##Examples
 
