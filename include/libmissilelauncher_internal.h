@@ -9,6 +9,7 @@
 #ifndef LIBMISSILELAUNCHER_INTERNAL_H
 #define LIBMISSILELAUNCHER_INTERNAL_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include <libusb-1.0/libusb.h>
@@ -39,15 +40,15 @@
 typedef struct ml_launcher_t
 {
 	ml_launcher_type type;
-	uint8_t usb_bus;
-	uint8_t usb_device_number;
-	uint8_t device_connected;
-	uint32_t ref_count;
-	uint8_t is_open;
+	uint8_t   usb_bus;
+	uint8_t   usb_device_number;
+	uint8_t   device_connected;
+	uint32_t  ref_count;
+	bool      claimed;
 
-	uint32_t horizontal_position;
-	uint32_t vertical_position;
-	uint8_t led_status;
+	uint32_t  horizontal_position;
+	uint32_t  vertical_position;
+	uint8_t   led_status;
 
 	libusb_device *usb_device;
 	libusb_device_handle *usb_handle;
@@ -59,13 +60,11 @@ struct ml_controller_t
 {
 	int16_t  launcher_count;
 	int16_t  launcher_array_size;
-	uint8_t       poll_rate_seconds;
-	uint8_t       control_initialized;
-	uint8_t       currently_polling;
+	uint8_t  poll_rate_seconds;
+	uint8_t  control_initialized;
+	uint8_t  currently_polling;
 
 	struct ml_launcher_t **launchers;
-	// Event Handlers
-	ml_void_event_handler on_launchers_updated;
 };
 
 typedef struct ml_time_t
@@ -114,10 +113,10 @@ extern "C" {
 #endif
 
 // Controller Init
-int16_t _ml_init_controller(ml_controller_t *);
-int16_t _ml_cleanup_controller(ml_controller_t *);
+int16_t _ml_controller_init(ml_controller_t *);
+int16_t _ml_controller_cleanup(ml_controller_t *);
+
 // Polling
-//void *_ml_poll_for_launchers(void *);
 int16_t _ml_poll_for_launchers(ml_controller_t *cont);
 int16_t _ml_update_launchers(ml_controller_t *, struct libusb_device **, int);
 int16_t _ml_get_launchers_from_devices(libusb_device **,
@@ -125,22 +124,26 @@ int16_t _ml_get_launchers_from_devices(libusb_device **,
 int16_t _ml_remove_disconnected_launchers(ml_controller_t *,
         libusb_device **, uint32_t);
 int16_t _ml_add_new_launchers(ml_controller_t *, libusb_device **, uint32_t *);
+
 // Launcher Array
 int16_t _ml_remove_launcher(ml_controller_t *, ml_launcher_t *);
 int16_t _ml_remove_launcher_index(ml_controller_t *, int16_t);
 int16_t _ml_add_launcher(ml_controller_t *, ml_launcher_t *);
 int16_t _ml_add_launcher_index(ml_controller_t *, ml_launcher_t *, int16_t);
+
 // Launcher Init
-int16_t _ml_init_launcher(ml_controller_t *, ml_launcher_t *, libusb_device *);
-int16_t _ml_cleanup_launcher(ml_launcher_t **);
+int16_t _ml_launcher_init(ml_controller_t *, ml_launcher_t *, libusb_device *);
+int16_t _ml_launcher_cleanup(ml_launcher_t **);
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
+
 // Launcher Control
 int16_t ml_usb_open_launcher(ml_launcher_t *launcher);
 int16_t ml_usb_close_launcher(ml_launcher_t *launcher);
-int16_t _ml_move_launcher_unsafe(ml_launcher_t *, ml_launcher_direction);
-int16_t _ml_move_launcher_time_unsafe(ml_launcher_t *,
+int16_t _ml_launcher_move_unsafe(ml_launcher_t *, ml_launcher_direction);
+int16_t _ml_launcher_move_time_unsafe(ml_launcher_t *,
                                       ml_launcher_direction, ml_time_t *);
-int16_t _ml_send_command_unsafe(ml_launcher_t *, ml_launcher_cmd);
+int16_t _ml_launcher_send_cmd_unsafe(ml_launcher_t *, ml_launcher_cmd);
+
 // Time Conversions
 int16_t _ml_mseconds_to_time(uint32_t, ml_time_t *);
 
