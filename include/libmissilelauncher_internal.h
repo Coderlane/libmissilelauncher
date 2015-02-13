@@ -2,7 +2,7 @@
  * @file libmissilelauncher_internal.h
  * @brief Library internal header, I strongly recommend against using these functions.
  * @author Travis Lane
- * @version 0.3.0
+ * @version 0.4.0
  * @date 2014-05-18
  */
 
