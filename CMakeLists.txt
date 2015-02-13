@@ -60,6 +60,12 @@ set(INSTALL_LIBRARY_DIR lib CACHE PATH
 set(INSTALL_INCLUDE_DIR include CACHE PATH
   "Installation directory for header files")
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	set(INSTALL_UDEV_DIR "/etc/udev/rules.d/" CACHE PATH
+  "Installation directory for header files")
+endif()
+
+
 # CMake install dir
 if(WIN32 AND NOT CYGWIN)
   set(DEF_INSTALL_CMAKE_DIR CMake)
@@ -106,9 +112,13 @@ install(TARGETS ${LIBMISSILELAUNCHER_LIBRARY}
 	DESTINATION ${LIBMISSILELAUNCHER_INSTALL_LIBDIR} COMPONENT shlib)
 install(FILES ${LIBMISSILELAUNCHER_HEADER_FILES}
 	DESTINATION "${LIBMISSILELAUNCHER_INSTALL_INCLUDEDIR}" COMPONENT dev)
-
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libmissilelauncher.pc
 	DESTINATION "${INSTALL_PKGCONFIG_DIR}" COMPONENT dev)
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	install(FILES "${PROJECT_SOURCE_DIR}/99-missile-launcher.rules"
+		DESTINATION "${INSTALL_UDEV_DIR}" COMPONENT dev)
+endif()
 
 install(FILES
   "${PROJECT_BINARY_DIR}/libmissilelauncher-config.cmake"
