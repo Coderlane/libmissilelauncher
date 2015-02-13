@@ -63,6 +63,13 @@ _ml_launcher_cleanup(ml_launcher_t **launcher)
   return ML_OK;
 }
 
+/**
+ * @brief Claim the launcher.
+ *
+ * @param launcher The launcher to claim.
+ *
+ * @return A status code.
+ */
 int16_t
 ml_launcher_claim(ml_launcher_t *launcher)
 {
@@ -77,29 +84,24 @@ ml_launcher_claim(ml_launcher_t *launcher)
     return status;
   }
 
-#ifdef LINUX
-  // Linux needs some workarounds
-  status = libusb_kernel_driver_active(launcher->usb_handle, 0);
-  if(status == 1) {
-    libusb_detach_kernel_driver(launcher->usb_handle, 0);
-  }
-  libusb_claim_interface(launcher->usb_handle, 0);
-#endif
-
 	launcher->claimed = true;
 
   return ML_OK;
 }
 
+/**
+ * @brief Unclaim the launcher.
+ *
+ * @param launcher The launcher to unclaim.
+ *
+ * @return A status code.
+ */
 int16_t
 ml_launcher_unclaim(ml_launcher_t *launcher)
 {
   if(!(launcher->claimed)) {
     goto out;
   }
-#ifdef LINUX
-  libusb_release_interface(launcher->usb_handle, 0);
-#endif
   libusb_close(launcher->usb_handle);
 out:
   launcher->claimed = false;
@@ -350,7 +352,6 @@ _ml_launcher_move_time_unsafe(ml_launcher_t *launcher,
                               ml_launcher_direction direction,
                               ml_time_t *time)
 {
-
   int16_t result = 0;
 
   result = _ml_launcher_move_unsafe(launcher, direction);
@@ -369,6 +370,15 @@ out:
   return result;
 }
 
+/**
+ * @brief Move the launcher in an unsafe manner.
+ * Internal use only please! :)
+ *
+ * @param launcher The launcher to move.
+ * @param direction The direction to move the launcher in.
+ *
+ * @return A status code.
+ */
 int16_t
 _ml_launcher_move_unsafe(ml_launcher_t *launcher,
                          ml_launcher_direction direction)
