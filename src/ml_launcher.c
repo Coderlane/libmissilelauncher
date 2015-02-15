@@ -73,18 +73,27 @@ _ml_launcher_cleanup(ml_launcher_t **launcher)
 int16_t
 ml_launcher_claim(ml_launcher_t *launcher)
 {
-  int status;
+  int rv;
 
   if(launcher->claimed) {
     return ML_OK;
   }
 
-  status = libusb_open(launcher->usb_device, &(launcher->usb_handle));
-  if(status != 0) {
-    return status;
+  rv = libusb_open(launcher->usb_device, &(launcher->usb_handle));
+  if(rv != 0) {
+    return rv;
   }
 
-	launcher->claimed = true;
+#ifdef LINUX
+  // Linux needs some workarounds
+  rv = libusb_kernel_driver_active(launcher->usb_handle, 0);
+  if(rv == 1) {
+    libusb_detach_kernel_driver(launcher->usb_handle, 0);
+  }
+  libusb_claim_interface(launcher->usb_handle, 0);
+#endif
+
+  launcher->claimed = true;
 
   return ML_OK;
 }
@@ -102,7 +111,13 @@ ml_launcher_unclaim(ml_launcher_t *launcher)
   if(!(launcher->claimed)) {
     goto out;
   }
-  libusb_close(launcher->usb_handle);
+
+#ifdef LINUX
+  libusb_release_interface(launcher->usb_handle, 0);
+#endif
+
+	libusb_close(launcher->usb_handle);
+
 out:
   launcher->claimed = false;
   return ML_OK;
@@ -258,7 +273,7 @@ ml_launcher_led_on(ml_launcher_t *launcher)
 {
   int16_t result = 0;
 
-	if(!launcher->claimed) {
+  if(!launcher->claimed) {
     return ML_UNCLAIMED;
   }
 
@@ -283,7 +298,7 @@ ml_launcher_led_off(ml_launcher_t *launcher)
 {
   int16_t result = 0;
 
-	if(!launcher->claimed) {
+  if(!launcher->claimed) {
     return ML_UNCLAIMED;
   }
 
@@ -330,7 +345,7 @@ ml_launcher_move_mseconds(ml_launcher_t *launcher,
 {
   ml_time_t time;
 
-	if(!launcher->claimed) {
+  if(!launcher->claimed) {
     return ML_UNCLAIMED;
   }
 
