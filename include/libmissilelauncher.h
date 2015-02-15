@@ -3,8 +3,8 @@
  * @brief Header file for libmissilelauncher.h
  * Use these functions to control your missile launcher
  * @author Travis Lane
- * @version 0.4.0
- * @date 2014-05-18
+ * @version 0.4.1
+ * @date 20.4.15-18
  */
 
 #ifndef LIBMISSILELAUNCHER_H
