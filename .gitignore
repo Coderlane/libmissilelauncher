@@ -34,7 +34,7 @@ examples/obj/*
 tests/obj/*
 
 #Personal
-.ycm_extra_conf.pyc
+*.py*
 
 #Ignore Documentation until finished.
 doc/*

@@ -2,8 +2,8 @@
  * @file ml_launcher.c
  * @brief Functions for control over missile launchers.
  * @author Travis Lane
- * @version 0.4.1
- * @date 20.4.15-18
+ * @version 0.5.0
+ * @date 2016-11-27
  */
 
 #include <stdint.h>
@@ -21,7 +21,7 @@
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_launcher_init(ml_controller_t *controller,
                   ml_launcher_t *launcher, libusb_device *device)
 {
@@ -29,7 +29,7 @@ _ml_launcher_init(ml_controller_t *controller,
   struct libusb_device_descriptor desc;
 
   if (launcher == NULL) {
-    return ML_NULL_LAUNCHER;
+    return ML_NULL_POINTER;
   }
   libusb_get_device_descriptor(device, &desc);
 
@@ -50,11 +50,11 @@ _ml_launcher_init(ml_controller_t *controller,
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_launcher_cleanup(ml_launcher_t **launcher)
 {
   if ((*launcher) == NULL) {
-    return ML_NULL_LAUNCHER;
+    return ML_NULL_POINTER;
   }
 
 
@@ -70,7 +70,7 @@ _ml_launcher_cleanup(ml_launcher_t **launcher)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_claim(ml_launcher_t *launcher)
 {
   int rv;
@@ -105,7 +105,7 @@ ml_launcher_claim(ml_launcher_t *launcher)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_unclaim(ml_launcher_t *launcher)
 {
   if(!(launcher->claimed)) {
@@ -136,11 +136,11 @@ out:
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_reference(ml_launcher_t *launcher)
 {
   if (launcher == NULL) {
-    return ML_NULL_LAUNCHER;
+    return ML_NULL_POINTER;
   }
   launcher->ref_count += 1;
   return ML_OK;
@@ -155,11 +155,11 @@ ml_launcher_reference(ml_launcher_t *launcher)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_dereference(ml_launcher_t *launcher)
 {
   if (launcher == NULL) {
-    return ML_NULL_LAUNCHER;
+    return ML_NULL_POINTER;
   }
   launcher->ref_count -= 1;
   if (launcher->ref_count == 0 && launcher->device_connected == 0) {
@@ -177,7 +177,7 @@ ml_launcher_dereference(ml_launcher_t *launcher)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_fire(ml_launcher_t *launcher)
 {
   if(!launcher->claimed) {
@@ -195,7 +195,7 @@ ml_launcher_fire(ml_launcher_t *launcher)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_stop(ml_launcher_t *launcher)
 {
   if(!launcher->claimed) {
@@ -213,7 +213,7 @@ ml_launcher_stop(ml_launcher_t *launcher)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_move(ml_launcher_t *launcher, ml_launcher_direction direction)
 {
   if(!launcher->claimed) {
@@ -231,7 +231,7 @@ ml_launcher_move(ml_launcher_t *launcher, ml_launcher_direction direction)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_zero(ml_launcher_t *launcher)
 {
   ml_time_t left_time, down_time, right_time, up_time;
@@ -268,10 +268,10 @@ ml_launcher_zero(ml_launcher_t *launcher)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_led_on(ml_launcher_t *launcher)
 {
-  int16_t result = 0;
+  ml_error_code result = 0;
 
   if(!launcher->claimed) {
     return ML_UNCLAIMED;
@@ -293,10 +293,10 @@ ml_launcher_led_on(ml_launcher_t *launcher)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_led_off(ml_launcher_t *launcher)
 {
-  int16_t result = 0;
+  ml_error_code result = 0;
 
   if(!launcher->claimed) {
     return ML_UNCLAIMED;
@@ -338,7 +338,7 @@ ml_launcher_get_led_state(ml_launcher_t *launcher)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_move_mseconds(ml_launcher_t *launcher,
                           ml_launcher_direction direction,
                           uint32_t mseconds)
@@ -362,12 +362,12 @@ ml_launcher_move_mseconds(ml_launcher_t *launcher,
  *
  * @return A status code
  */
-int16_t
+ml_error_code
 _ml_launcher_move_time_unsafe(ml_launcher_t *launcher,
                               ml_launcher_direction direction,
                               ml_time_t *time)
 {
-  int16_t result = 0;
+  ml_error_code result = 0;
 
   result = _ml_launcher_move_unsafe(launcher, direction);
   if (result != ML_OK) {
@@ -394,7 +394,7 @@ out:
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_launcher_move_unsafe(ml_launcher_t *launcher,
                          ml_launcher_direction direction)
 {
@@ -410,7 +410,7 @@ _ml_launcher_move_unsafe(ml_launcher_t *launcher,
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_launcher_send_cmd_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd)
 {
   uint8_t request_type = 0, request_field = 0;
@@ -431,7 +431,7 @@ _ml_launcher_send_cmd_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd)
                                    request_field, value, index,
                                    ml_cmd_arr[cmd], ML_CMD_ARR_SIZE, 0);
   if (status < 0) {
-    return status;
+    return ML_LIBUSB_ERROR;
   } else {
     return ML_OK;
   }
@@ -445,7 +445,7 @@ _ml_launcher_send_cmd_unsafe(ml_launcher_t *launcher, ml_launcher_cmd cmd)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_mseconds_to_time(uint32_t mseconds, ml_time_t *time)
 {
   if (time == NULL) {

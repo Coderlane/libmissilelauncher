@@ -2,8 +2,8 @@
  * @file ml_controller.c
  * @brief Functions releated to the launcher controller
  * @author Travis Lane
- * @version 0.4.1
- * @date 20.4.15-18
+ * @version 0.5.0
+ * @date 2016-11-27
  */
 
 #include <stdint.h>
@@ -13,59 +13,13 @@
 #include "libmissilelauncher_internal.h"
 
 /**
- * @brief Initializes the library.
- * This function must be called before all others.
- *
- * @return A status code.
- */
-int16_t
-ml_library_init()
-{
-  int init_result;
-  int16_t failed = 0;
-
-
-  if (ml_main_controller != NULL) {
-    return ML_LIBRARY_ALREADY_INIT;
-  }
-
-  // Allocate space for the main controller, calloc so everything is null.
-  ml_main_controller = calloc(sizeof(ml_controller_t), 1);
-  if (ml_main_controller == NULL) {
-    return ML_ALLOC_FAILED;
-  }
-
-  // Initialize libusb
-  init_result = libusb_init(NULL);
-  if (init_result < 0) {
-    free(ml_main_controller);
-    ml_main_controller = NULL;
-    return ML_LIBUSB_INIT_FAILED;
-  }
-
-  // Initialize the main controller
-  failed = _ml_controller_init(ml_main_controller);
-  // Check result
-  if (failed != ML_OK) {
-    // Setup failed
-    if (ml_main_controller->launchers != NULL) {
-      free(ml_main_controller->launchers);
-    }
-    free(ml_main_controller);
-    ml_main_controller = NULL;
-  }
-
-  return failed;
-}
-
-/**
  * @brief initializes a controller.
  *
  * @param controller The controller to initialize.
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_controller_init(ml_controller_t *controller)
 {
   if (controller->control_initialized) {
@@ -86,27 +40,7 @@ _ml_controller_init(ml_controller_t *controller)
   return ML_OK;
 }
 
-/**
- * @brief Cleans up the library when you are done.
- *
- * @return A status code.
- */
-int16_t
-ml_library_cleanup()
-{
-  int16_t failed = 0;
-  if (ml_main_controller == NULL) {
-    return ML_LIBRARY_NOT_INIT;
-  }
-  // Cleanup the controller
-  failed = _ml_controller_cleanup(ml_main_controller);
-  // Free everything
-  free(ml_main_controller);
-  ml_main_controller = NULL;
-  // Cleanup libusb
-  libusb_exit(NULL);
-  return failed;
-}
+
 
 /**
  * @brief Cleans up the controller when the library is done.
@@ -115,7 +49,7 @@ ml_library_cleanup()
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_controller_cleanup(ml_controller_t *controller)
 {
   ml_launcher_t *cur_launcher = NULL;
@@ -147,36 +81,17 @@ _ml_controller_cleanup(ml_controller_t *controller)
 }
 
 /**
- * @brief Checks to see if the library is currently initialized.
- *
- * @return 0 - false 1 - true
- */
-uint8_t
-ml_is_library_init()
-{
-  uint8_t result = 0;
-  if (ml_main_controller == NULL ||
-      ml_main_controller->control_initialized == 0) {
-    result = 0;
-  } else {
-    result = 1;
-  }
-  return result;
-}
-
-
-/**
  * @brief Polls for new launchers.
  *
  * @param cont The controller to poll.
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_poll_for_launchers(ml_controller_t *cont)
 {
   int device_count = 0;
-  int16_t status = 0;
+  ml_error_code status = 0;
   libusb_device **devices = NULL;
   device_count = libusb_get_device_list(NULL, &devices);
   status = _ml_update_launchers(cont, devices, device_count);
@@ -214,7 +129,7 @@ _ml_catagorize_device(struct libusb_device_descriptor *desc)
  *
  * @return A status code, ML_OK if everything went well.
  */
-int16_t
+ml_error_code
 _ml_update_launchers(ml_controller_t *cont,
                      struct libusb_device **devices, int device_count)
 {
@@ -248,7 +163,7 @@ _ml_update_launchers(ml_controller_t *cont,
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_get_launchers_from_devices(libusb_device **devices,
                                int device_count,
                                libusb_device ***found_launchers,
@@ -298,9 +213,10 @@ _ml_get_launchers_from_devices(libusb_device **devices,
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_remove_disconnected_launchers(ml_controller_t *cont,
-                                  libusb_device **found_launchers, uint32_t found_launchers_count)
+                                  libusb_device **found_launchers,
+                                  uint32_t found_launchers_count)
 {
 
   libusb_device *found_device = NULL;
@@ -356,7 +272,7 @@ _ml_remove_disconnected_launchers(ml_controller_t *cont,
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 _ml_add_new_launchers(ml_controller_t *cont,
                       libusb_device **found_launchers,
                       uint32_t *found_launchers_count)
@@ -415,18 +331,18 @@ _ml_add_new_launchers(ml_controller_t *cont,
  *
  * @return A status code, ML_OK if everything went well.
  */
-int16_t
+ml_error_code
 ml_launcher_array_new(ml_launcher_t ***new_arr, uint32_t *count)
 {
   ml_launcher_t *cur_launcher;
   int16_t new_index = 0, new_count = 0, status = 0;
-  if (ml_is_library_init() == 0) {
+  if (ml_library_is_init() == 0) {
     return ML_LIBRARY_NOT_INIT;
   }
 
   // Error checking
   if ((*new_arr) != NULL) {
-    return ML_ARRAY_NOT_NULL;
+    return ML_NOT_NULL_POINTER;
   }
 
   status = _ml_poll_for_launchers(ml_main_controller);
@@ -474,7 +390,7 @@ ml_launcher_array_new(ml_launcher_t ***new_arr, uint32_t *count)
  *
  * @return A status code.
  */
-int16_t
+ml_error_code
 ml_launcher_array_free(ml_launcher_t **free_arr)
 {
   ml_launcher_t *cur_launcher = NULL;
@@ -502,7 +418,7 @@ ml_launcher_array_free(ml_launcher_t **free_arr)
  *
  * @return A status value, ML_OK if it is okay.
  */
-int16_t
+ml_error_code
 _ml_remove_launcher(ml_controller_t *cont, ml_launcher_t *launcher)
 {
   /* This function is not thread safe, please lock the array first */
@@ -524,14 +440,14 @@ _ml_remove_launcher(ml_controller_t *cont, ml_launcher_t *launcher)
  *
  * @return A status value, ML_OK if it is okay.
  */
-int16_t
+ml_error_code
 _ml_remove_launcher_index(ml_controller_t *cont, int16_t index)
 {
   /* This function is not thread safe, please lock the array first */
 
   // Error checking
   if (cont->launchers[index] == NULL) {
-    return ML_POSITION_WAS_NULL;
+    return ML_NULL_POINTER;
   }
   if (index >= cont->launcher_array_size || index < 0) {
     return ML_INDEX_OUT_OF_BOUNDS;
@@ -539,6 +455,7 @@ _ml_remove_launcher_index(ml_controller_t *cont, int16_t index)
   if (cont->launcher_count <= 0) {
     return ML_COUNT_ZERO;
   }
+
   // Everything looks good, decrement and set as null. We do not free here.
   cont->launcher_count -= 1;
   cont->launchers[index] = NULL;
@@ -553,7 +470,7 @@ _ml_remove_launcher_index(ml_controller_t *cont, int16_t index)
  *
  * @return A status value, ML_OK if it is okay.
  */
-int16_t
+ml_error_code
 _ml_add_launcher(ml_controller_t *cont, ml_launcher_t *launcher)
 {
   /* This function is not thread safe, please lock the array first */
@@ -563,6 +480,7 @@ _ml_add_launcher(ml_controller_t *cont, ml_launcher_t *launcher)
       return _ml_add_launcher_index(cont, launcher, i);
     }
   }
+
   // No freespace found, needs a resize.
   // Not yet implemented...
   return ML_NOT_IMPLEMENTED;
@@ -577,14 +495,15 @@ _ml_add_launcher(ml_controller_t *cont, ml_launcher_t *launcher)
  *
  * @return A status code, ML_OK if it is okay.
  */
-int16_t
+ml_error_code
 _ml_add_launcher_index(ml_controller_t *cont,
                        ml_launcher_t *launcher, int16_t index)
 {
   /* This function is not thread safe, please lock the array first */
   if (cont->launchers[index] != NULL) {
-    return ML_POSITION_WAS_NOT_NULL;
+    return ML_NOT_NULL_POINTER;
   }
+
   // Update index and add
   cont->launcher_count += 1;
   cont->launchers[index] = launcher;

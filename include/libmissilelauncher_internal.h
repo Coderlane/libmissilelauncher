@@ -2,8 +2,8 @@
  * @file libmissilelauncher_internal.h
  * @brief Library internal header, I strongly recommend against using these functions.
  * @author Travis Lane
- * @version 0.4.1
- * @date 20.4.15-18
+ * @version 0.5.0
+ * @date 2016-11-27
  */
 
 #ifndef LIBMISSILELAUNCHER_INTERNAL_H
@@ -113,39 +113,43 @@ extern "C" {
 #endif
 
 // Controller Init
-int16_t _ml_controller_init(ml_controller_t *);
-int16_t _ml_controller_cleanup(ml_controller_t *);
+ml_error_code _ml_controller_init(ml_controller_t *);
+ml_error_code _ml_controller_cleanup(ml_controller_t *);
 
 // Polling
-int16_t _ml_poll_for_launchers(ml_controller_t *cont);
-int16_t _ml_update_launchers(ml_controller_t *, struct libusb_device **, int);
-int16_t _ml_get_launchers_from_devices(libusb_device **,
-                                       int, libusb_device ***, uint32_t *);
-int16_t _ml_remove_disconnected_launchers(ml_controller_t *,
-        libusb_device **, uint32_t);
-int16_t _ml_add_new_launchers(ml_controller_t *, libusb_device **, uint32_t *);
+ml_error_code _ml_poll_for_launchers(ml_controller_t *cont);
+ml_error_code _ml_update_launchers(ml_controller_t *,
+    struct libusb_device **, int);
+ml_error_code _ml_get_launchers_from_devices(libusb_device **,
+    int, libusb_device ***, uint32_t *);
+ml_error_code _ml_remove_disconnected_launchers(ml_controller_t *,
+    libusb_device **, uint32_t);
+ml_error_code _ml_add_new_launchers(ml_controller_t *,
+    libusb_device **, uint32_t *);
 
 // Launcher Array
-int16_t _ml_remove_launcher(ml_controller_t *, ml_launcher_t *);
-int16_t _ml_remove_launcher_index(ml_controller_t *, int16_t);
-int16_t _ml_add_launcher(ml_controller_t *, ml_launcher_t *);
-int16_t _ml_add_launcher_index(ml_controller_t *, ml_launcher_t *, int16_t);
+ml_error_code _ml_remove_launcher(ml_controller_t *, ml_launcher_t *);
+ml_error_code _ml_remove_launcher_index(ml_controller_t *, int16_t);
+ml_error_code _ml_add_launcher(ml_controller_t *, ml_launcher_t *);
+ml_error_code _ml_add_launcher_index(ml_controller_t *,
+    ml_launcher_t *, int16_t);
 
 // Launcher Init
-int16_t _ml_launcher_init(ml_controller_t *, ml_launcher_t *, libusb_device *);
-int16_t _ml_launcher_cleanup(ml_launcher_t **);
+ml_error_code _ml_launcher_init(ml_controller_t *,
+    ml_launcher_t *, libusb_device *);
+ml_error_code _ml_launcher_cleanup(ml_launcher_t **);
 uint8_t _ml_catagorize_device(struct libusb_device_descriptor *);
 
 // Launcher Control
-int16_t ml_usb_open_launcher(ml_launcher_t *launcher);
-int16_t ml_usb_close_launcher(ml_launcher_t *launcher);
-int16_t _ml_launcher_move_unsafe(ml_launcher_t *, ml_launcher_direction);
-int16_t _ml_launcher_move_time_unsafe(ml_launcher_t *,
-                                      ml_launcher_direction, ml_time_t *);
-int16_t _ml_launcher_send_cmd_unsafe(ml_launcher_t *, ml_launcher_cmd);
+ml_error_code ml_usb_open_launcher(ml_launcher_t *launcher);
+ml_error_code ml_usb_close_launcher(ml_launcher_t *launcher);
+ml_error_code _ml_launcher_move_unsafe(ml_launcher_t *, ml_launcher_direction);
+ml_error_code _ml_launcher_move_time_unsafe(ml_launcher_t *,
+    ml_launcher_direction, ml_time_t *);
+ml_error_code _ml_launcher_send_cmd_unsafe(ml_launcher_t *, ml_launcher_cmd);
 
 // Time Conversions
-int16_t _ml_mseconds_to_time(uint32_t, ml_time_t *);
+ml_error_code _ml_mseconds_to_time(uint32_t, ml_time_t *);
 
 #ifdef __cplusplus
 }

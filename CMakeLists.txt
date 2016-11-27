@@ -14,9 +14,9 @@ set(LIBMISSILELAUNCHER_INCLUDEDIR "${PROJECT_SOURCE_DIR}/include")
 set(LIBMISSILELAUNCHER_SRC "${PROJECT_SOURCE_DIR}/src")
 set(LIBMISSILELAUNCHER_TEST "${PROJECT_SOURCE_DIR}/test")
 set(LIBMISSILELAUNCHER_VERSION_MAJOR "0")
-set(LIBMISSILELAUNCHER_VERSION_MINOR "4")
-set(LIBMISSILELAUNCHER_VERSION_PATCH "1")
-set(LIBMISSILELAUNCHER_VERSION 
+set(LIBMISSILELAUNCHER_VERSION_MINOR "5")
+set(LIBMISSILELAUNCHER_VERSION_PATCH "0")
+set(LIBMISSILELAUNCHER_VERSION
 	"${LIBMISSILELAUNCHER_VERSION_MAJOR}.${LIBMISSILELAUNCHER_VERSION_MINOR}.${LIBMISSILELAUNCHER_VERSION_PATCH}")
 
 
@@ -47,7 +47,7 @@ set(LIBMISSILELAUNCHER_SOURCE_FILES ${SOURCE_FILES})
 include_directories(${LIBMISSILELAUNCHER_INCLUDEDIR})
 include_directories(${LIBUSB_1_INCLUDE_DIRS})
 
-# lib 
+# lib
 add_library(missilelauncher SHARED ${LIBMISSILELAUNCHER_SOURCE_FILES})
 
 # Link build deps.
@@ -55,7 +55,7 @@ add_library(missilelauncher SHARED ${LIBMISSILELAUNCHER_SOURCE_FILES})
 target_link_libraries(missilelauncher ${LIBUSB_1_LIBRARIES})
 
 # Offer the user the choice of overriding the installation directories
-set(INSTALL_LIBRARY_DIR lib CACHE PATH 
+set(INSTALL_LIBRARY_DIR lib CACHE PATH
 	"Installation directory for libraries")
 set(INSTALL_INCLUDE_DIR include CACHE PATH
   "Installation directory for header files")
@@ -88,17 +88,17 @@ set(INSTALL_PKGCONFIG_DIR ${DEF_INSTALL_PKGCONFIG_DIR} CACHE PATH
 
 set(LIBMISSILELAUNCHER_INSTALL_PREFIX      "${CMAKE_INSTALL_PREFIX}")
 set(LIBMISSILELAUNCHER_INSTALL_EXEC_PREFIX "${CMAKE_INSTALL_PREFIX}")
-set(LIBMISSILELAUNCHER_INSTALL_LIBDIR 
+set(LIBMISSILELAUNCHER_INSTALL_LIBDIR
 	"${CMAKE_INSTALL_PREFIX}/${INSTALL_LIBRARY_DIR}")
-set(LIBMISSILELAUNCHER_INSTALL_INCLUDEDIR 
+set(LIBMISSILELAUNCHER_INSTALL_INCLUDEDIR
 	"${CMAKE_INSTALL_PREFIX}/${INSTALL_INCLUDE_DIR}/${PROJECT_NAME}")
 
 # Write out cmake config file.
-write_basic_package_version_file(libmissilelauncher-config-version.cmake 
+write_basic_package_version_file(libmissilelauncher-config-version.cmake
 	VERSION ${LIBMISSILELAUNCHER_VERSION} COMPATIBILITY SameMajorVersion)
 
 # Configure cmake config file
-configure_package_config_file(libmissilelauncher-config.cmake.in 
+configure_package_config_file(libmissilelauncher-config.cmake.in
 	${PROJECT_BINARY_DIR}/libmissilelauncher-config.cmake
   INSTALL_DESTINATION ${LIB_INSTALL_DIR}/libmissilelauncher/cmake
 	PATH_VARS INSTALL_INCLUDE_DIR INSTALL_LIBRARY_DIR)
@@ -108,7 +108,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libmissilelauncher.pc.in
   ${CMAKE_CURRENT_BINARY_DIR}/libmissilelauncher.pc @ONLY)
 
 # Set install targets
-install(TARGETS ${LIBMISSILELAUNCHER_LIBRARY} 
+install(TARGETS ${LIBMISSILELAUNCHER_LIBRARY}
 	DESTINATION ${LIBMISSILELAUNCHER_INSTALL_LIBDIR} COMPONENT shlib)
 install(FILES ${LIBMISSILELAUNCHER_HEADER_FILES}
 	DESTINATION "${LIBMISSILELAUNCHER_INSTALL_INCLUDEDIR}" COMPONENT dev)
@@ -128,7 +128,7 @@ install(FILES
 ### CPACK
 include(InstallRequiredSystemLibraries)
 
-set(CPACK_PACKAGE_CONTACT "" CACHE STRING 
+set(CPACK_PACKAGE_CONTACT "" CACHE STRING
 	"The contact information for the package distributor")
 
 set(CPACK_PACKAGE_NAME "libmissilelauncher")

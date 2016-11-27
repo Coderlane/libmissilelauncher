@@ -15,7 +15,7 @@ int main()
 {
   ml_launcher_t **launchers = NULL;
   uint32_t launchers_count = 0;
-  int16_t rv;
+  ml_error_code rv;
   char input = '\0';
 
   // Always initialize the library before using any functions.
