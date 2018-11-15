@@ -1,12 +1,13 @@
 language: c
 
+dist: xenial
+
 compiler:
   - clang
 
 before_script:
-  - sudo add-apt-repository --yes ppa:kalakris/cmake
   - sudo apt-get update -qq
-  - sudo apt-get install pkg-config libusb-1.0-0-dev cmake -qq
+  - sudo apt-get install pkg-config libusb-1.0-0-dev -qq
   - cmake --version
   - mkdir build
   - cd build
