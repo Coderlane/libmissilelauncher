@@ -1,4 +1,4 @@
-# libmissilelauncher
+# libmissilelauncher [![Build Status](https://travis-ci.org/Coderlane/libmissilelauncher.svg?branch=master)](https://travis-ci.org/Coderlane/libmissilelauncher)
 
 ## Overview
 
